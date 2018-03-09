@@ -51,10 +51,8 @@ vagrant ssh
 # Navigate to the site directory
 cd site
 
-# Run dev or production minification process
-npm run dev
--or-
-npm run prod
+-Run dev or production minification process-
+npm run development // might work?
 ```
 
 You should be able to view the site from http://rcon2.app

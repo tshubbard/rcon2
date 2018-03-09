@@ -68,6 +68,6 @@ Credentials
 Host: 192.168.10.25
 Port: 3306
 DB Name: rcon2
-Username: rcon2
+Username: homestead
 Password: secret
 ```

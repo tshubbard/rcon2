@@ -1,0 +1,8 @@
+vendor/
+node_modules/
+npm-debug.log
+
+# Vagrant
+.vagrant/
+
+.DS_Store

@@ -1,0 +1,15 @@
+{
+	"name": "streamer",
+	"version": "0.0.1",
+	"description": "Connect to a RUST server rcon and perform operations based on the message stream.",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js"
+	},
+	"dependencies": {
+		"luxon": "^0.5.2",
+		"mysql": "^2.15.0",
+		"utf8": "^3.0.0",
+		"ws": "^3.3.3"
+	}
+}

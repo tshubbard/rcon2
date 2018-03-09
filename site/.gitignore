@@ -1,0 +1,28 @@
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+/.idea
+/.vscode
+/.vagrant
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+.env
+
+# HTML files in public (use resources/assets/html)
+public/*.html
+
+# Compiled JavaScript
+public/js/*
+
+# Compiled CSS (.less files)
+public/css/*
+
+# Compiled Templates
+public/templates/*
+
+# Fonts (copied over from gulp)
+public/fonts

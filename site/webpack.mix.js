@@ -11,5 +11,20 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/assets/js/app.js', 'public/js')
-    .less('resources/assets/less/app.less', 'public/css');
+mix
+    .js('resources/assets/js/app.js', 'public/js/app.js')
+    .extract(['vue'])
+    .less('resources/assets/less/app.less', 'public/css')
+    .browserSync({
+        open: 'local',
+        proxy: 'rcon2.test',
+        notify: false,
+        files: [
+            'public/**/*.css',
+            'public/**/*.js',
+            'resources/**/*'
+        ]
+    })
+    .disableNotifications();
+
+

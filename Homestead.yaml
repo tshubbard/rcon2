@@ -9,6 +9,11 @@ folders:
     -
         map: ~/code/rcon2/site
         to: /home/vagrant/site
+        options:
+            fsnotify: true
+            exclude:
+                - node_modules
+                - vendor
 sites:
     -
         map: rcon2.test

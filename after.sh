@@ -9,6 +9,7 @@ cd ~/site
 # Run Composer
 composer install
 
+echo "--- SEEDING DATABASE ---"
 # Migrate & Seed data
 php artisan migrate:refresh --seed
 

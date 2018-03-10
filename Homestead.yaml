@@ -9,16 +9,11 @@ folders:
     -
         map: ~/code/rcon2/site
         to: /home/vagrant/site
-        options:
-            fsnotify: true
-            exclude:
-                - node_modules
-                - vendor
 sites:
     -
         map: rcon2.test
         to: /home/vagrant/site/public
 databases:
     - rcon2
-name: homestead
+name: rcon2
 hostname: rcon2

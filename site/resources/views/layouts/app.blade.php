@@ -12,6 +12,7 @@
     <base href="/" />
 
     <!-- Styles -->
+    <link rel="stylesheet" href="{{ asset('css/vendor.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     @yield('styles')
 </head>
@@ -23,10 +24,11 @@
             </div>
         </header>
 
-        <example-component></example-component>
         <div class="content">
             @yield('content')
         </div>
+
+        <example-component></example-component>
 
         <div class="footer">
             <div class="container">

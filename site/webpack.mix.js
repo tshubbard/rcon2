@@ -12,9 +12,15 @@ let mix = require('laravel-mix');
  */
 
 mix
-    .js('resources/assets/js/app.js', 'public/js/app.js')
-    .extract(['vue'])
+    .js([
+            'node_modules/bootstrap/dist/js/bootstrap.js',
+            'resources/assets/js/app.js'
+        ],
+        'public/js/app.js'
+    )
     .less('resources/assets/less/app.less', 'public/css')
+    .combine('node_modules/bootstrap/dist/css/bootstrap.css', 'public/css/vendor.css')
+    .extract(['vue', 'bootstrap'])
     .browserSync({
         open: 'local',
         proxy: 'rcon2.test',

@@ -70,6 +70,11 @@ class DashboardController extends Controller
         return $viewData;
     }
 
+	public function servers()
+	{
+		return $this->_getDefaultViewData()['servers'];
+	}
+
     /**
      * Show the form for creating a new resource.
      *

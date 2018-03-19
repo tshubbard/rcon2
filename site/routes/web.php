@@ -21,6 +21,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', 'DashboardController@index');
     Route::get('/dashboard/{serverId}', 'DashboardController@show');
 
+    Route::get('/api/v1/user/servers', 'DashboardController@servers');
+
     // ServerController
     Route::get('/api/v1/items', 'ItemController@index');
 

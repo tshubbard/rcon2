@@ -7,7 +7,10 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+//window.Vue = require('vue');
+
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -16,9 +19,20 @@ window.Vue = require('vue');
  */
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('dashboard', require('./components/Dashboard.vue'));
 
-const app = new Vue({
-    el: '#app'
+var router = new VueRouter({
+	routes:[
+		{'path': '', 'component': Vue.component('dashboard')}
+	]
 });
 
-console.log('app:555  ', app);
+Vue.use(VueRouter);
+
+var app = new Vue({
+    'el': '#vueapp',
+    'router': router,
+    'data': {
+	    'server_selected': null
+    }
+});

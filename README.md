@@ -56,7 +56,7 @@ npm run dev // compiles and builds resources to public/
 npm run watch // MUST BE FROM LOCAL MACHINE TERMINAL --- NOT SSH INSIDE VAGRANT
 ```
 
-You should be able to view the site from http://rcon2.app
+You should be able to view the site from http://rcon2.test
 
 ## MySQL
 

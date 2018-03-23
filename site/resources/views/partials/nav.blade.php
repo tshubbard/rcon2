@@ -12,7 +12,7 @@
         <ul class="navbar-nav mr-auto">
             @auth
                 <li class="nav-item active">
-                    <a class="nav-link" href="/dashboard">Dashboard <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/dashboard/">Dashboard <span class="sr-only">(current)</span></a>
                 </li>
             @endauth
         </ul>
@@ -21,12 +21,12 @@
             <!-- Authentication Links -->
             @guest
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{ route('login') }}">
+                    <a class="nav-link" href="{{ route('login') }}/">
                         Login
                     </a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{ route('register') }}">
+                    <a class="nav-link" href="{{ route('register') }}/">
                         Register
                     </a>
                 </li>
@@ -40,7 +40,7 @@
                     <ul class="dropdown-menu">
                         @if(Auth::user()->isAdmin())
                             <li>
-                                <a class="dropdown-item" href="/admin">Admin</a>
+                                <a class="dropdown-item" href="/admin/">Admin</a>
                             </li>
                         @endif
 

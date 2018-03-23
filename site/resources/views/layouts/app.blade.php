@@ -24,6 +24,8 @@
             </div>
         </header>
 
+		@yield('content')
+
         <div id="vueapp" class="content">
 	        <router-view></router-view>
         </div>

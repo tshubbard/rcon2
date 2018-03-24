@@ -14,6 +14,15 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/dashboard/">Dashboard <span class="sr-only">(current)</span></a>
                 </li>
+
+                @if(Auth::user()->isAdmin())
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/">Admin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/users">Users</a>
+                    </li>
+                @endif
             @endauth
         </ul>
         <!-- Right Side Of Navbar -->

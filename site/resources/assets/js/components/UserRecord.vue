@@ -41,23 +41,10 @@
 
         },
         'methods': {
-            'updateSelectedServer': function(e) {
-                this.server_selected = this.servers[e.target.value];
-            },
-            'showAddEditServerEvent': function(event) {
 
-            },
-            'toggleEventActive': function(event) {
-
-            },
-            'removeServerEvent': function(event) {
-
-            }
         },
         'computed': {
-            'eventClass': function(event) {
-                return 'server-event my-2 ' + (event.is_active ? '' : 'not-') + 'active';
-            }
+
         }
     }
 </script>

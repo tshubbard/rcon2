@@ -45,11 +45,17 @@ class User extends Authenticatable
     /**
      * Returns the servers assigned to the User
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function servers()
     {
-        return $this->hasMany(Server::class, 'account_id', 'account_id');
+        return $this->hasManyThrough(
+            Server::class,
+            Account::class,
+            'id',
+            'account_id',
+            'id',
+            'id'
+        );
     }
 
     /**
@@ -57,7 +63,7 @@ class User extends Authenticatable
      */
     public function accounts()
     {
-        return $this->belongsToMany(Account::class);
+        return $this->belongsToMany(Account::class, 'account_user');
     }
 
     /**

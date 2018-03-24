@@ -16,6 +16,11 @@ class Account extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'account_user');
+    }
+
+    public function servers()
+    {
+        return $this->hasMany(Server::class);
     }
 }

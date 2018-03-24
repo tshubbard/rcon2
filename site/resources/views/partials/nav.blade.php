@@ -12,15 +12,15 @@
         <ul class="navbar-nav mr-auto">
             @auth
                 <li class="nav-item active">
-                    <a class="nav-link" href="/dashboard/">Dashboard <span class="sr-only">(current)</span></a>
+                    <router-link class="nav-link" to="/dashboard">Dashboard</router-link>
                 </li>
 
                 @if(Auth::user()->isAdmin())
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/">Admin</a>
+                        <router-link class="nav-link" to="/admin">Admin</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/users">Users</a>
+                        <router-link class="nav-link" to="/admin/users">Users</router-link>
                     </li>
                 @endif
             @endauth

@@ -3,25 +3,28 @@ require('./bootstrap');
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-if(document.getElementById('vueapp') !== null)
+if(document.getElementById('app') !== null)
 {
-	// Fucking Laravel ending-slash hating bullshit.
-	if(location.pathname.slice(-1) != '/')
-		history.pushState(null, null, location.pathname + '/');
 
 	Vue.component('example-component', require('./components/ExampleComponent.vue'));
-	Vue.component('dashboard', require('./components/Dashboard.vue'));
+    const Dashboard = Vue.component('dashboard', require('./components/Dashboard.vue'));
+    const UserRecord = Vue.component('user-record', require('./components/UserRecord.vue'));
 
 	var router = new VueRouter({
-		routes:[
-			{'path': '', 'component': Vue.component('dashboard')}
-		]
+        mode: 'history',
+        routes:[{
+            'path': '/dashboard',
+            'component': Dashboard
+        }, {
+            'path': '/u/:userName',
+            'component': UserRecord
+        }]
 	});
 
 	Vue.use(VueRouter);
 
 	var app = new Vue({
-		'el': '#vueapp',
+		'el': '#app',
 		'router': router,
 		'data': {
 			'server_selected': null

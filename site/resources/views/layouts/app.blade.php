@@ -25,7 +25,7 @@
         </header>
 
         <div class="content">
-            @yield('content')
+            <router-view></router-view>
         </div>
 
         <div class="footer">

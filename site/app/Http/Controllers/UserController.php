@@ -31,6 +31,8 @@ class UserController extends Controller
     public function showJSON(Request $request, $userName)
     {
         $user = User::where('name' , '=', $userName)->first();
+        // weird way to populate user accounts
+        $user->accounts;
 
         return response()->json($user);
     }

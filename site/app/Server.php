@@ -32,4 +32,9 @@ class Server extends Model
     {
         return $this->hasMany(Stream::class);
     }
+
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
+    }
 }

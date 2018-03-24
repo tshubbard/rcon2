@@ -74,9 +74,13 @@
 				}
 			}
 		},
-		'created': function(){
-			$.get('/api/v1/user/servers', function(data){
+		'created': function() {
+		    console.log('getting servers');
+
+			$.get('/api/v1/user/servers', function(data) {
 				this.servers = data;
+				console.log('user/servers data ', data);
+
 
 				if(this.servers.length > 0)
 					this.server_selected = this.servers[0];

@@ -74,9 +74,6 @@ class DashboardController extends Controller
 	{
 		$servers = Auth::user()->servers->toArray();
 
-		foreach($servers as $key => $value)
-			$servers[$key]['events'] = \App\ServerEvent::find(array('server_id' => $value['id']))->toArray();
-
 		return $servers;
 	}
 

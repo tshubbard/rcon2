@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\Server;
+use App\ServerEvent;
 
 class DashboardController extends Controller
 {
@@ -73,6 +74,13 @@ class DashboardController extends Controller
 	public function servers()
 	{
 		$servers = Auth::user()->servers->toArray();
+
+		foreach ($servers as &$server) {
+            $server['events'] = ServerEvent::where([
+                ['server_id', '=', $server['id']],
+                ['deleted_at', '=', null]
+            ])->get();
+        }
 
 		return $servers;
 	}

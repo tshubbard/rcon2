@@ -16,6 +16,9 @@ if(document.getElementById('app') !== null)
             'path': '/dashboard',
             'component': Dashboard
         }, {
+            'path': '/dashboard/:serverId',
+            'component': Dashboard
+        }, {
             'path': '/u/:userName',
             'component': UserRecord
         }]

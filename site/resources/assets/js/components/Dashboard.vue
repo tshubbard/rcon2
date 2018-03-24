@@ -75,18 +75,28 @@
 			}
 		},
 		'created': function() {
+		    var serverId = +this.$route.params.serverId;
 		    console.log('getting servers');
 
-			$.get('/api/v1/user/servers', function(data) {
-				this.servers = data;
-				console.log('user/servers data ', data);
 
+            $.get('/api/v1/user/servers', function(data) {
+                this.servers = data;
+                console.log('user/servers data ', data);
 
-				if(this.servers.length > 0)
-					this.server_selected = this.servers[0];
+                debugger;
+				if (serverId) {
+				    this.server_selected = _.find(this.servers, function(server) {
+				        return server.id === serverId;
+					})
+				} else {
+                    if(this.servers.length > 0) {
+                        this.server_selected = this.servers[0];
+                    }
+				}
 
-				console.log(this.server_selected);
-			}.bind(this), 'json');
+                console.log(this.server_selected);
+            }.bind(this), 'json');
+
 		},
 		'methods': {
 			'updateSelectedServer': function(e){

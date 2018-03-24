@@ -52,9 +52,7 @@ class User extends Authenticatable
             Server::class,
             Account::class,
             'id',
-            'account_id',
-            'id',
-            'id'
+            'account_id'
         );
     }
 

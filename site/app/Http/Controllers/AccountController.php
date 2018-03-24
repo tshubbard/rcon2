@@ -19,7 +19,7 @@ class AccountController extends Controller
     }
 
     /**
-     * API - Display the specified User in JSON
+     * API - Display the specified Account in JSON
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Account  $account The Account to return

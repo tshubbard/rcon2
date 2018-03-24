@@ -18,8 +18,8 @@ mix
         ],
         'public/js/app.js'
     )
-    .less('resources/assets/less/app.less', 'public/css')
     .combine('node_modules/bootstrap/dist/css/bootstrap.css', 'public/css/vendor.css')
+    .less('resources/assets/less/app.less', 'public/css')
     .extract(['vue', 'bootstrap'])
     .browserSync({
         open: 'local',

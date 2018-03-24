@@ -13,7 +13,6 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'account_id' => 1,
             'name' => 'Haelix',
             'email' => 'tshubbard2@gmail.com',
             'password' => bcrypt('secret'),
@@ -22,7 +21,6 @@ class UsersTableSeeder extends Seeder
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
         DB::table('users')->insert([
-            'account_id' => 1,
             'name' => 'LordAmish',
             'email' => 'adam.voigt@gmail.com',
             'password' => bcrypt('secret'),
@@ -31,7 +29,6 @@ class UsersTableSeeder extends Seeder
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
         DB::table('users')->insert([
-            'account_id' => 1,
             'name' => 'ScopeXL',
             'email' => 'eroesch88@gmail.com',
             'password' => bcrypt('secret'),
@@ -40,7 +37,6 @@ class UsersTableSeeder extends Seeder
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
         DB::table('users')->insert([
-            'account_id' => 2,
             'name' => 'Turd Fergusen (Test Default Role)',
             'email' => 'role1@gmail.com',
             'password' => bcrypt('secret'),
@@ -49,7 +45,6 @@ class UsersTableSeeder extends Seeder
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
         DB::table('users')->insert([
-            'account_id' => 2,
             'name' => 'Turd Fergusen (Test User Role)',
             'email' => 'role2@gmail.com',
             'password' => bcrypt('secret'),
@@ -58,7 +53,6 @@ class UsersTableSeeder extends Seeder
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
         DB::table('users')->insert([
-            'account_id' => 2,
             'name' => 'Turd Fergusen (Test Mod Role)',
             'email' => 'role3@gmail.com',
             'password' => bcrypt('secret'),

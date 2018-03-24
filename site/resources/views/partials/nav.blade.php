@@ -47,6 +47,9 @@
                     </a>
 
                     <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="/u/{{Auth::user()->name}}">Profile</a>
+                        </li>
                         @if(Auth::user()->isAdmin())
                             <li>
                                 <a class="dropdown-item" href="/admin/">Admin</a>

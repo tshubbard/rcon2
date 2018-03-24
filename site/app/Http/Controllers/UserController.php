@@ -2,32 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Account;
+use App\User;
 use Illuminate\Http\Request;
 
-class AccountController extends Controller
+class UserController extends Controller
 {
+
     /**
      * Display the specified resource.
      *
-     * @param  \App\Account  $account
+     * @param  string  $userName The user name of a user to return
      * @return \Illuminate\Http\Response
      */
-    public function show(Account $account)
+    public function show($userName)
     {
-        return view('accounts.show', compact('account'));
+        $user = User::where('name' , '=', $userName)->first();
+
+        return view('users.show', compact('user'));
     }
 
     /**
      * API - Display the specified User in JSON
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Account  $account The Account to return
+     * @param  string  $userName The user name of a user to return
      * @return \Illuminate\Http\Response
      */
-    public function showJSON(Request $request, Account $account)
+    public function showJSON(Request $request, $userName)
     {
-        return response()->json($account);
+        $user = User::where('name' , '=', $userName)->first();
+
+        return response()->json($user);
     }
 
     /**
@@ -64,10 +69,10 @@ class AccountController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Account  $account
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Account $account)
+    public function edit($id)
     {
         //
     }
@@ -76,10 +81,10 @@ class AccountController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Account  $account
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Account $account)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -87,10 +92,10 @@ class AccountController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Account  $account
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Account $account)
+    public function destroy($id)
     {
         //
     }

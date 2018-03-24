@@ -6,7 +6,8 @@
                     <div class="card-header">Example Component</div>
 
                     <div class="card-body">
-                        I'm an example component. 444
+                        I'm an example component.
+                        <input v-model="message">
                     </div>
                 </div>
             </div>
@@ -16,8 +17,17 @@
 
 <script>
     export default {
-        mounted() {
-            console.log('Component mounted.')
+        msg: 'hello',
+        data: function() {
+            return {
+                message: this.msg
+            }
+        },
+        methods: {
+            mounted() {
+                console.log('Component mounted.')
+
+            }
         }
     }
 </script>

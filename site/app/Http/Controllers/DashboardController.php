@@ -25,7 +25,7 @@ class DashboardController extends Controller
         //$serverData = json_encode($serverData);
 
         //dd($serverData);
-        return view('user.dashboard-layout', compact('serverData'));
+        return view('dashboard.dashboard-layout', compact('serverData'));
     }
 
     /**
@@ -45,7 +45,7 @@ class DashboardController extends Controller
         $serverData['selectedServer'] = $server;
 
         $serverData = json_encode($serverData);
-        return view('user.dashboard-layout', compact('serverData'));
+        return view('dashboard.dashboard-layout', compact('serverData'));
     }
 
     /**

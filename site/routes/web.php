@@ -17,13 +17,17 @@ Route::get('/', 'HomeController@index')->name('home');
 
 // Requires User Authentication
 Route::group(['middleware' => ['auth']], function () {
+    // AccountController
+    Route::get('/a/{account}', 'AccountController@show');
+    Route::get('/api/v1/a/{account}', 'AccountController@showJSON');
+
     // DashboardController
     Route::get('/dashboard/', 'DashboardController@index');
     Route::get('/dashboard/{serverId}', 'DashboardController@show');
 
     Route::get('/api/v1/user/servers', 'DashboardController@servers');
 
-    // ServerController
+    // ItemController
     Route::get('/api/v1/items', 'ItemController@index');
 
     // ServerController
@@ -38,6 +42,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/api/v1/serverEvent', 'ServerEventController@store');
     Route::put('/api/v1/serverEvent/{serverEvent}', 'ServerEventController@update');
     Route::delete('/api/v1/serverEvent/{serverEvent}', 'ServerEventController@destroy');
+
+    // UserController
+    Route::get('/u/{userName}', 'UserController@show');
+    Route::get('/api/v1/u/{userName}', 'UserController@showJSON');
 });
 
 // Requires Admin Authentication

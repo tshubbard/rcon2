@@ -26,12 +26,6 @@
 
 		@yield('content')
 
-        <div id="vueapp" class="content">
-	        <router-view></router-view>
-        </div>
-
-        <example-component></example-component>
-
         <div class="footer">
             <div class="container">
                 <span class="float-right"><a href="#">Back to top</a></span>

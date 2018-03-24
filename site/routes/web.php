@@ -18,7 +18,7 @@ Route::get('/', 'HomeController@index')->name('home');
 // Requires User Authentication
 Route::group(['middleware' => ['auth']], function () {
     // DashboardController
-    Route::get('/dashboard', 'DashboardController@index');
+    Route::get('/dashboard/', 'DashboardController@index');
     Route::get('/dashboard/{serverId}', 'DashboardController@show');
 
     Route::get('/api/v1/user/servers', 'DashboardController@servers');

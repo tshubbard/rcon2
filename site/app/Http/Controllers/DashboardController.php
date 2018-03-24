@@ -15,14 +15,14 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $serverData = $this->_getDefaultViewData();
+        //$serverData = $this->_getDefaultViewData();
 
-        if (count($serverData['servers']) === 1) {
+        //if (count($serverData['servers']) === 1) {
             // if there's only one server, just go to the server page
-            return redirect('/dashboard/' . $serverData['servers'][0]['id']);
-        }
+            //return redirect('/dashboard/' . $serverData['servers'][0]['id']);
+        //}
 
-        $serverData = json_encode($serverData);
+        //$serverData = json_encode($serverData);
 
         //dd($serverData);
         return view('user.dashboard-layout', compact('serverData'));
@@ -62,7 +62,7 @@ class DashboardController extends Controller
             'breadcrumbs' => array(
                 array(
                     'label' => 'Dashboard',
-                    'url' => '/dashboard'
+                    'url' => '/dashboard/'
                 ),
             ),
         );

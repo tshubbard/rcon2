@@ -72,7 +72,12 @@ class DashboardController extends Controller
 
 	public function servers()
 	{
-		return $this->_getDefaultViewData()['servers'];
+		$servers = Auth::user()->servers->toArray();
+
+		foreach($servers as $key => $value)
+			$servers[$key]['events'] = \App\ServerEvent::find(array('server_id' => $value['id']))->toArray();
+
+		return $servers;
 	}
 
     /**

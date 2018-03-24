@@ -76,14 +76,11 @@
 		},
 		'created': function() {
 		    var serverId = +this.$route.params.serverId;
-		    console.log('getting servers');
-
 
             $.get('/api/v1/user/servers', function(data) {
                 this.servers = data;
                 console.log('user/servers data ', data);
 
-                debugger;
 				if (serverId) {
 				    this.server_selected = _.find(this.servers, function(server) {
 				        return server.id === serverId;

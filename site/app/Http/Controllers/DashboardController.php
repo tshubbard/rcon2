@@ -59,7 +59,7 @@ class DashboardController extends Controller
         $user = Auth::user();
         $viewData = array(
             'user' => $user,
-            'servers' => $user->servers,
+            'servers' => $this->servers(),
             'breadcrumbs' => array(
                 array(
                     'label' => 'Dashboard',
@@ -73,13 +73,20 @@ class DashboardController extends Controller
 
 	public function servers()
 	{
-		$servers = Auth::user()->servers->toArray();
+	    // get all the accounts a user is assigned to
+	    $accounts = Auth::user()->accounts;
 
-		foreach ($servers as &$server) {
-            $server['events'] = ServerEvent::where([
-                ['server_id', '=', $server['id']],
-                ['deleted_at', '=', null]
-            ])->get();
+	    // loop over accounts and get servers for each account
+	    foreach ($accounts as $acct) {
+            $servers = $acct->servers;
+            foreach ($servers as &$server) {
+                $serverData = $server->toArray();
+                // get server events for each server
+                $server['events'] = ServerEvent::where([
+                    ['server_id', '=', $serverData['id']],
+                    ['deleted_at', '=', null]
+                ])->get();
+            }
         }
 
 		return $servers;

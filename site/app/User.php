@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -41,20 +42,6 @@ class User extends Authenticatable
     protected $guarded = [
         'role_id',
     ];
-
-    /**
-     * Returns the servers assigned to the User
-     *
-     */
-    public function servers()
-    {
-        return $this->hasManyThrough(
-            Server::class,
-            Account::class,
-            'id',
-            'account_id'
-        );
-    }
 
     /**
      * The accounts that belong to the user.

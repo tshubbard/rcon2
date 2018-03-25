@@ -25,7 +25,11 @@
         </header>
 
         <div class="content">
-            <router-view></router-view>
+            @guest
+                @yield('content')
+            @else
+                <router-view></router-view>
+            @endguest
         </div>
 
         <div class="footer">

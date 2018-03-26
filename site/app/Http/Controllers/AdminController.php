@@ -15,8 +15,20 @@ class AdminController extends Controller
      */
     public function index()
     {
+        //$viewData = $this->_getDefaultViewData();
+        return view('admin.index');
+    }
+
+    /**
+     * API - Send the admin index data in json
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function indexJSON(Request $request)
+    {
         $viewData = $this->_getDefaultViewData();
-        return view('admin.index', $viewData);
+        return response()->json($viewData);
     }
 
     /**
@@ -26,12 +38,28 @@ class AdminController extends Controller
      */
     public function usersIndex()
     {
+        /*
         $viewData = array_merge(
             $this->_getDefaultViewData(),
             array('users' => User::all())
         );
+        */
+        return view('admin.users.index');
+    }
 
-        return view('admin.users.index', $viewData);
+    /**
+     * API - Send the admin users data in json
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function usersIndexJSON(Request $request)
+    {
+        $viewData = array_merge(
+            $this->_getDefaultViewData(),
+            array('users' => User::all())
+        );
+        return response()->json($viewData);
     }
 
     /**

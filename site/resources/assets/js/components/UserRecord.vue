@@ -4,19 +4,27 @@
             <span class="name">{{ user.name }}</span>
         </h3>
 
-        <div class="record-body">
-            <div class="user-name">
-
-                <label for="name">User: </label>
-                <span class="name" id="name" name="name">{{ user }}</span>
-            </div>
-            <div class="user-name">
-
-                <label for="accounts">Accounts: </label>
-                <span class="accounts" id="accounts" name="accounts">{{ accounts }}</span>
+        <div class="container-fluid">
+            <div class="row record-body">
+                <div class="col-md-6">
+                    <h5>User Info</h5>
+                    <div>
+                        <label for="name">Email: </label>
+                        <span class="name" id="name" name="name">{{ user.email }}</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h5>Accounts Info</h5>
+                    <div>
+                        <ul>
+                            <li v-for="acct in accounts">
+                                {{acct.name}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 </template>
 <script>

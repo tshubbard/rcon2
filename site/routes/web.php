@@ -51,5 +51,8 @@ Route::group(['middleware' => ['auth']], function () {
 // Requires Admin Authentication
 Route::group(['middleware' => ['admin']], function () {
     Route::get('/admin', 'AdminController@index');
+    Route::get('/api/v1/admin', 'AdminController@indexJSON');
+
     Route::get('/admin/users', 'AdminController@usersIndex');
+    Route::get('/api/v1/admin/users', 'AdminController@usersIndexJSON');
 });

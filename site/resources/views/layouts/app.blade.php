@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="{{ asset('css/vendor.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     @yield('styles')
+
+    <link href="https://fonts.googleapis.com/css?family=Lato|Titillium+Web" rel="stylesheet">
 </head>
 <body>
     <div id="app" class="site-wrapper">

@@ -45,16 +45,12 @@
 </template>
 <script>
     export default {
-        'created': function() {
-
+        created: function() {
             console.log('this: ', this);
-
         },
-        'methods': {
-
+        methods: {
         },
-        'computed': {
-
+        computed: {
         }
     }
 </script>

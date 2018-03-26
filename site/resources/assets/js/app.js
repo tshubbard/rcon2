@@ -5,8 +5,8 @@ import VueRouter from 'vue-router'
 
 if (document.getElementById('app') !== null) {
 
-    Vue.component('example-component', require('./components/ExampleComponent.vue'));
     const Dashboard = Vue.component('dashboard', require('./components/Dashboard.vue'));
+    const AccountRecord = Vue.component('account-record', require('./components/AccountRecord.vue'));
     const UserRecord = Vue.component('user-record', require('./components/UserRecord.vue'));
     const HomeCarousel = Vue.component('home-carousel', require('./components/HomeCarousel.vue'));
     const AdminIndex = Vue.component('admin-index', require('./components/AdminIndex.vue'));
@@ -18,6 +18,9 @@ if (document.getElementById('app') !== null) {
             {
                 'path': '/',
                 'component': HomeCarousel
+            }, {
+                'path': '/a/:accountName',
+                'component': AccountRecord
             }, {
                 'path': '/admin',
                 'component': AdminIndex

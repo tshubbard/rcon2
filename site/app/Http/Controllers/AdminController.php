@@ -15,7 +15,6 @@ class AdminController extends Controller
      */
     public function index()
     {
-        //$viewData = $this->_getDefaultViewData();
         return view('admin.index');
     }
 
@@ -38,12 +37,6 @@ class AdminController extends Controller
      */
     public function usersIndex()
     {
-        /*
-        $viewData = array_merge(
-            $this->_getDefaultViewData(),
-            array('users' => User::all())
-        );
-        */
         return view('admin.users.index');
     }
 

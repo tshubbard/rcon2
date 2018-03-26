@@ -17,7 +17,11 @@
                     <tbody>
                         <tr v-for="user in users">
                             <td class="text-center">{{user.id}}</td>
-                            <td>{{user.name}}</td>
+                            <td>
+                                <router-link class="nav-link" :to="'/u/' + user.name">
+                                    {{user.name}}
+                                </router-link>
+                            </td>
                             <td>{{user.email}}</td>
                             <td class="text-center">{{user.role_id}}</td>
                             <td>

@@ -22,11 +22,15 @@ class AccountController extends Controller
      * API - Display the specified Account in JSON
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Account  $account The Account to return
+     * @param  string  $accountName The account name to return
      * @return \Illuminate\Http\Response
      */
-    public function showJSON(Request $request, Account $account)
+    public function showJSON(Request $request, $accountName)
     {
+        $account = Account::where('name' , '=', $accountName)->first();
+        // weird way to populate account users
+        $account->users;
+
         return response()->json($account);
     }
 

@@ -11,7 +11,7 @@
     <div class="collapse navbar-collapse" id="app-navbar-collapse">
         <ul class="navbar-nav mr-auto">
             @auth
-                <li class="nav-item active">
+                <li class="nav-item">
                     <router-link class="nav-link" to="/dashboard">Dashboard</router-link>
                 </li>
 

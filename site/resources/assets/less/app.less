@@ -60,17 +60,25 @@ nav {
             left: auto;
         }
     }
-    li.router-link-exact-active {
-        color: @color-white;
-    }
-    .navbar-nav {
-        padding-top: 5px;
-    }
     .md-theme-default {
         .dropdown-menu {
             a:not(.md-button):hover {
                 background-color: @color-steel;
             }
+        }
+    }
+}
+.navbar-dark {
+    .navbar-nav {
+        padding-top: 5px;
+
+        .nav-link {
+            &.router-link-exact-active {
+                color: @color-white;
+            }
+        }
+        .nav-link:focus {
+            color: @color-white;
         }
     }
 }

@@ -12,15 +12,21 @@
         <ul class="navbar-nav mr-auto">
             @auth
                 <li class="nav-item">
-                    <router-link class="nav-link" to="/dashboard">Dashboard</router-link>
+                    <router-link class="nav-link"
+                                 class-active="active"
+                                 to="/dashboard">Dashboard</router-link>
                 </li>
 
                 @if(Auth::user()->isAdmin())
                     <li class="nav-item">
-                        <router-link class="nav-link" to="/admin">Admin</router-link>
+                        <router-link class="nav-link"
+                                     class-active="active"
+                                     to="/admin">Admin</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" to="/admin/users">Users</router-link>
+                        <router-link class="nav-link"
+                                     class-active="active"
+                                     to="/admin/users">Users</router-link>
                     </li>
                 @endif
             @endauth

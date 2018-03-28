@@ -66,7 +66,17 @@
                 </div>
             </div>
         </div>
+        <md-dialog-confirm
+                :md-active.sync="showDeleteServerEvent"
+                md-title="Delete Server Event "
+                v-model="selectedDeleteEvent"
+                md-content="Are you sure you want to delete the event?"
+                md-confirm-text="Delete Event"
+                md-cancel-text="Cancel"
+                @md-cancel="onDeleteServerEventCancel"
+                @md-confirm="onDeleteServerEventConfirm" />
     </div>
+
 </template>
 
 <script>
@@ -78,6 +88,10 @@
                 servers: [],
                 server_selected: {
                     events: []
+                },
+                showDeleteServerEvent: false,
+                selectedDeleteEvent: {
+                    name: ''
                 }
             }
         },
@@ -131,8 +145,19 @@
                     })
             },
             removeServerEvent: function(event) {
+                this.selectedDeleteEvent = event;
+                this.showDeleteServerEvent = true;
                 console.log('removeServerEvent ', event);
-            }
+            },
+            onDeleteServerEventConfirm: function(event) {
+                this.selectedDeleteEvent = event;
+                console.log('onDeleteServerEventConfirm ', event);
+            },
+            onDeleteServerEventCancel: function() {
+                this.showDeleteServerEvent = false;
+                console.log('onDeleteServerEventCancel ', event);
+
+            },
         },
         computed: {
             eventClass: function(event){

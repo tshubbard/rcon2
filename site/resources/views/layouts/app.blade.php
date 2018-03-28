@@ -12,7 +12,7 @@
     <base href="/" />
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons|Titillium+Web" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/vue-material@beta/dist/theme/default-dark.css">
+    <link rel="stylesheet" href="https://unpkg.com/vue-material@beta/dist/theme/default.css">
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/vendor.css') }}" />

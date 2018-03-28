@@ -7,6 +7,13 @@ import 'vue-material/dist/vue-material.min.css';
 
 Vue.use(VueMaterial);
 
+import axios from 'axios';
+export const HTTP = axios.create({
+    headers: {
+        Authorization: 'Bearer {token}'
+    }
+});
+
 if (document.getElementById('app') !== null) {
 
     const Dashboard = Vue.component('dashboard', require('./components/Dashboard.vue'));

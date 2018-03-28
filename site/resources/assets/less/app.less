@@ -43,6 +43,8 @@ header {
     background-color: @color-bg-dark;
 }
 nav {
+    font-size: 1rem;
+
     &.navbar {
         padding: 0.5rem 0;
     }
@@ -56,6 +58,19 @@ nav {
         &.show {
             right: 0px;
             left: auto;
+        }
+    }
+    li.router-link-exact-active {
+        color: @color-white;
+    }
+    .navbar-nav {
+        padding-top: 5px;
+    }
+    .md-theme-default {
+        .dropdown-menu {
+            a:not(.md-button):hover {
+                background-color: @color-steel;
+            }
         }
     }
 }
@@ -173,14 +188,20 @@ nav {
                     border-bottom: 1px solid @color-mist-dark;
                     padding: 5px 10px;
 
-                    .md-switch.md-theme-default.md-checked {
+                    .md-switch.md-theme-default {
                         .md-switch-container {
-                            background-color: @color-bs-teal;
+                            background-color: @color-steel;
                         }
-                        .md-switch-thumb {
-                            background-color: @color-bs-green;
+                        &.md-checked {
+                            .md-switch-container {
+                                background-color: @color-bs-teal;
+                            }
+                            .md-switch-thumb {
+                                background-color: @color-bs-green;
+                            }
                         }
                     }
+
                 }
             }
         }

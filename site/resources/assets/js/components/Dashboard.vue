@@ -22,7 +22,7 @@
                                 <div class="panel-top">
                                     <div class="md-hue-2">
                                         <div class="md-toolbar-tools">
-                                            <span class="float-right">
+                                            <span class="server-actions float-right">
                                                 <i class="material-icons clickable" aria-hidden="true"
                                                    v-on:click="showAddEditServerEvent()">add_box</i>
                                             </span>
@@ -70,6 +70,8 @@
 </template>
 
 <script>
+    import {HTTP} from '../app';
+
     export default {
         data: function(){
             return {
@@ -82,29 +84,32 @@
         created: function() {
             let serverId = +this.$route.params.serverId;
 
-            $.get('/api/v1/user/servers', function(data) {
-                this.servers = data;
+            HTTP.get('/api/v1/user/servers')
+                .then(response => {
+                    this.servers = response.data;
 
-                // add any data parsing we need
-                _.each(this.servers, function(server) {
-                    _.each(server.events, function(event) {
-                        event.is_active = !!event.is_active;
+                    // add any data parsing we need
+                    _.each(this.servers, function(server) {
+                        _.each(server.events, function(event) {
+                            event.is_active = !!event.is_active;
+                        }, this);
                     }, this);
-                }, this);
 
-                if (serverId) {
-                    this.server_selected = _.find(this.servers, function(server) {
-                        return server.id === serverId;
-                    })
-                } else {
-                    if(this.servers.length > 0) {
-                        this.server_selected = this.servers[0];
+                    if (serverId) {
+                        this.server_selected = _.find(this.servers, function(server) {
+                            return server.id === serverId;
+                        })
+                    } else {
+                        if(this.servers.length > 0) {
+                            this.server_selected = this.servers[0];
+                        }
                     }
-                }
-
-                console.log('user/servers data ', data);
-                console.log(this.server_selected);
-            }.bind(this), 'json');
+                    console.log('user/servers data ', response);
+                    console.log(this.server_selected);
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
         },
         methods: {
             updateSelectedServer: function(e) {
@@ -114,8 +119,16 @@
                 console.log('showAddEditServerEvent ', event);
             },
             toggleEventActive: function(event) {
-                event.is_active = !event.is_active;
-                console.log('toggleEventActive ', event);
+                let active = event.is_active ? 1 : 0;
+                HTTP.put('/api/v1/serverEvent/' + event.id, {
+                        is_active: active
+                    })
+                    .then(response => {
+                        console.log('response.data ', response.data);
+                    })
+                    .catch(e => {
+                        this.errors.push(e)
+                    })
             },
             removeServerEvent: function(event) {
                 console.log('removeServerEvent ', event);

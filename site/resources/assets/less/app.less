@@ -173,17 +173,12 @@ nav {
                     border-bottom: 1px solid @color-mist-dark;
                     padding: 5px 10px;
 
-                    md-switch {
-                        margin: 0;
-                        display: inline;
-
-                        &.md-checked {
-                            .md-bar {
-                                background-color: @color-bs-teal;
-                            }
-                            .md-thumb {
-                                 background-color: @color-bs-green;
-                             }
+                    .md-switch.md-theme-default.md-checked {
+                        .md-switch-container {
+                            background-color: @color-bs-teal;
+                        }
+                        .md-switch-thumb {
+                            background-color: @color-bs-green;
                         }
                     }
                 }
@@ -193,6 +188,13 @@ nav {
             font-size: 1.25rem;
             margin-top: 3px;
         }
+    }
+    .server-actions {
+        top: 16px;
+        position: relative;
+    }
+    .server-event-name {
+        vertical-align: super;
     }
     // Admin styles
     .admin {

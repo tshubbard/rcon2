@@ -165,7 +165,7 @@
                 }
 
                 this.showServerEventAddEdit = !this.showServerEventAddEdit;
-                console.log('showAddEditServerEvent ', this.showServerEventAddEdit);
+                console.log('showAddEditServerEvent ', this.selectedServerEvent, this.showServerEventAddEdit);
             },
 
             /**

@@ -280,7 +280,7 @@ nav {
         font-size: 14px;
     }
 }
-md-dialog {
+.md-dialog {
     &.add-server,
     &.add-edit-server-event {
         padding-left: 0;
@@ -290,7 +290,7 @@ md-dialog {
         label {
             font-weight: bold;
         }
-        md-radio-group {
+        .md-radio-group {
             &.side-by-side {
                 display: inline-flex;
                 width: 100%;
@@ -309,7 +309,7 @@ md-dialog {
                 }
             }
         }
-        md-switch.is-public {
+        .md-switch.is-public {
             margin: 3px 0 0 35px;
 
             &.md-checked {
@@ -321,17 +321,17 @@ md-dialog {
                 }
             }
         }
-        md-switch {
+        .md-switch {
             .md-ink-ripple {
                 color: rgba(19, 162, 235, 0.26);
             }
         }
-        md-divider.dialog-divider {
+        .md-divider.dialog-divider {
             margin-bottom: 1rem;
         }
     }
 }
-md-radio-button {
+.md-radio-button {
     .md-container {
         .md-ripple {
             background-color: @color-blue-500;
@@ -350,7 +350,7 @@ md-radio-button {
             display: list-item;
         }
     }
-    md-list {
+    .md-list {
         &.md-dense {
             md-list-item {
 
@@ -364,6 +364,9 @@ md-radio-button {
     .command-target-help-text {
         font-weight: 400;
         font-size: 0.7rem;
+    }
+    .md-toolbar {
+        margin-bottom: 15px;
     }
 }
 .full-width {

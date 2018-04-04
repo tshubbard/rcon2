@@ -24,7 +24,7 @@
                                         <div class="md-toolbar-tools">
                                             <span class="server-actions float-right">
                                                 <i class="material-icons clickable" aria-hidden="true"
-                                                   v-on:click="showAddEditServerEvent()">add_box</i>
+                                                   @click.stop="showAddEditServerEvent()">add_box</i>
                                             </span>
                                             <h2 flex>Server Events</h2>
                                         </div>
@@ -66,6 +66,7 @@
                 </div>
             </div>
         </div>
+
         <md-dialog-confirm
                 :md-active.sync="showDeleteServerEvent"
                 md-title="Delete Server Event "
@@ -74,20 +75,35 @@
                 md-confirm-text="Delete Event"
                 md-cancel-text="Cancel"
                 @md-cancel="onDeleteServerEventCancel"
-                @md-confirm="onDeleteServerEventConfirm" />
-    </div>
+                @md-confirm="onDeleteServerEventConfirm"
+        />
 
+        <server-event-add-edit
+                :visible="showServerEventAddEdit"
+                :data="selectedServerEvent"
+                @close="showServerEventAddEdit = false">
+
+        </server-event-add-edit>
+    </div>
 </template>
 
 <script>
     import {HTTP} from '../app';
+    import ServerEventAddEdit from './ServerEventAddEdit';
 
     export default {
-        data: function(){
+        components: {
+            ServerEventAddEdit
+        },
+        data: function() {
             return {
                 servers: [],
                 server_selected: {
                     events: []
+                },
+                showServerEventAddEdit: false,
+                selectedServerEvent: {
+                    actionType: 'Add'
                 },
                 showDeleteServerEvent: false,
                 selectedDeleteEvent: {
@@ -129,9 +145,34 @@
             updateSelectedServer: function(e) {
                 this.server_selected = this.servers[e.target.value];
             },
+
+            /**
+             * Toggles the Add/Edit Server Event modal
+             */
             showAddEditServerEvent: function(event) {
-                console.log('showAddEditServerEvent ', event);
+                if (event) {
+                    this.selectedServerEvent = event;
+                    this.selectedServerEvent.actionType = 'Edit';
+                } else {
+                    this.selectedServerEvent = {
+                        actionType: 'Add',
+                        host: undefined,
+                        max_players: undefined,
+                        name: undefined,
+                        password: undefined,
+                        port: undefined
+                    };
+                }
+
+                this.showServerEventAddEdit = !this.showServerEventAddEdit;
+                console.log('showAddEditServerEvent ', this.showServerEventAddEdit);
             },
+
+            /**
+             * Toggles a server event active or not
+             *
+             * @param {Object} event The ServerEvent object to toggle
+             */
             toggleEventActive: function(event) {
                 let active = event.is_active ? 1 : 0;
                 HTTP.put('/api/v1/serverEvent/' + event.id, {

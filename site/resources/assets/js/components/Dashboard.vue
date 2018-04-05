@@ -122,6 +122,7 @@
                     _.each(this.servers, function(server) {
                         _.each(server.events, function(event) {
                             event.is_active = !!event.is_active;
+                            event.is_public = !!event.is_public;
                         }, this);
                     }, this);
 

@@ -195,21 +195,6 @@ nav {
                     font-size: 0.85rem;
                     border-bottom: 1px solid @color-mist-dark;
                     padding: 5px 10px;
-
-                    .md-switch.md-theme-default {
-                        .md-switch-container {
-                            background-color: @color-steel;
-                        }
-                        &.md-checked {
-                            .md-switch-container {
-                                background-color: @color-bs-teal;
-                            }
-                            .md-switch-thumb {
-                                background-color: @color-bs-green;
-                            }
-                        }
-                    }
-
                 }
             }
         }
@@ -309,27 +294,39 @@ nav {
                 }
             }
         }
-        .md-switch.is-public {
-            margin: 3px 0 0 35px;
+    }
+}
+.md-switch {
+    margin: 3px 0 0 35px;
 
-            &.md-checked {
-                .md-bar {
-                    background-color: @color-blue-200;
-                }
-                .md-thumb {
-                    background-color: @color-blue-500;
-                }
-            }
+    &.md-checked.blue {
+        .md-bar {
+            background-color: @color-blue-200;
         }
-        .md-switch {
-            .md-ink-ripple {
-                color: rgba(19, 162, 235, 0.26);
-            }
-        }
-        .md-divider.dialog-divider {
-            margin-bottom: 1rem;
+        .md-thumb {
+            background-color: @color-blue-500;
         }
     }
+    .md-ink-ripple.blue {
+        color: rgba(19, 162, 235, 0.26);
+    }
+    &.md-theme-default {
+        .md-switch-container {
+            background-color: @color-steel;
+        }
+        &.md-checked {
+            .md-switch-container {
+                background-color: @color-bs-teal;
+            }
+            .md-switch-thumb {
+                background-color: @color-bs-green;
+            }
+        }
+    }
+}
+
+.md-divider.dialog-divider {
+    margin-bottom: 1rem;
 }
 .md-radio-button {
     .md-container {

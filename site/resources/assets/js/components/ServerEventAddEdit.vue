@@ -27,12 +27,20 @@
                         <input id="event_name" type="text" class="form-control" name="event_name"
                                v-model="eventData.name" required>
                     </div>
-                    <div class="form-group col-md-3">
-                        <label for="is_public">Visible to Public</label>
+                    <div class="form-group col-md-2">
+                        <label for="is_public">Public</label>
                         <div>
                             <md-switch id="is_public" name="is_public" class="is-public"
                                        v-model="eventData.is_public"
                                        aria-label="Server Event Public on/off toggle"></md-switch>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="is_active">Active</label>
+                        <div>
+                            <md-switch id="is_active" name="is_active" class="is-active"
+                                       v-model="eventData.is_active"
+                                       aria-label="Server Event Active on/off toggle"></md-switch>
                         </div>
                     </div>
                     <div class="form-group col-md-2" v-show="eventData.actionType === 'Edit'">
@@ -61,6 +69,8 @@
                         {{selectedEventTypeText}}
                     </div>
                 </div>
+
+                <md-divider></md-divider>
 
             </md-dialog-content>
         </form>
@@ -124,12 +134,18 @@
             onChange: function() {
                 console.log('onChange: ', arguments);
             },
-            onDialogOpened: function() {
-                console.log('onDialogOpened: ', arguments);
 
+            /**
+             * When the dialog opens
+             */
+            onDialogOpened: function() {
+                this.selectedEventType = this.data.event_type;
             },
+
+            /**
+             * When the dialog closes
+             */
             onDialogClosed: function() {
-                console.log('onDialogClosed: ', arguments);
                 this.selectedEventType = {};
             }
         },

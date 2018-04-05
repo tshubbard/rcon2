@@ -2,6 +2,8 @@
     <md-dialog
             :md-active.sync="showDialog"
             aria-label="Add/Edit Rust Server Event Dialog"
+            @md-opened="onDialogOpened"
+            @md-closed="onDialogClosed"
             class="add-edit-server-event col-11">
 
         <form name="addEditServerActionEventForm">
@@ -46,7 +48,7 @@
                         <md-field>
                             <label for="event_type">Event Type</label>
                             <md-select id="event_type" name="event_type"
-                                       v-model="eventData.event_type">
+                                       v-model="selectedEventType">
                                 <md-option v-for="opt in eventTypes"
                                            :key="opt.id"
                                            :value="opt.id">
@@ -73,6 +75,7 @@
         ],
         data: function() {
             return {
+                selectedEventType: '',
                 eventTypes: [{
                     id: 'timer',
                     name: 'Scheduled/Timed',
@@ -106,16 +109,37 @@
                     name: 'Patrol Helicopter',
                     help: 'When the Patrol Helicopter spawns'
                 }],
+                eventTypeObj: {},
                 selectedEventTypeText: ''
             }
         },
         created: function() {
             console.log('this: ', this);
+
+            this.eventTypes.forEach(_.bind(function(evt) {
+                this.eventTypeObj[evt.id] = evt;
+            }, this));
         },
         methods: {
             onChange: function() {
                 console.log('onChange: ', arguments);
+            },
+            onDialogOpened: function() {
+                console.log('onDialogOpened: ', arguments);
 
+            },
+            onDialogClosed: function() {
+                console.log('onDialogClosed: ', arguments);
+                this.selectedEventType = {};
+            }
+        },
+        watch: {
+            selectedEventType: function(eventType) {
+                let evt = this.eventTypeObj[eventType];
+
+                if (eventType && evt) {
+                    this.selectedEventTypeText = evt.help;
+                }
             }
         },
         computed: {
@@ -131,9 +155,19 @@
             },
             eventData: {
                 get() {
+                    this.selectedEventType = this.data.event_type;
+
                     return this.data;
                 },
                 set(data) {
+                    let evt = this.eventTypeObj[this.selectedEventType];
+
+                    this.selectedEventType = data.event_type;
+
+                    if (evt) {
+                        this.selectedEventTypeText = this.eventTypeObj[this.selectedEventType].help;
+                    }
+
                     this.data = data;
                 }
             }

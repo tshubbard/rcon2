@@ -124,7 +124,7 @@
                         server.events.forEach(_.bind(function(event) {
                             event.is_active = !!event.is_active;
                             event.is_public = !!event.is_public;
-                            this.updateEventTimeInterval(event);
+                            this.updateEventTimer(event);
                         }, this));
                     }, this));
 
@@ -150,10 +150,10 @@
             /**
              * Converts interval time to days/hours/minutes
              */
-            updateEventTimeInterval: function(event) {
+            updateEventTimer: function(event) {
                 let days;
                 let hours;
-                let totalTime = event.interval;
+                let totalTime = event.command_timer;
 
                 event.command_interval_days = 0;
                 event.command_interval_hours = 0;

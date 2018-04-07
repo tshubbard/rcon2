@@ -78,7 +78,7 @@
                         <label for="trigger">Chat Trigger Word</label>
                         <div>
                             <input id="trigger" type="text" class="form-control" name="trigger"
-                                   v-model="eventData.trigger"
+                                   v-model="eventData.command_trigger"
                                    :required="eventData.event_type === 'player.chat'">
                         </div>
                     </div>
@@ -255,7 +255,7 @@
             saveAddEditServerEventDialog: function() {
 
                 if (this.eventData.event_type === 'timer') {
-                    this.eventData.interval =
+                    this.eventData.command_timer =
                         (this.eventData.command_interval_days * 1440) +
                         (this.eventData.command_interval_hours * 60) +
                         this.eventData.command_interval_minutes;

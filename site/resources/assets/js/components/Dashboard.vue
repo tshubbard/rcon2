@@ -152,7 +152,7 @@
              */
             showAddEditServerEvent: function(event) {
                 if (event) {
-                    this.selectedServerEvent = event;
+                    this.selectedServerEvent = _.clone(event);
                     this.selectedServerEvent.actionType = 'Edit';
                 } else {
                     this.selectedServerEvent = {

@@ -16,8 +16,6 @@
                             <i class="material-icons clickable" aria-label="Close dialog">clear</i>
                         </md-button>
                     </h2>
-
-
                 </div>
             </md-toolbar>
             <md-dialog-content>
@@ -56,7 +54,7 @@
                         <md-field>
                             <label for="event_type">Event Type</label>
                             <md-select id="event_type" name="event_type"
-                                       v-model="selectedEventType">
+                                       v-model="eventData.event_type">
                                 <md-option v-for="opt in eventTypes"
                                            :key="opt.id"
                                            :value="opt.id">
@@ -65,14 +63,93 @@
                             </md-select>
                         </md-field>
                     </div>
-                    <div class="form-group col-md-6">
-                        {{selectedEventTypeText}}
+                    <div class="form-group col-md-6 event-type-help-text">
+                        <div>
+                            {{selectedEventTypeText}}
+                        </div>
                     </div>
                 </div>
 
                 <md-divider></md-divider>
 
+                <!-- Chat Trigger -->
+                <div class="form-row" v-show="eventData.event_type === 'player.chat'">
+                    <div class="form-group col-md-6">
+                        <label for="trigger">Chat Trigger Word</label>
+                        <div>
+                            <input id="trigger" type="text" class="form-control" name="trigger"
+                                   v-model="eventData.trigger"
+                                   :required="eventData.event_type === 'player.chat'">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <small class="form-text text-muted">This is the trigger word that users should type in chat to
+                            cause an event to happen. <br/>Ex. !kits, !rules, etc
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Timer Inputs -->
+                <div class="form-row" v-show="eventData.event_type === 'timer'">
+                    <div class="form-group col-md-2">
+                        <label for="interval-days">Days</label>
+                        <md-field>
+                            <md-select id="interval-days" name="interval-days" class="white-select-dropdown"
+                                       v-model="eventData.command_interval_days"
+                                       aria-label="Interval Days Select">
+                                <md-option :value="opt.val"
+                                           :key="opt.val"
+                                           v-for="opt in optionsDays">
+                                    {{opt.val}}
+                                </md-option>
+                            </md-select>
+                        </md-field>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="interval-hours">Hours</label>
+                        <md-field>
+                            <md-select id="interval-hours" name="interval-hours" class="white-select-dropdown"
+                                       v-model="eventData.command_interval_hours"
+                                       aria-label="Interval Hours Select">
+                                <md-option :value="opt.val"
+                                           :key="opt.val"
+                                           v-for="opt in optionsHours">
+                                    {{opt.val}}
+                                </md-option>
+                            </md-select>
+                        </md-field>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="interval-minutes">Minutes</label>
+                        <md-field>
+                            <md-select id="interval-minutes" name="interval-minutes" class="white-select-dropdown"
+                                       v-model="eventData.command_interval_minutes"
+                                       aria-label="Interval Minutes Select">
+                                <md-option :value="opt.val"
+                                           :key="opt.val"
+                                           v-for="opt in optionsMinutes">
+                                    {{opt.val}}
+                                </md-option>
+                            </md-select>
+                        </md-field>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <small class="form-text text-muted">This is the timer or schedule for how often your "Command"
+                            should be executed.
+                        </small>
+                    </div>
+                </div>
+
+
             </md-dialog-content>
+            <md-dialog-actions layout="row" layout-align="end">
+                <md-button @click.stop="showDialog = false" type="button">
+                    Cancel
+                </md-button>
+                <md-button @click.stop="saveAddEditServerEventDialog()" class="md-primary">
+                    Save
+                </md-button>
+            </md-dialog-actions>
         </form>
     </md-dialog>
 </template>
@@ -85,7 +162,6 @@
         ],
         data: function() {
             return {
-                selectedEventType: '',
                 eventTypes: [{
                     id: 'timer',
                     name: 'Scheduled/Timed',
@@ -120,7 +196,10 @@
                     help: 'When the Patrol Helicopter spawns'
                 }],
                 eventTypeObj: {},
-                selectedEventTypeText: ''
+                selectedEventTypeText: '',
+                optionsDays: [],
+                optionsHours: [],
+                optionsMinutes: []
             }
         },
         created: function() {
@@ -129,10 +208,28 @@
             this.eventTypes.forEach(_.bind(function(evt) {
                 this.eventTypeObj[evt.id] = evt;
             }, this));
+
+            var i;
+            for (i = 0; i < 31; i++) {
+                this.optionsDays.push({
+                    val: i
+                });
+            }
+            for (i = 0; i < 24; i++) {
+                this.optionsHours.push({
+                    val: i
+                });
+            }
+            for (i = 0; i < 60; i++) {
+                this.optionsMinutes.push({
+                    val: i
+                });
+            }
         },
         methods: {
-            onChange: function() {
-                console.log('onChange: ', arguments);
+            onSelectedEventTypeChanged: function() {
+                //eventData.event_type = selectedEventType
+                debugger;
             },
 
             /**
@@ -147,6 +244,14 @@
              */
             onDialogClosed: function() {
                 this.selectedEventType = {};
+            },
+
+            /**
+             * Validates the server event info and saves or provides user feedback on errors
+             */
+            saveAddEditServerEventDialog: function() {
+                // todo: ADD SAVING
+                console.log('saveAddEditServerEventDialog ', this.eventData);
             }
         },
         watch: {
@@ -171,19 +276,13 @@
             },
             eventData: {
                 get() {
-                    this.selectedEventType = this.data.event_type;
-
                     return this.data;
                 },
                 set(data) {
-                    let evt = this.eventTypeObj[this.selectedEventType];
-
-                    this.selectedEventType = data.event_type;
-
+                    let evt = this.eventTypeObj[data.event_type];
                     if (evt) {
-                        this.selectedEventTypeText = this.eventTypeObj[this.selectedEventType].help;
+                        this.selectedEventTypeText = this.eventTypeObj[data.event_type].help;
                     }
-
                     this.data = data;
                 }
             }

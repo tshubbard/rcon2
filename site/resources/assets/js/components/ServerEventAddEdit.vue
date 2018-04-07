@@ -9,16 +9,22 @@
         <form name="addEditServerActionEventForm">
             <md-toolbar>
                 <div class="md-toolbar-tools">
-                    <h2>
+                    <h3>
                         {{eventData.actionType}} Server Event
-                        <md-button class="md-icon-button float-right"
+                        <md-button class="md-icon-button close-button"
                                    @click.stop="showDialog = false">
                             <i class="material-icons clickable" aria-label="Close dialog">clear</i>
                         </md-button>
-                    </h2>
+                    </h3>
                 </div>
             </md-toolbar>
-            <md-dialog-content>
+            <md-dialog-content style="overflow-y: scroll" class="md-scrollbar">
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <h5>Event Setup</h5>
+                    </div>
+                </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="event_name">Event Name</label>
@@ -70,7 +76,15 @@
                     </div>
                 </div>
 
-                <md-divider class="mb-4"></md-divider>
+                <md-divider class="mb-2"
+                            v-show="eventData.event_type === 'player.chat' || eventData.event_type === 'timer'"></md-divider>
+
+                <div class="form-row"
+                     v-show="eventData.event_type === 'player.chat' || eventData.event_type === 'timer'">
+                    <div class="form-group col-md-6">
+                        <h5>Event Type Configuration</h5>
+                    </div>
+                </div>
 
                 <!-- Chat Trigger -->
                 <div class="form-row" v-show="eventData.event_type === 'player.chat'">
@@ -140,6 +154,57 @@
                     </div>
                 </div>
 
+                <md-divider class="my-3"></md-divider>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <h5>Event Commands</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+
+                    </div>
+                    <div class="form-group col-md-6">
+
+                    </div>
+                </div>
+
+                <md-table v-model="eventData.commands" md-card>
+                    <md-table-toolbar>
+                        <h5 class="md-title">Commands</h5>
+                    </md-table-toolbar>
+                    <md-table-row>
+                        <md-table-head md-numeric>Order</md-table-head>
+                        <md-table-head>Type/Key</md-table-head>
+                        <md-table-head>Command</md-table-head>
+                        <md-table-head>Actions</md-table-head>
+                    </md-table-row>
+                    <md-table-row slot="md-table-row" slot-scope="{ item }">
+                        <md-table-cell md-label="Order" md-sort-by="order" md-numeric>{{ item.$index }}</md-table-cell>
+                        <md-table-cell md-label="Type/Key" md-numeric>{{ item.command_key }}</md-table-cell>
+                        <md-table-cell md-label="Command" md-numeric>{{ item.command }}</md-table-cell>
+                        <md-table-cell md-label="Actions" md-numeric>&nbsp;</md-table-cell>
+                    </md-table-row>
+                </md-table>
+
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        Command Type/Key
+                    </div>
+                    <div class="form-group col-md-4">
+                        Command
+                    </div>
+                </div>
+
+                <div class="form-row" v-for="cmd in eventData.commands">
+                    <div class="form-group col-md-3">
+                        {{cmd.command_key}}
+                    </div>
+                    <div class="form-group col-md-4">
+                        {{cmd.command}}
+                    </div>
+                </div>
 
             </md-dialog-content>
 
@@ -153,6 +218,7 @@
                     Save
                 </md-button>
             </md-dialog-actions>
+
         </form>
     </md-dialog>
 </template>

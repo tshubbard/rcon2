@@ -124,6 +124,7 @@
                         server.events.forEach(_.bind(function(event) {
                             event.is_active = !!event.is_active;
                             event.is_public = !!event.is_public;
+                            event.commands = JSON.parse(event.commands);
                             this.updateEventTimer(event);
                         }, this));
                     }, this));

@@ -18,14 +18,9 @@ class CreateServerEventsTable extends Migration
             $table->string('name');
             $table->unsignedInteger('server_id');
             $table->string('event_type', 30);
-            $table->string('command_key');
-            $table->text('command');
+            $table->json('commands');
             $table->string('command_trigger')->nullable();
-            $table->text('command_text')->nullable();
-            $table->string('command_itemid')->nullable();
-            $table->string('command_target')->nullable();
-            $table->unsignedInteger('command_quantity')->nullable();
-            $table->unsignedMediumInteger('interval')->nullable();
+            $table->unsignedMediumInteger('command_timer')->nullable();
             $table->boolean('is_indefinite')->default(0);
             $table->boolean('is_public')->default(0);
             $table->boolean('is_active')->default(0);

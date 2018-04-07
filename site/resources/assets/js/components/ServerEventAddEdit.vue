@@ -70,7 +70,7 @@
                     </div>
                 </div>
 
-                <md-divider></md-divider>
+                <md-divider class="mb-4"></md-divider>
 
                 <!-- Chat Trigger -->
                 <div class="form-row" v-show="eventData.event_type === 'player.chat'">
@@ -93,7 +93,7 @@
                 <div class="form-row" v-show="eventData.event_type === 'timer'">
                     <div class="form-group col-md-2">
                         <label for="interval-days">Days</label>
-                        <md-field>
+                        <md-field class="no-padding-top">
                             <md-select id="interval-days" name="interval-days" class="white-select-dropdown"
                                        v-model="eventData.command_interval_days"
                                        aria-label="Interval Days Select">
@@ -107,7 +107,7 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label for="interval-hours">Hours</label>
-                        <md-field>
+                        <md-field class="no-padding-top">
                             <md-select id="interval-hours" name="interval-hours" class="white-select-dropdown"
                                        v-model="eventData.command_interval_hours"
                                        aria-label="Interval Hours Select">
@@ -121,7 +121,7 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label for="interval-minutes">Minutes</label>
-                        <md-field>
+                        <md-field class="no-padding-top">
                             <md-select id="interval-minutes" name="interval-minutes" class="white-select-dropdown"
                                        v-model="eventData.command_interval_minutes"
                                        aria-label="Interval Minutes Select">
@@ -142,6 +142,9 @@
 
 
             </md-dialog-content>
+
+            <md-divider class="mt-4"></md-divider>
+
             <md-dialog-actions layout="row" layout-align="end">
                 <md-button @click.stop="showDialog = false" type="button">
                     Cancel
@@ -250,7 +253,16 @@
              * Validates the server event info and saves or provides user feedback on errors
              */
             saveAddEditServerEventDialog: function() {
+
+                if (this.eventData.event_type === 'timer') {
+                    this.eventData.interval =
+                        (this.eventData.command_interval_days * 1440) +
+                        (this.eventData.command_interval_hours * 60) +
+                        this.eventData.command_interval_minutes;
+                }
+
                 // todo: ADD SAVING
+
                 console.log('saveAddEditServerEventDialog ', this.eventData);
             }
         },
@@ -261,6 +273,9 @@
                 if (eventType && evt) {
                     this.selectedEventTypeText = evt.help;
                 }
+            },
+            eventData: function(a,b,c) {
+                console.log('eventData watcher ', arguments);
             }
         },
         computed: {

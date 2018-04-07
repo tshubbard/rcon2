@@ -97,6 +97,7 @@
         },
         data: function() {
             return {
+                errors: [],
                 servers: [],
                 server_selected: {
                     events: []
@@ -119,12 +120,13 @@
                     this.servers = response.data;
 
                     // add any data parsing we need
-                    _.each(this.servers, function(server) {
-                        _.each(server.events, function(event) {
+                    this.servers.forEach(_.bind(function(server) {
+                        server.events.forEach(_.bind(function(event) {
                             event.is_active = !!event.is_active;
                             event.is_public = !!event.is_public;
-                        }, this);
-                    }, this);
+                            this.updateEventTimeInterval(event);
+                        }, this));
+                    }, this));
 
                     if (serverId) {
                         this.server_selected = _.find(this.servers, function(server) {
@@ -139,10 +141,45 @@
                     console.log(this.server_selected);
                 })
                 .catch(e => {
+                    console.log('error ', e);
+
                     this.errors.push(e)
                 });
         },
         methods: {
+            /**
+             * Converts interval time to days/hours/minutes
+             */
+            updateEventTimeInterval: function(event) {
+                let days;
+                let hours;
+                let totalTime = event.interval;
+
+                event.command_interval_days = 0;
+                event.command_interval_hours = 0;
+                event.command_interval_minutes = 5;
+
+                if (totalTime) {
+                    days = totalTime / 1440;
+
+                    if (days >= 1) {
+                        days = Math.floor(days);
+                        event.command_interval_days = days;
+                        totalTime -= (days * 1440);
+                    }
+
+                    hours = totalTime / 60;
+
+                    if (hours >= 1) {
+                        hours = Math.floor(hours);
+                        event.command_interval_hours = hours;
+                        totalTime -= (hours * 60);
+                    }
+
+                    event.command_interval_minutes = totalTime;
+                }
+            },
+
             updateSelectedServer: function(e) {
                 this.server_selected = this.servers[e.target.value];
             },

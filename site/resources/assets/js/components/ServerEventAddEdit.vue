@@ -6,19 +6,19 @@
             @md-closed="onDialogClosed"
             class="add-edit-server-event col-11">
 
-        <form name="addEditServerActionEventForm">
-            <md-toolbar>
-                <div class="md-toolbar-tools">
-                    <h3>
-                        {{eventData.actionType}} Server Event
-                        <md-button class="md-icon-button close-button"
-                                   @click.stop="showDialog = false">
-                            <i class="material-icons clickable" aria-label="Close dialog">clear</i>
-                        </md-button>
-                    </h3>
-                </div>
-            </md-toolbar>
-            <md-dialog-content style="overflow-y: scroll" class="md-scrollbar">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h3>
+                    {{eventData.actionType}} Server Event
+                    <md-button class="md-icon-button close-button"
+                               @click.stop="showDialog = false">
+                        <i class="material-icons clickable" aria-label="Close dialog">clear</i>
+                    </md-button>
+                </h3>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <form name="addEditServerActionEventForm">
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -205,21 +205,21 @@
                         {{cmd.command}}
                     </div>
                 </div>
+            </form>
 
-            </md-dialog-content>
+        </md-dialog-content>
 
-            <md-divider class="mt-4"></md-divider>
+        <md-divider class="mt-4"></md-divider>
 
-            <md-dialog-actions layout="row" layout-align="end">
-                <md-button @click.stop="showDialog = false" type="button">
-                    Cancel
-                </md-button>
-                <md-button @click.stop="saveAddEditServerEventDialog()" class="md-primary">
-                    Save
-                </md-button>
-            </md-dialog-actions>
+        <md-dialog-actions layout="row" layout-align="end">
+            <md-button @click.stop="showDialog = false" type="button">
+                Cancel
+            </md-button>
+            <md-button @click.stop="saveAddEditServerEventDialog()" class="md-primary">
+                Save
+            </md-button>
+        </md-dialog-actions>
 
-        </form>
     </md-dialog>
 </template>
 

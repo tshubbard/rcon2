@@ -161,50 +161,33 @@
                         <h5>Event Commands</h5>
                     </div>
                 </div>
+                <!--
                 <div class="form-row">
-                    <div class="form-group col-md-6">
+                   <div class="form-group col-md-6">
 
-                    </div>
-                    <div class="form-group col-md-6">
+                   </div>
+                   <div class="form-group col-md-6">
 
-                    </div>
+                   </div>
                 </div>
-
+                -->
                 <md-table v-model="eventData.commands" md-card>
-                    <md-table-toolbar>
-                        <h5 class="md-title">Commands</h5>
-                    </md-table-toolbar>
-                    <md-table-row>
-                        <md-table-head md-numeric>Order</md-table-head>
-                        <md-table-head>Type/Key</md-table-head>
-                        <md-table-head>Command</md-table-head>
-                        <md-table-head>Actions</md-table-head>
-                    </md-table-row>
                     <md-table-row slot="md-table-row" slot-scope="{ item }">
-                        <md-table-cell md-label="Order" md-sort-by="order" md-numeric>{{ item.$index }}</md-table-cell>
-                        <md-table-cell md-label="Type/Key" md-numeric>{{ item.command_key }}</md-table-cell>
-                        <md-table-cell md-label="Command" md-numeric>{{ item.command }}</md-table-cell>
-                        <md-table-cell md-label="Actions" md-numeric>&nbsp;</md-table-cell>
+                        <md-table-cell md-label="Order" md-sort-by="order" class="text-center" md-numeric>
+                            {{ item.order }}
+                        </md-table-cell>
+                        <md-table-cell md-label="Type/Key">
+                            {{ item.key }}
+                        </md-table-cell>
+                        <md-table-cell md-label="Command">
+                            {{ item.command }}
+                        </md-table-cell>
+                        <md-table-cell md-label="Actions">
+                            &nbsp;
+                        </md-table-cell>
                     </md-table-row>
                 </md-table>
 
-                <div class="form-row">
-                    <div class="form-group col-md-3">
-                        Command Type/Key
-                    </div>
-                    <div class="form-group col-md-4">
-                        Command
-                    </div>
-                </div>
-
-                <div class="form-row" v-for="cmd in eventData.commands">
-                    <div class="form-group col-md-3">
-                        {{cmd.command_key}}
-                    </div>
-                    <div class="form-group col-md-4">
-                        {{cmd.command}}
-                    </div>
-                </div>
             </form>
 
         </md-dialog-content>

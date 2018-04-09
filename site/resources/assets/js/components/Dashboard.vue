@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="panel-body">
                                     <ul class="server-events">
-                                        <li v-for="event in server_selected.events" class="server-event">
+                                        <li v-for="event in selectedServer.events" class="server-event">
                                             <md-switch v-model="event.is_active"
                                                        v-on:change="toggleEventActive(event)"
                                                     aria-label="Server Event Active on/off toggle"></md-switch>
@@ -99,7 +99,7 @@
             return {
                 errors: [],
                 servers: [],
-                server_selected: {
+                selectedServer: {
                     events: []
                 },
                 showServerEventAddEdit: false,
@@ -122,6 +122,7 @@
                     // add any data parsing we need
                     this.servers.forEach(_.bind(function(server) {
                         server.events.forEach(_.bind(function(event) {
+                            event.order = 1;
                             event.is_active = !!event.is_active;
                             event.is_public = !!event.is_public;
                             event.commands = JSON.parse(event.commands);
@@ -130,16 +131,17 @@
                     }, this));
 
                     if (serverId) {
-                        this.server_selected = _.find(this.servers, function(server) {
+                        this.selectedServer = _.find(this.servers, function(server) {
                             return server.id === serverId;
                         })
                     } else {
                         if(this.servers.length > 0) {
-                            this.server_selected = this.servers[0];
+                            this.selectedServer = this.servers[0];
                         }
                     }
                     console.log('user/servers data ', response);
-                    console.log(this.server_selected);
+                    console.log('this.servers ', this.servers);
+                    console.log('selectedServer: ', this.selectedServer);
                 })
                 .catch(e => {
                     console.log('error ', e);
@@ -182,7 +184,7 @@
             },
 
             updateSelectedServer: function(e) {
-                this.server_selected = this.servers[e.target.value];
+                this.selectedServer = this.servers[e.target.value];
             },
 
             /**

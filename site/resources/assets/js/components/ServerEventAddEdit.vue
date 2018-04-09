@@ -158,7 +158,71 @@
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <h5>Event Commands</h5>
+                        <h5>Add Commands</h5>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label>Templates</label>
+                        <md-list class="bordered-list">
+
+                            <md-list-item @click.stop="onChangeEventTemplate('say')">
+                                <md-icon>chat</md-icon>
+                                <span class="md-list-item-text">say</span>
+                            </md-list-item>
+
+                            <md-list-item @click.stop="onChangeEventTemplate('giveto')">
+                                <md-icon>person_add</md-icon>
+                                <span class="md-list-item-text">giveto</span>
+                            </md-list-item>
+
+                            <md-list-item @click.stop="onChangeEventTemplate('giveall')">
+                                <md-icon>group_add</md-icon>
+                                <span class="md-list-item-text">giveall</span>
+                            </md-list-item>
+
+                            <md-list-item @click.stop="onChangeEventTemplate('kick')">
+                                <md-icon>exposure_neg_1</md-icon>
+                                <span class="md-list-item-text">kick</span>
+                            </md-list-item>
+
+                            <md-list-item @click.stop="onChangeEventTemplate('custom')">
+                                <md-icon>brush</md-icon>
+                                <span class="md-list-item-text">custom</span>
+                            </md-list-item>
+
+                        </md-list>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label>Command</label>
+                        <md-field>
+                            <md-textarea v-model="selectedServerEvent.command"></md-textarea>
+                        </md-field>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <md-tabs>
+                            <md-tab id="tab-fields" md-label="Command Fields">
+                                <md-list v-model="serverCommandTargetList">
+                                    <md-list-item slot="md-list-item" slot-scope="{ item }">
+                                        {{item.id}}
+                                    </md-list-item>
+                                </md-list>
+                            </md-tab>
+                            <md-tab id="tab-items" md-label="Items">
+
+                            </md-tab>
+                        </md-tabs>
+                    </div>
+                </div>
+
+                <md-divider class="my-3"></md-divider>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <h5>Event Commands List</h5>
                     </div>
                 </div>
                 <!--
@@ -183,7 +247,15 @@
                             {{ item.command }}
                         </md-table-cell>
                         <md-table-cell md-label="Actions">
-                            &nbsp;
+
+                            <md-button class="slim-button" @click.stop="onEditServerEvent(item)">
+                                <md-icon>mode_edit</md-icon>
+                            </md-button>
+
+                            <md-button class="slim-button" @click.stop="onDeleteServerEvent(item)">
+                                <md-icon>delete</md-icon>
+                            </md-button>
+
                         </md-table-cell>
                     </md-table-row>
                 </md-table>
@@ -249,19 +321,99 @@
                 }],
                 eventTypeObj: {},
                 selectedEventTypeText: '',
+                selectedServerEvent: {
+                    command: ''
+                },
                 optionsDays: [],
                 optionsHours: [],
-                optionsMinutes: []
+                optionsMinutes: [],
+                serverCommandTargetList: [],
+                serverCommandTargets: {
+                    timer: [],
+                    'player.chat': [{
+                        id: 'user.username',
+                        name: 'UserName',
+                        help: 'The name of the user sending the message'
+                    }, {
+                        id: 'user.steam_id',
+                        name: 'Steam ID',
+                        help: 'The Steam ID of the user sending the message'
+                    }],
+                    'player.killed': [{
+                        id: 'victim.username',
+                        name: 'Victim UserName',
+                        help: 'The name of the victim'
+                    }, {
+                        id: 'victim.short_id',
+                        name: 'Victim Short ID',
+                        help: 'The combatlog ID of the victim'
+                    }, {
+                        id: 'victim.steam_id',
+                        name: 'Victim Steam ID',
+                        help: 'The Steam ID of the victim'
+                    }, {
+                        id: 'killer.username',
+                        name: 'Killer UserName',
+                        help: 'The name of the killer'
+                    }, {
+                        id: 'killer.short_id',
+                        name: 'Killer Short ID',
+                        help: 'The combatlog ID of the killer'
+                    }, {
+                        id: 'killer.steam_id',
+                        name: 'Killer Steam ID',
+                        help: 'The Steam ID of the killer'
+                    }],
+                    'player.spawned': [{
+                        id: 'user.username',
+                        name: 'UserName',
+                        help: 'The name of the user who spawned'
+                    }, {
+                        id: 'user.short_id',
+                        name: 'Short ID',
+                        help: 'The Short ID of the user who spawned'
+                    }, {
+                        id: 'user.steam_id',
+                        name: 'Steam ID',
+                        help: 'The Steam ID of the user who spawned'
+                    }],
+                    'player.connected': [{
+                        id: 'user.host',
+                        name: 'Host',
+                        help: 'The Host info of the user who connected'
+                    }, {
+                        id: 'user.username',
+                        name: 'UserName',
+                        help: 'The name of the user who connected'
+                    }, {
+                        id: 'user.steam_id',
+                        name: 'Steam ID',
+                        help: 'The Steam ID of the user who connected'
+                    }],
+                    'player.disconnected': [{
+                        id: 'user.host',
+                        name: 'Host',
+                        help: 'The Host info of the user who disconnected'
+                    }, {
+                        id: 'user.username',
+                        name: 'UserName',
+                        help: 'The name of the user who disconnected'
+                    }, {
+                        id: 'user.steam_id',
+                        name: 'Steam ID',
+                        help: 'The Steam ID of the user who disconnected'
+                    }]
+                }
             }
         },
         created: function() {
+            let i;
             console.log('this: ', this);
 
             this.eventTypes.forEach(_.bind(function(evt) {
                 this.eventTypeObj[evt.id] = evt;
             }, this));
 
-            var i;
             for (i = 0; i < 31; i++) {
                 this.optionsDays.push({
                     val: i
@@ -279,11 +431,6 @@
             }
         },
         methods: {
-            onSelectedEventTypeChanged: function() {
-                //eventData.event_type = selectedEventType
-                debugger;
-            },
-
             /**
              * When the dialog opens
              */
@@ -313,6 +460,22 @@
                 // todo: ADD SAVING
 
                 console.log('saveAddEditServerEventDialog ', this.eventData);
+            },
+
+            onChangeEventTemplate: function(type) {
+                console.log('onChangeEventTemplate: ', type);
+
+            },
+
+            onEditServerEvent: function(serverEvent) {
+                console.log('onEditServerEvent: ', serverEvent);
+                this.selectedServerEvent = serverEvent;
+                this.serverCommandTargetList = this.serverCommandTargets[serverEvent.key];
+            },
+
+            onDeleteServerEvent: function(serverEvent) {
+                console.log('onDeleteServerEvent: ', serverEvent);
+
             }
         },
         watch: {
@@ -321,13 +484,24 @@
 
                 if (eventType && evt) {
                     this.selectedEventTypeText = evt.help;
+                    this.serverCommandTargetList = this.serverCommandTargets[eventType];
                 }
+                console.log('selectedEventType watcher ', this.serverCommandTargetList);
+
             },
             eventData: function(a,b,c) {
                 console.log('eventData watcher ', arguments);
             }
         },
         computed: {
+            selectedEventType: {
+                get() {
+                    return this.eventData.event_type;
+                },
+                set(value) {
+                    this.eventData.event_type = value;
+                }
+            },
             showDialog: {
                 get() {
                     return this.visible;

@@ -393,4 +393,17 @@ nav {
         position: absolute;
         top: 5px;
     }
+    &.slim-button {
+        min-width: 16px;
+        margin: 6px 0px;
+    }
+}
+.md-list {
+    &.bordered-list {
+        border: 1px solid @color-mist-dark;
+
+        .md-list-item:not(:first-child) {
+            border-top: 1px solid @color-mist;
+        }
+    }
 }

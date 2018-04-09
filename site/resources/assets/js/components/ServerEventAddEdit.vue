@@ -214,7 +214,12 @@
                                 </md-list>
                             </md-tab>
                             <md-tab id="tab-items" md-label="Items">
-
+                                <md-list-item v-for="item in items"
+                                              :key="item.id"
+                                              class="command-items-list"
+                                              @click.stop="onAddItemToCommand(item)">
+                                    {{item.name}}
+                                </md-list-item>
                             </md-tab>
                         </md-tabs>
                     </div>
@@ -284,7 +289,8 @@
     export default {
         props: [
             'visible',
-            'data'
+            'data',
+            'items'
         ],
         data: function() {
             return {
@@ -497,6 +503,10 @@
              */
             onAddTargetToCommand: function(targetId) {
                 this.selectedServerEvent.command += ' ${' + targetId + '}';
+            },
+
+            onAddItemToCommand: function(itemObj) {
+                console.log('onAddItemToCommand: ', itemObj);
             }
         },
         watch: {

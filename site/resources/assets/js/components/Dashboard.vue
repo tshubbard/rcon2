@@ -81,6 +81,7 @@
         <server-event-add-edit
                 :visible="showServerEventAddEdit"
                 :data="selectedServerEvent"
+                :items="rustItems"
                 @close="showServerEventAddEdit = false">
 
         </server-event-add-edit>
@@ -98,6 +99,7 @@
         data: function() {
             return {
                 errors: [],
+                rustItems: [],
                 servers: [],
                 selectedServer: {
                     events: []
@@ -114,6 +116,7 @@
         },
         created: function() {
             let serverId = +this.$route.params.serverId;
+            let items = localStorage.getItem('rustItems');
 
             HTTP.get('/api/v1/user/servers')
                 .then(response => {
@@ -143,10 +146,25 @@
                     console.log('selectedServer: ', this.selectedServer);
                 })
                 .catch(e => {
-                    console.log('error ', e);
+                    console.log('/api/v1/user/servers error ', e);
 
                     this.errors.push(e)
                 });
+
+            // todo: set up a latest items ID/hash/timestamp so we dont get this every time
+            //if (!items) {
+                HTTP.get('/api/v1/items')
+                    .then(response => {
+                        console.log('ITEMS data: ', response.data);
+                        this.rustItems = response.data.items;
+                        localStorage.setItem('rustItems', JSON.stringify(this.rustItems));
+                    })
+                    .catch(e => {
+                        console.log('/api/v1/items error ', e);
+
+                        this.errors.push(e)
+                    });
+            //}
         },
         methods: {
             /**

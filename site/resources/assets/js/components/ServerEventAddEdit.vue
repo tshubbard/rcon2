@@ -167,27 +167,27 @@
                         <label>Templates</label>
                         <md-list class="bordered-list">
 
-                            <md-list-item @click.stop="onChangeEventTemplate('say')">
+                            <md-list-item @click.stop="onAddKeyToCommand('say')">
                                 <md-icon>chat</md-icon>
                                 <span class="md-list-item-text">say</span>
                             </md-list-item>
 
-                            <md-list-item @click.stop="onChangeEventTemplate('giveto')">
+                            <md-list-item @click.stop="onAddKeyToCommand('giveto')">
                                 <md-icon>person_add</md-icon>
                                 <span class="md-list-item-text">giveto</span>
                             </md-list-item>
 
-                            <md-list-item @click.stop="onChangeEventTemplate('giveall')">
+                            <md-list-item @click.stop="onAddKeyToCommand('giveall')">
                                 <md-icon>group_add</md-icon>
                                 <span class="md-list-item-text">giveall</span>
                             </md-list-item>
 
-                            <md-list-item @click.stop="onChangeEventTemplate('kick')">
+                            <md-list-item @click.stop="onAddKeyToCommand('kick')">
                                 <md-icon>exposure_neg_1</md-icon>
                                 <span class="md-list-item-text">kick</span>
                             </md-list-item>
 
-                            <md-list-item @click.stop="onChangeEventTemplate('custom')">
+                            <md-list-item @click.stop="onAddKeyToCommand('custom')">
                                 <md-icon>brush</md-icon>
                                 <span class="md-list-item-text">custom</span>
                             </md-list-item>
@@ -205,8 +205,10 @@
                     <div class="form-group col-md-3">
                         <md-tabs>
                             <md-tab id="tab-fields" md-label="Command Fields">
-                                <md-list v-model="serverCommandTargetList">
-                                    <md-list-item slot="md-list-item" slot-scope="{ item }">
+                                <md-list>
+                                    <md-list-item v-for="item in serverCommandTargetList"
+                                                  :key="item.id"
+                                                  @click.stop="onAddTargetToCommand(item.id)">
                                         {{item.id}}
                                     </md-list-item>
                                 </md-list>
@@ -462,20 +464,39 @@
                 console.log('saveAddEditServerEventDialog ', this.eventData);
             },
 
-            onChangeEventTemplate: function(type) {
-                console.log('onChangeEventTemplate: ', type);
-
-            },
-
+            /**
+             * Handles when user clicks to edit a specific server event
+             */
             onEditServerEvent: function(serverEvent) {
                 console.log('onEditServerEvent: ', serverEvent);
                 this.selectedServerEvent = serverEvent;
                 this.serverCommandTargetList = this.serverCommandTargets[serverEvent.key];
             },
 
+            /**
+             * Handles deleting an event from a server event list
+             */
             onDeleteServerEvent: function(serverEvent) {
                 console.log('onDeleteServerEvent: ', serverEvent);
+                // todo: make this work
+            },
 
+            /**
+             * Prepends a specific command keyword to the command stromg
+             *
+             * @param {string} type The type of command keyword to prepend
+             */
+            onAddKeyToCommand: function(type) {
+                this.selectedServerEvent.command = type + ' ' + this.selectedServerEvent.command;
+            },
+
+            /**
+             * Adds a command target to the command string
+             *
+             * @param {string} targetId The target id for a command
+             */
+            onAddTargetToCommand: function(targetId) {
+                this.selectedServerEvent.command += ' ${' + targetId + '}';
             }
         },
         watch: {

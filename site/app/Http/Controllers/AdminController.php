@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use \App\User;
+use \App\Account;
 
 class AdminController extends Controller
 {
@@ -52,6 +53,33 @@ class AdminController extends Controller
             $this->_getDefaultViewData(),
             array('users' => User::all())
         );
+        return response()->json($viewData);
+    }
+
+    /**
+     * API - Send the admin servers data in json
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function serversIndexJSON(Request $request)
+    {
+        // get all the accounts a user is assigned to
+        $accounts = Auth::user()->accounts;
+        $servers = [];
+
+        // loop over accounts and get servers for each account
+        foreach($accounts as $account) {
+            foreach($account->servers as $server) {
+                $servers[] = $server->toArray();
+            }
+        }
+
+        $viewData = array_merge(
+            $this->_getDefaultViewData(),
+            array('servers' => $servers)
+        );
+
         return response()->json($viewData);
     }
 

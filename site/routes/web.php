@@ -55,4 +55,6 @@ Route::group(['middleware' => ['admin']], function () {
 
     Route::get('/admin/users', 'AdminController@usersIndex');
     Route::get('/api/v1/admin/users', 'AdminController@usersIndexJSON');
+
+    Route::get('/api/v1/admin/servers', 'AdminController@serversIndexJSON');
 });

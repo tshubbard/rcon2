@@ -23,6 +23,7 @@ if (document.getElementById('app') !== null) {
     const HomeCarousel = Vue.component('home-carousel', require('./components/HomeCarousel.vue'));
     const AdminIndex = Vue.component('admin-index', require('./components/AdminIndex.vue'));
     const AdminUsers = Vue.component('admin-users', require('./components/AdminUsers.vue'));
+    const AdminServers = Vue.component('admin-servers', require('./components/AdminServers.vue'));
 
     var router = new VueRouter({
         mode: 'history',
@@ -39,6 +40,9 @@ if (document.getElementById('app') !== null) {
             }, {
                 'path': '/admin/users',
                 'component': AdminUsers
+            }, {
+                'path': '/admin/servers',
+                'component': AdminServers
             }, {
                 'path': '/dashboard',
                 'component': Dashboard

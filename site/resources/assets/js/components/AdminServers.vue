@@ -58,9 +58,15 @@
             }.bind(this), 'json');
         },
         methods: {
-	        'editServer': function(serverData){
-		        console.log(serverData);
-	        }
+            'editServer': function(serverData){
+                if(serverData.disabled)
+                    serverData.active = false;
+                else
+                    serverData.active = true;
+
+                this.selectedServer = serverData;
+                this.showServerAddEdit = true;
+            }
         },
         computed: {
         }

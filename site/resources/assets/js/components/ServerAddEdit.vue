@@ -33,7 +33,7 @@
                         <label for="disabled">Active</label>
                         <div>
                             <md-switch id="disabled" name="disabled" class="disabled"
-                                       v-model="serverData.disabled"
+                                       v-model="serverData.active"
                                        aria-label="Server Active on/off toggle"></md-switch>
                         </div>
                     </div>
@@ -80,28 +80,9 @@
         },
         methods: {
             /**
-             * When the dialog opens
-             */
-            onDialogOpened: function() {
-            },
-
-            /**
-             * When the dialog closes
-             */
-            onDialogClosed: function() {
-            },
-
-            /**
              * Validates the server info and saves or provides user feedback on errors
              */
             saveAddEditServerDialog: function() {
-            },
-
-            /**
-             * Handles when user clicks to edit a specific server
-             */
-            onEditServerEvent: function(server) {
-                this.selectedServer = server;
             },
 
             /**
@@ -110,28 +91,6 @@
             onDeleteServerEvent: function(serverEvent) {
                 console.log('onDeleteServerEvent: ', serverEvent);
                 // todo: make this work
-            },
-
-            /**
-             * Prepends a specific command keyword to the command stromg
-             *
-             * @param {string} type The type of command keyword to prepend
-             */
-            onAddKeyToCommand: function(type) {
-                this.selectedServerEvent.command = type + ' ' + this.selectedServerEvent.command;
-            },
-
-            /**
-             * Adds a command target to the command string
-             *
-             * @param {string} targetId The target id for a command
-             */
-            onAddTargetToCommand: function(targetId) {
-                this.selectedServerEvent.command += ' ${' + targetId + '}';
-            },
-
-            onAddItemToCommand: function(itemObj) {
-                console.log('onAddItemToCommand: ', itemObj);
             }
         },
         computed: {
@@ -150,10 +109,6 @@
                     return this.data;
                 },
                 set(data) {
-                    let evt = this.eventTypeObj[data.event_type];
-                    if (evt) {
-                        this.selectedEventTypeText = this.eventTypeObj[data.event_type].help;
-                    }
                     this.data = data;
                 }
             }

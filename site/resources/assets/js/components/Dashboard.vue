@@ -251,8 +251,8 @@
             toggleEventActive: function(event) {
                 let active = event.is_active ? 1 : 0;
                 HTTP.put('/api/v1/serverEvent/' + event.id, {
-                        is_active: active
-                    })
+                    is_active: active
+                })
                     .then(response => {
                         console.log('response.data ', response.data);
                     })
@@ -274,13 +274,6 @@
                 console.log('onDeleteServerEventCancel ', event);
 
             },
-        },
-        watcher: {
-            selectedServerId: function(serverId) {
-
-                console.log('selectedServerId ', serverId);
-
-            }
         },
         computed: {
             eventClass: function(event){

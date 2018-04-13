@@ -6,10 +6,18 @@
                     Server: {{servers[0].name}}
                 </div>
                 <div class="col-md-5" v-if="servers.length > 1">
-                    Servers:
-                    <select class="server-select-dropdown" v-on:change="updateSelectedServer">
-                        <option v-for="row in servers" :value="row.id">{{row.name}}</option>
-                    </select>
+                    <md-field>
+                        <label for="selected-server">Servers:</label>
+                        <md-select id="selected-server" name="selected-server"
+                                   v-model="selectedServerId"
+                                   @input="updateSelectedServer">
+                            <md-option v-for="server in servers"
+                                       :key="server.id"
+                                       :value="server.id">
+                                {{server.name}}
+                            </md-option>
+                        </md-select>
+                    </md-field>
                 </div>
             </div>
         </div>
@@ -101,6 +109,7 @@
                 errors: [],
                 rustItems: [],
                 servers: [],
+                selectedServerId: -1,
                 selectedServer: {
                     events: []
                 },
@@ -141,6 +150,9 @@
                             this.selectedServer = this.servers[0];
                         }
                     }
+
+                    this.selectedServerId = this.selectedServer.id;
+
                     console.log('user/servers data ', response);
                     console.log('this.servers ', this.servers);
                     console.log('selectedServer: ', this.selectedServer);
@@ -200,8 +212,13 @@
                 }
             },
 
-            updateSelectedServer: function(e) {
-                this.selectedServer = this.servers[e.target.value];
+            /**
+             * Updates the selected server when the dropdown is changed
+             */
+            updateSelectedServer: function(serverId) {
+                this.selectedServer = _.find(this.servers, function(server) {
+                    return server.id === serverId;
+                })
             },
 
             /**
@@ -257,6 +274,13 @@
                 console.log('onDeleteServerEventCancel ', event);
 
             },
+        },
+        watcher: {
+            selectedServerId: function(serverId) {
+
+                console.log('selectedServerId ', serverId);
+
+            }
         },
         computed: {
             eventClass: function(event){

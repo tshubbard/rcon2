@@ -326,6 +326,10 @@
                     id: 'patrolhelicopter',
                     name: 'Patrol Helicopter',
                     help: 'When the Patrol Helicopter spawns'
+                }, {
+                    id: 'ch47scientists.entity',
+                    name: 'Chinook Helicopter',
+                    help: 'When the Chinook Helicopter with scientists spawns'
                 }],
                 eventTypeObj: {},
                 selectedEventTypeText: '',

@@ -10,7 +10,7 @@ class RconConnectionEvents {
 
 			_servers[server.id].intervals.push(setInterval(function(){
 				_servers[server.id].player.updateSteamFeed();
-			}, Util.minToMSeconds(30)));
+			}, Util.minToMSeconds(60)));
 
 			_servers[server.id].scheduler.load();
 

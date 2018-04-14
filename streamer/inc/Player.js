@@ -11,12 +11,15 @@ class Player {
 			data = JSON.parse(data.Message);
 
 			data.forEach(function(row){
-				this.cache[row.SteamID] = {
-					'steam_id': row.SteamID,
-					'short_id': null,
-					'username': row.DisplayName,
-					'ip_address': row.Address.substr(0, row.Address.lastIndexOf(':'))
-				};
+				if(row.ConnectedSeconds > Util.hourToSeconds(8))
+					_servers[this.server_id].rcon.command('kick ' + row.SteamID + ' "Idle too long."');
+				else
+					this.cache[row.SteamID] = {
+						'steam_id': row.SteamID,
+						'short_id': null,
+						'username': row.DisplayName,
+						'ip_address': row.Address.substr(0, row.Address.lastIndexOf(':'))
+					};
 			}.bind(this));
 
 			db.query('DELETE FROM players_current WHERE server_id=?', [this.server_id], function (error, results, fields){

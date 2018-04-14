@@ -9,6 +9,16 @@ class Util {
 		return (minutes * 60000);
 	}
 
+	static minToSeconds(minutes)
+	{
+		return (minutes * 60);
+	}
+
+	static hourToSeconds(hours)
+	{
+		return (hours * 3600);
+	}
+
 	static gracefulShutdown(){
 		console.log("\n" + 'Graceful shutdown initiated.');
 

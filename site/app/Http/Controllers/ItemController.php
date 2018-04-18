@@ -16,13 +16,23 @@ class ItemController extends Controller
      */
     public function index()
     {
+        $retItems = array();
         // get the server by ID and return it
         $items = Item::all();
         foreach ($items as &$item) {
-            $item->item_type_name = $item->itemType->name;
+            if (!isset($retItems[$item->itemType->id])) {
+                $retItems[$item->itemType->id] = array(
+                    "id" => $item->itemType->id,
+                    "name" => $item->itemType->name,
+                    "items" => array()
+                );
+            }
+
+            $retItems[$item->itemType->id]["items"][] = $item;
         }
+
         return response()->json([
-            'items' => $items,
+            'items' => $retItems,
         ]);
     }
 }

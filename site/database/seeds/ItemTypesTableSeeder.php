@@ -18,11 +18,11 @@ class ItemTypesTableSeeder extends Seeder
             array('id' => 4,  'name' => 'Armor'),
             array('id' => 5,  'name' => 'Consumables'),
             array('id' => 6,  'name' => 'Traps'),
-            array('id' => 7,  'name' => 'Usable'),
-            array('id' => 8,  'name' => 'Deployable'),
-            array('id' => 9,  'name' => 'Resource'),
-            array('id' => 10,  'name' => 'Container'),
-            array('id' => 11,  'name' => 'Mod'),
+            array('id' => 7,  'name' => 'Usables'),
+            array('id' => 8,  'name' => 'Deployables'),
+            array('id' => 9,  'name' => 'Resources'),
+            array('id' => 10,  'name' => 'Containers'),
+            array('id' => 11,  'name' => 'Mods'),
             array('id' => 20, 'name' => 'Misc'),
         );
 

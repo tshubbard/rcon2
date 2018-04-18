@@ -195,16 +195,16 @@
                         </md-list>
                     </div>
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-5">
                         <label>Command</label>
                         <md-field>
                             <md-textarea v-model="selectedServerEvent.command"></md-textarea>
                         </md-field>
                     </div>
 
-                    <div class="form-group col-md-3">
-                        <md-tabs>
-                            <md-tab id="tab-fields" md-label="Command Fields">
+                    <div class="form-group col-md-4">
+                        <md-tabs class="md-scrollbar">
+                            <md-tab id="tab-fields" md-label="Event Target">
                                 <md-list>
                                     <md-list-item v-for="item in serverCommandTargetList"
                                                   :key="item.id"
@@ -214,11 +214,19 @@
                                 </md-list>
                             </md-tab>
                             <md-tab id="tab-items" md-label="Items">
-                                <md-list-item v-for="item in items"
-                                              :key="item.id"
-                                              class="command-items-list"
-                                              @click.stop="onAddItemToCommand(item)">
-                                    {{item.name}}
+                                <md-list-item v-for="category in items"
+                                              class="command-items-list md-dense md-scrollbar list-style-type-none"
+                                              :key="category.id" md-expand>
+                                    <span class="md-list-item-text">{{category.name}}</span>
+
+                                    <md-list slot="md-expand" class="md-dense">
+                                        <md-list-item v-for="item in category.items"
+                                                      class="md-inset list-style-type-none"
+                                                      :key="item.id"
+                                                      @click.stop="onAddItemToCommand(item)">
+                                            {{item.name}}
+                                        </md-list-item>
+                                    </md-list>
                                 </md-list-item>
                             </md-tab>
                         </md-tabs>
@@ -511,6 +519,7 @@
 
             onAddItemToCommand: function(itemObj) {
                 console.log('onAddItemToCommand: ', itemObj);
+                this.selectedServerEvent.command += ' ' + itemObj.console_id;
             }
         },
         watch: {

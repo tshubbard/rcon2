@@ -203,7 +203,7 @@
                     </div>
 
                     <div class="form-group col-md-4">
-                        <md-tabs class="md-scrollbar">
+                        <md-tabs class="command-tabs">
                             <md-tab id="tab-fields" md-label="Event Target">
                                 <md-list>
                                     <md-list-item v-for="item in serverCommandTargetList"
@@ -219,7 +219,7 @@
                                               :key="category.id" md-expand>
                                     <span class="md-list-item-text">{{category.name}}</span>
 
-                                    <md-list slot="md-expand" class="md-dense">
+                                    <md-list slot="md-expand" class="md-dense md-content">
                                         <md-list-item v-for="item in category.items"
                                                       class="md-inset list-style-type-none"
                                                       :key="item.id"

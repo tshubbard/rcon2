@@ -180,6 +180,12 @@
                         <md-field>
                             <md-textarea v-model="selectedServerEvent.command"></md-textarea>
                         </md-field>
+                        <div class="text-right">
+                            <md-button class="md-raised md-dense md-primary"
+                                       @click.stop="addEventToCommandStack()">
+                                Add To Command Stack
+                            </md-button>
+                        </div>
                     </div>
 
                     <div class="form-group col-md-4">
@@ -461,6 +467,10 @@
              */
             onDialogClosed: function() {
                 this.selectedEventType = {};
+                this.selectedServerEvent = {
+                    command: '',
+                    key: undefined
+                };
             },
 
             /**
@@ -493,8 +503,29 @@
              * Handles deleting an event from a server event list
              */
             onDeleteServerEvent: function(serverEvent) {
-                console.log('onDeleteServerEvent: ', serverEvent);
-                // todo: make this work
+                let len = 0;
+                // remove the event from the list
+                this.eventData.commands.splice(serverEvent.order - 1, 1);
+                len = this.eventData.commands.length + 1;
+                for (let i = 1; i < len; i++) {
+                    this.eventData.commands[i - 1].order = i;
+                }
+            },
+
+            addEventToCommandStack: function() {
+                console.log('addEventToCommandStack  ', this.selectedServerEvent);
+
+                if (this.selectedServerEvent.order) {
+                    this.eventData.commands[this.selectedServerEvent.order - 1] = this.selectedServerEvent;
+                } else {
+                    this.selectedServerEvent.order = this.eventData.commands.length + 1;
+                    this.eventData.commands.push(this.selectedServerEvent);
+                }
+
+                this.selectedServerEvent = {
+                    command: '',
+                    key: undefined
+                };
             },
 
             /**

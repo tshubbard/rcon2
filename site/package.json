@@ -22,7 +22,6 @@
     "dependencies": {
         "bootstrap": "^4.0.0",
         "jquery": "^3.3.1",
-        "npm": "^5.8.0",
         "popper.js": "^1.12",
         "vue": "^2.5.7",
         "vue-material": "^1.0.0-beta-8",

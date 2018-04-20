@@ -166,32 +166,12 @@
                     <div class="form-group col-md-3">
                         <label>Templates</label>
                         <md-list class="bordered-list">
-
-                            <md-list-item @click.stop="onAddKeyToCommand('say')">
-                                <md-icon>chat</md-icon>
-                                <span class="md-list-item-text">say</span>
+                            <md-list-item v-for="cmd in serverCommandTemplates"
+                                          :key="cmd.name"
+                                          @click.stop="onAddKeyToCommand(cmd.name)">
+                                <md-icon>{{cmd.icon}}</md-icon>
+                                <span class="md-list-item-text">{{cmd.name}}</span>
                             </md-list-item>
-
-                            <md-list-item @click.stop="onAddKeyToCommand('giveto')">
-                                <md-icon>person_add</md-icon>
-                                <span class="md-list-item-text">giveto</span>
-                            </md-list-item>
-
-                            <md-list-item @click.stop="onAddKeyToCommand('giveall')">
-                                <md-icon>group_add</md-icon>
-                                <span class="md-list-item-text">giveall</span>
-                            </md-list-item>
-
-                            <md-list-item @click.stop="onAddKeyToCommand('kick')">
-                                <md-icon>exposure_neg_1</md-icon>
-                                <span class="md-list-item-text">kick</span>
-                            </md-list-item>
-
-                            <md-list-item @click.stop="onAddKeyToCommand('custom')">
-                                <md-icon>brush</md-icon>
-                                <span class="md-list-item-text">custom</span>
-                            </md-list-item>
-
                         </md-list>
                     </div>
 
@@ -203,9 +183,9 @@
                     </div>
 
                     <div class="form-group col-md-4">
-                        <md-tabs class="command-tabs">
+                        <md-tabs class="command-tabs" md-dynamic-height>
                             <md-tab id="tab-fields" md-label="Event Target">
-                                <md-list>
+                                <md-list class="command-targets-list">
                                     <md-list-item v-for="item in serverCommandTargetList"
                                                   :key="item.id"
                                                   @click.stop="onAddTargetToCommand(item.id)">
@@ -305,52 +285,13 @@
                 eventTypes: [{
                     id: 'timer',
                     name: 'Scheduled/Timed',
-                    help: 'Post server message every 15 minutes'
+                    help: 'Post server message every 15 minutes',
+                    targets: []
                 }, {
                     id: 'player.chat',
                     name: 'Chat-Triggered',
-                    help: 'Chat-typed messages: !kits, !rules, etc'
-                }, {
-                    id: 'player.spawned',
-                    name: 'Player Spawned',
-                    help: 'When a player spawns - occurs on Connect and after death'
-                }, {
-                    id: 'player.killed',
-                    name: 'Player Killed',
-                    help: 'When a player is killed'
-                }, {
-                    id: 'player.connected',
-                    name: 'Player Connected',
-                    help: 'When the player connects to the server'
-                }, {
-                    id: 'player.disconnected',
-                    name: 'Player Disconnected',
-                    help: 'When a player disconnects from the server'
-                }, {
-                    id: 'cargo_plane',
-                    name: 'Cargo Plane / Airdrop',
-                    help: 'When the Cargo Plane spawns'
-                }, {
-                    id: 'patrolhelicopter',
-                    name: 'Patrol Helicopter',
-                    help: 'When the Patrol Helicopter spawns'
-                }, {
-                    id: 'ch47scientists.entity',
-                    name: 'Chinook Helicopter',
-                    help: 'When the Chinook Helicopter with scientists spawns'
-                }],
-                eventTypeObj: {},
-                selectedEventTypeText: '',
-                selectedServerEvent: {
-                    command: ''
-                },
-                optionsDays: [],
-                optionsHours: [],
-                optionsMinutes: [],
-                serverCommandTargetList: [],
-                serverCommandTargets: {
-                    timer: [],
-                    'player.chat': [{
+                    help: 'Chat-typed messages: !kits, !rules, etc',
+                    targets: [{
                         id: 'user.username',
                         name: 'UserName',
                         help: 'The name of the user sending the message'
@@ -358,8 +299,29 @@
                         id: 'user.steam_id',
                         name: 'Steam ID',
                         help: 'The Steam ID of the user sending the message'
-                    }],
-                    'player.killed': [{
+                    }]
+                }, {
+                    id: 'player.spawned',
+                    name: 'Player Spawned',
+                    help: 'When a player spawns - occurs on Connect and after death',
+                    targets: [{
+                        id: 'user.username',
+                        name: 'UserName',
+                        help: 'The name of the user who spawned'
+                    }, {
+                        id: 'user.short_id',
+                        name: 'Short ID',
+                        help: 'The Short ID of the user who spawned'
+                    }, {
+                        id: 'user.steam_id',
+                        name: 'Steam ID',
+                        help: 'The Steam ID of the user who spawned'
+                    }]
+                }, {
+                    id: 'player.killed',
+                    name: 'Player Killed',
+                    help: 'When a player is killed',
+                    targets: [{
                         id: 'victim.username',
                         name: 'Victim UserName',
                         help: 'The name of the victim'
@@ -383,21 +345,12 @@
                         id: 'killer.steam_id',
                         name: 'Killer Steam ID',
                         help: 'The Steam ID of the killer'
-                    }],
-                    'player.spawned': [{
-                        id: 'user.username',
-                        name: 'UserName',
-                        help: 'The name of the user who spawned'
-                    }, {
-                        id: 'user.short_id',
-                        name: 'Short ID',
-                        help: 'The Short ID of the user who spawned'
-                    }, {
-                        id: 'user.steam_id',
-                        name: 'Steam ID',
-                        help: 'The Steam ID of the user who spawned'
-                    }],
-                    'player.connected': [{
+                    }]
+                }, {
+                    id: 'player.connected',
+                    name: 'Player Connected',
+                    help: 'When the player connects to the server',
+                    targets: [{
                         id: 'user.host',
                         name: 'Host',
                         help: 'The Host info of the user who connected'
@@ -409,8 +362,12 @@
                         id: 'user.steam_id',
                         name: 'Steam ID',
                         help: 'The Steam ID of the user who connected'
-                    }],
-                    'player.disconnected': [{
+                    }]
+                }, {
+                    id: 'player.disconnected',
+                    name: 'Player Disconnected',
+                    help: 'When a player disconnects from the server',
+                    targets: [{
                         id: 'user.host',
                         name: 'Host',
                         help: 'The Host info of the user who disconnected'
@@ -423,7 +380,48 @@
                         name: 'Steam ID',
                         help: 'The Steam ID of the user who disconnected'
                     }]
-                }
+                }, {
+                    id: 'cargo_plane',
+                    name: 'Cargo Plane / Airdrop',
+                    help: 'When the Cargo Plane spawns',
+                    targets: []
+                }, {
+                    id: 'patrolhelicopter',
+                    name: 'Patrol Helicopter',
+                    help: 'When the Patrol Helicopter spawns',
+                    targets: []
+                }, {
+                    id: 'ch47scientists.entity',
+                    name: 'Chinook Helicopter',
+                    help: 'When the Chinook Helicopter with scientists spawns',
+                    targets: []
+                }],
+                eventTypeObj: {},
+                selectedEventTypeText: '',
+                selectedServerEvent: {
+                    command: '',
+                    key: undefined
+                },
+                optionsDays: [],
+                optionsHours: [],
+                optionsMinutes: [],
+                serverCommandTemplates: [{
+                    name: 'say',
+                    icon: 'chat'
+                }, {
+                    name: 'giveto',
+                    icon: 'person_add'
+                }, {
+                    name: 'giveall',
+                    icon: 'group_add'
+                }, {
+                    name: 'kick',
+                    icon: 'exposure_neg_1'
+                }, {
+                    name: 'custom',
+                    icon: 'brush'
+                }],
+                serverCommandTargetList: []
             }
         },
         created: function() {
@@ -488,7 +486,7 @@
             onEditServerEvent: function(serverEvent) {
                 console.log('onEditServerEvent: ', serverEvent);
                 this.selectedServerEvent = serverEvent;
-                this.serverCommandTargetList = this.serverCommandTargets[serverEvent.key];
+                //this.serverCommandTargetList = this.eventTypeObj[serverEvent.key];
             },
 
             /**
@@ -505,7 +503,19 @@
              * @param {string} type The type of command keyword to prepend
              */
             onAddKeyToCommand: function(type) {
-                this.selectedServerEvent.command = type + ' ' + this.selectedServerEvent.command;
+                // custom event types dont add "custom" to the beginning
+                var cmd = type === 'custom' ? '' : type;
+
+                if (this.selectedServerEvent.key && this.selectedServerEvent.key !== 'custom') {
+                    // if there's already a selected event key, replace it in the string with the new key
+                    cmd = this.selectedServerEvent.command.replace(this.selectedServerEvent.key, cmd);
+                } else {
+                    // otherwise prepend the new command type to the command string
+                    cmd = cmd + ' ' + this.selectedServerEvent.command;
+                }
+
+                this.selectedServerEvent.command = cmd;
+                this.selectedServerEvent.key = type;
             },
 
             /**
@@ -528,7 +538,7 @@
 
                 if (eventType && evt) {
                     this.selectedEventTypeText = evt.help;
-                    this.serverCommandTargetList = this.serverCommandTargets[eventType];
+                    this.serverCommandTargetList = this.eventTypeObj[eventType].targets;
                 }
                 console.log('selectedEventType watcher ', this.serverCommandTargetList);
 

@@ -109,6 +109,18 @@ class ServerEventController extends Controller
     }
 
     /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\ServerEvent  $serverEvent
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(ServerEvent $serverEvent)
+    {
+        ServerEvent::destroy($serverEvent->id);
+        return response()->json($serverEvent);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -125,17 +137,6 @@ class ServerEventController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(ServerEvent $serverEvent)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\ServerEvent  $serverEvent
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ServerEvent $serverEvent)
     {
         //
     }

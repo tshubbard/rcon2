@@ -278,13 +278,30 @@
                 this.showDeleteServerEvent = true;
                 console.log('removeServerEvent ', event);
             },
-            onDeleteServerEventConfirm: function(event) {
-                this.selectedDeleteEvent = event;
-                console.log('onDeleteServerEventConfirm ', event);
+
+            /**
+             * When user confirms to delete an event, this makes the delete call
+             */
+            onDeleteServerEventConfirm: function() {
+                console.log('onDeleteServerEventConfirm ', this.selectedDeleteEvent);
+
+                HTTP.delete('/api/v1/serverEvent/' + this.selectedDeleteEvent.id)
+                    .then(response => {
+                        console.log('response.data ', response.data);
+                        this.selectedServer.events = _.reject(this.selectedServer.events, function(evt) {
+                            return +evt.id === +response.data.id;
+                        });
+                    })
+                    .catch(e => {
+                        this.errors.push(e)
+                    })
             },
+
+            /**
+             * When user cancels a delete event, hide the delete event dialog
+             */
             onDeleteServerEventCancel: function() {
                 this.showDeleteServerEvent = false;
-                console.log('onDeleteServerEventCancel ', event);
             },
 
             /**

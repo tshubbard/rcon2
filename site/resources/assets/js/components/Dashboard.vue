@@ -1,5 +1,7 @@
 <template>
     <div class="dashboard">
+        <md-content>
+
         <div class="container-fluid">
             <div class="row dashboard-summary">
                 <div class="col-md-5" v-if="servers.length === 1">
@@ -90,9 +92,13 @@
                 :visible="showServerEventAddEdit"
                 :data="selectedServerEvent"
                 :items="rustItems"
+                v-on:event-changed="onServerEventChanged"
+                v-on:event-added="onServerEventAdded"
                 @close="showServerEventAddEdit = false">
 
         </server-event-add-edit>
+        </md-content>
+
     </div>
 </template>
 
@@ -231,11 +237,18 @@
                 } else {
                     this.selectedServerEvent = {
                         actionType: 'Add',
-                        host: undefined,
-                        max_players: undefined,
                         name: undefined,
-                        password: undefined,
-                        port: undefined
+                        server_id: this.selectedServer.id,
+                        command_interval_days: 0,
+                        command_interval_hours: 0,
+                        command_interval_minutes: 5,
+                        command_trigger: undefined,
+                        command_timer: undefined,
+                        event_type: 'timer',
+                        commands: [],
+                        is_public: 0,
+                        is_active: 0,
+                        votes: 0
                     };
                 }
 
@@ -272,8 +285,34 @@
             onDeleteServerEventCancel: function() {
                 this.showDeleteServerEvent = false;
                 console.log('onDeleteServerEventCancel ', event);
-
             },
+
+            /**
+             * When the user saves and updates an existing event,
+             * push the changes back to the dashboard
+             *
+             * @param {object} changedEvent The changed/saved event
+             */
+            onServerEventChanged: function(changedEvent) {
+                _.each(this.selectedServer.events, function(evt) {
+                    if (+evt.id === changedEvent.id) {
+                        evt = changedEvent;
+                    }
+                }, this);
+            },
+
+            /**
+             * When the user creates a new event,
+             * push the changes back to the dashboard
+             *
+             * @param {object} changedEvent The changed/saved event
+             */
+            onServerEventAdded: function(addedEvent) {
+                this.selectedServer.events.push(addedEvent);
+
+                debugger;
+
+            }
         },
         computed: {
             eventClass: function(event){

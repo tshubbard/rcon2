@@ -280,6 +280,8 @@
 </template>
 
 <script>
+    import {HTTP} from '../app';
+
     export default {
         props: [
             'visible',
@@ -288,6 +290,7 @@
         ],
         data: function() {
             return {
+                errors: [],
                 eventTypes: [{
                     id: 'timer',
                     name: 'Scheduled/Timed',
@@ -477,17 +480,56 @@
              * Validates the server event info and saves or provides user feedback on errors
              */
             saveAddEditServerEventDialog: function() {
+                let method;
+                let url = '/api/v1/serverEvent';
+                let eventName;
+                let payload = _.clone(this.eventData);
 
-                if (this.eventData.event_type === 'timer') {
-                    this.eventData.command_timer =
-                        (this.eventData.command_interval_days * 1440) +
-                        (this.eventData.command_interval_hours * 60) +
-                        this.eventData.command_interval_minutes;
+                if (payload.event_type === 'timer') {
+                    payload.command_timer =
+                        (payload.command_interval_days * 1440) +
+                        (payload.command_interval_hours * 60) +
+                        payload.command_interval_minutes;
+                }
+                debugger;
+
+                if (payload.is_public === 'on' || payload.is_public === 'off') {
+                    payload.is_public = payload.is_public === 'on' ? 1 : 0;
+                }
+                if (payload.is_active === 'on' || payload.is_active === 'off') {
+                    payload.is_active = payload.is_active === 'on' ? 1 : 0;
                 }
 
-                // todo: ADD SAVING
 
-                console.log('saveAddEditServerEventDialog ', this.eventData);
+                if (payload.id) {
+                    method = 'put';
+                    url += '/' + payload.id;
+                    eventName = 'event-changed';
+                } else {
+                    method = 'post';
+                    eventName = 'event-added';
+                }
+
+                payload.commands = JSON.stringify(payload.commands);
+                console.log('PAYLOAD DATA: ', payload);
+
+                HTTP[method](url, payload)
+                    .then(response => {
+                        let eventData = _.clone(response.data.data);
+
+                        eventData.commands = JSON.parse(eventData.commands);
+                        console.log('response: ', response);
+                        console.log('eventData: ', eventData);
+                        this.$emit(eventName, eventData);
+                        this.showDialog = false;
+                    })
+                    .catch(e => {
+                        console.log('/api/v1/serverEvent error ', e);
+
+                        this.errors.push(e)
+                    });
+
+                console.log('saveAddEditServerEventDialog eventData ', this.eventData);
             },
 
             /**

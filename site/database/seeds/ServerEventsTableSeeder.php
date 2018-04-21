@@ -15,6 +15,7 @@ class ServerEventsTableSeeder extends Seeder
         DB::table('server_events')->insert([
             'name' => 'No KoS Server Message',
             'server_id' => 1,
+            'created_by_user_id' => 1,
             'event_type' => 'timer',
             'commands' => '[{"order":1,"key":"say","command":"say Please note this is a non-KOS server blah blah."}]',
             'command_timer' => 15,
@@ -30,6 +31,7 @@ class ServerEventsTableSeeder extends Seeder
         DB::table('server_events')->insert([
             'name' => 'PURGE KoS Server Message',
             'server_id' => 1,
+            'created_by_user_id' => 1,
             'event_type' => 'timer',
             'commands' => '[{"order":1,"key":"say","command":"say PURGE IS ACTIVE -- No PVP Rules."}]',
             'command_timer' => 60,
@@ -45,6 +47,7 @@ class ServerEventsTableSeeder extends Seeder
         DB::table('server_events')->insert([
             'name' => 'Kit 1',
             'server_id' => 1,
+            'created_by_user_id' => 1,
             'event_type' => 'player.chat',
             'commands' => '[{"order":1,"key":"giveto","command":"giveto ${user.steam_id} rifle.ak 1"},{"order":2,"key":"say","command":"say Server armed ${user.username} with an AK!"}]',
             'command_trigger' => '!kit1',
@@ -60,6 +63,7 @@ class ServerEventsTableSeeder extends Seeder
         DB::table('server_events')->insert([
             'name' => 'No KoS Server Message',
             'server_id' => 4,
+            'created_by_user_id' => 1,
             'event_type' => 'timer',
             'commands' => '[{"order":1,"key":"say","command":"say Please note this is a non-KOS server blah blah."}]',
             'command_timer' => 15,
@@ -75,6 +79,7 @@ class ServerEventsTableSeeder extends Seeder
         DB::table('server_events')->insert([
             'name' => 'PURGE KoS Server Message',
             'server_id' => 4,
+            'created_by_user_id' => 1,
             'event_type' => 'timer',
             'commands' => '[{"order":1,"key":"say","command":"say PURGE IS ACTIVE -- No PVP Rules."}]',
             'command_timer' => 60,
@@ -90,6 +95,7 @@ class ServerEventsTableSeeder extends Seeder
         DB::table('server_events')->insert([
             'name' => 'Kit 1',
             'server_id' => 4,
+            'created_by_user_id' => 1,
             'event_type' => 'player.chat',
             'commands' => '[{"order":1,"key":"giveto","command":"giveto ${user.steam_id} rifle.ak 1"},{"order":2,"key":"say","command":"say Server armed ${user.username} with an AK!"}]',
             'command_trigger' => '!kit1',

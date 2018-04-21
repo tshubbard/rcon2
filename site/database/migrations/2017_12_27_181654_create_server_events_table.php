@@ -17,6 +17,7 @@ class CreateServerEventsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->unsignedInteger('server_id');
+            $table->unsignedInteger('created_by_user_id');
             $table->string('event_type', 30);
             $table->json('commands');
             $table->string('command_trigger')->nullable();

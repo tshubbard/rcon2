@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\ServerEvent;
 use Illuminate\Http\Request;
 use Validator;
+use Auth;
 
 class ServerEventController extends Controller
 {
@@ -33,6 +34,53 @@ class ServerEventController extends Controller
         //
     }
 
+    protected function getValidationForEvent($eventData)
+    {
+        $vRules = array(
+            'server_id' => 'numeric',
+            'event_type' => 'string',
+        );
+
+        if ($eventData['event_type'] === 'timer') {
+            $vRules['command_timer'] = 'numeric';
+        }
+        if ($eventData['event_type'] === 'player.chat') {
+            $vRules['command_trigger'] = 'string';
+        }
+
+        return $vRules;
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $requestInput = $request->all();
+        $validationRules = $this->getValidationForEvent($requestInput);
+        $validator = Validator::make($requestInput, $validationRules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'data' => array(
+                    'errors' => $validator->failed()
+                )
+            ]);
+        }
+
+        $requestInput['created_by_user_id'] = Auth::user()->id;
+        $newServerEvent = ServerEvent::create($requestInput);
+
+        return response()->json([
+            'success' => true,
+            'data' => $newServerEvent
+        ]);
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -43,14 +91,8 @@ class ServerEventController extends Controller
     public function update(Request $request, ServerEvent $serverEvent)
     {
         $requestInput = $request->all();
-        $validator = Validator::make($requestInput, array(
-            'server_id' => 'numeric',
-            'interval' => 'numeric',
-            'is_indefinite' => 'numeric',
-            'is_public' => 'numeric',
-            'is_active' => 'numeric',
-            'votes' => 'numeric',
-        ));
+        $validationRules = $this->getValidationForEvent($requestInput);
+        $validator = Validator::make($requestInput, $validationRules);
 
         if ($validator->fails()) {
             return response()->json([
@@ -75,18 +117,6 @@ class ServerEventController extends Controller
     {
         //
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
 
     /**
      * Show the form for editing the specified resource.

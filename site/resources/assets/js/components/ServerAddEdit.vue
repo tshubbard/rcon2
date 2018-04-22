@@ -10,7 +10,7 @@
             <div class="md-toolbar-tools">
                 <h3>
                     Add/Edit Server
-                    <md-button class="md-icon-button close-button" @click.stop="showDialog = false">
+                    <md-button class="md-icon-button close-button" v-on:click="showDialog = false">
                         <i class="material-icons clickable" aria-label="Close dialog">clear</i>
                     </md-button>
                 </h3>
@@ -27,13 +27,13 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="server_name">Server Name</label>
-                        <input id="server_name" type="text" class="form-control" name="server_name" v-model="serverData.name" required>
+                        <input id="server_name" type="text" class="form-control" name="server_name" v-model="item.name" required>
                     </div>
                     <div class="form-group col-md-2">
                         <label for="disabled">Active</label>
                         <div>
                             <md-switch id="disabled" name="disabled" class="disabled"
-                                       v-model="serverData.active"
+                                       v-model="item.active"
                                        aria-label="Server Active on/off toggle"></md-switch>
                         </div>
                     </div>
@@ -41,11 +41,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="server_host">Server Host</label>
-                        <input id="server_host" type="text" class="form-control" name="server_host" v-model="serverData.host" required>
+                        <input id="server_host" type="text" class="form-control" name="server_host" v-model="item.host" required>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="server_port">Server Port</label>
-                        <input id="server_port" type="text" class="form-control" name="server_port" v-model="serverData.port" required>
+                        <input id="server_port" type="text" class="form-control" name="server_port" v-model="item.port" required>
                     </div>
                 </div>
             </form>
@@ -55,10 +55,10 @@
         <md-divider class="mt-4"></md-divider>
 
         <md-dialog-actions layout="row" layout-align="end">
-            <md-button @click.stop="showDialog = false" type="button">
+            <md-button v-on:click="showDialog = false" type="button">
                 Cancel
             </md-button>
-            <md-button @click.stop="saveAddEditServerDialog()" class="md-primary">
+            <md-button v-on:click="saveAddEditServerDialog()" class="md-primary">
                 Save
             </md-button>
         </md-dialog-actions>
@@ -74,6 +74,7 @@
         ],
         data: function() {
             return {
+                'item': {}
             }
         },
         created: function() {
@@ -83,6 +84,28 @@
              * Validates the server info and saves or provides user feedback on errors
              */
             saveAddEditServerDialog: function() {
+                let url = '/api/v1/server';
+                let data = _.pick(this.item, 'name', 'host', 'port', 'disabled');
+                let method;
+
+                if(this.item.id == null)
+                    method = 'POST';
+                else if(this.item.delete != null)
+                {
+                    method = 'DELETE';
+                    url += '/' + this.item.id;
+                }
+                else
+                {
+                    method = 'PUT';
+                    url += '/' + this.item.id;
+                }
+
+                $.ajax({'type': method, 'url': url, 'data': data, 'success': function(data){
+                    console.log(data);
+                }.bind(this), 'dataType': 'json'});
+
+                //this.$emit('server-change', {});
             },
 
             /**
@@ -91,6 +114,12 @@
             onDeleteServerEvent: function(serverEvent) {
                 console.log('onDeleteServerEvent: ', serverEvent);
                 // todo: make this work
+            },
+            onDialogOpened: function(){
+                this.item = _.clone(this.serverData);
+            },
+            onDialogClosed: function(){
+
             }
         },
         computed: {
@@ -102,14 +131,6 @@
                     if (!value) {
                         this.$emit('close');
                     }
-                }
-            },
-            eventData: {
-                get() {
-                    return this.data;
-                },
-                set(data) {
-                    this.data = data;
                 }
             }
         }

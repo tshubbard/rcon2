@@ -71,7 +71,8 @@ class AdminController extends Controller
         // loop over accounts and get servers for each account
         foreach($accounts as $account) {
             foreach($account->servers as $server) {
-                $servers[] = $server->toArray();
+                $server_array = $server->toArray();
+                $servers[$server_array['id']] = $server_array;
             }
         }
 

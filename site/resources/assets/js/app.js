@@ -26,7 +26,7 @@ if (document.getElementById('app') !== null) {
     const AdminServers = Vue.component('admin-servers', require('./components/AdminServers.vue'));
 
     var router = new VueRouter({
-        mode: 'history',
+        //mode: 'history',
         routes: [
             {
                 'path': '/',

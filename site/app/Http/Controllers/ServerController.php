@@ -6,15 +6,16 @@ use App\Server;
 use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Auth;
 
 class ServerController extends Controller
 {
     protected $validationRules = array(
         'name' => 'required',
         'host' => 'required',
-        'password' => 'required',
+        //'password' => 'required',
         'port' => 'required|numeric',
-        'max_players' => 'required|numeric',
+        //'max_players' => 'required|numeric',
     );
 
     /**

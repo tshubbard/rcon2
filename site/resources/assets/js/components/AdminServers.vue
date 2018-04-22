@@ -30,6 +30,7 @@
         <server-add-edit
                 :visible="showServerAddEdit"
                 :serverData="selectedServer"
+                v-on:server-change="onServerChange"
                 @close="showServerAddEdit = false">
 
         </server-add-edit>
@@ -44,7 +45,7 @@
         },
         data: function() {
             return {
-                servers: [],
+                servers: {},
                 showServerAddEdit: false,
                 selectedServer: {}
             }
@@ -66,6 +67,10 @@
 
                 this.selectedServer = serverData;
                 this.showServerAddEdit = true;
+            },
+            'onServerChange': function(changedServer) {
+console.log('got a change');
+                //this.servers[changedServer.id] = changedServer;
             }
         },
         computed: {

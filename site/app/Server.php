@@ -14,6 +14,18 @@ class Server extends Model
     protected $table = 'servers';
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'host',
+        'port',
+        'disabled'
+    ];
+
+    /**
      * Returns the Server Events assigned to the Server
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

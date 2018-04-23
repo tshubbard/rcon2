@@ -92,7 +92,7 @@ class ServerController extends Controller
             ]);
         }
 
-        $newServer = Server::find($requestInput['id']);
+        $newServer = Server::find($id);
         $newServer->update($requestInput);
 
         return response()->json([

@@ -1,5 +1,9 @@
 require('./bootstrap');
 
+// Fucking Laravel ending-slash hating bullshit.
+if(location.pathname.slice(-1) != '/')
+    history.pushState(null, null, location.pathname + '/');
+
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueMaterial from 'vue-material';

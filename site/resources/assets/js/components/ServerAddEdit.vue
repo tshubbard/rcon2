@@ -85,7 +85,7 @@
              */
             saveAddEditServerDialog: function() {
                 let url = '/api/v1/server';
-                let data = _.pick(this.item, 'name', 'host', 'port', 'disabled');
+                let payload = _.pick(this.item, 'name', 'host', 'port', 'disabled');
                 let method;
 
                 if(this.item.id == null)
@@ -101,11 +101,10 @@
                     url += '/' + this.item.id;
                 }
 
-                $.ajax({'type': method, 'url': url, 'data': data, 'success': function(data){
-                    console.log(data);
+                $.ajax({'type': method, 'url': url, 'data': payload, 'success': function(data){
+                    this.$emit('server-change', this.item);
+                    this.showDialog = false;
                 }.bind(this), 'dataType': 'json'});
-
-                //this.$emit('server-change', {});
             },
 
             /**

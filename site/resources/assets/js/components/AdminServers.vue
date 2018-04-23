@@ -68,9 +68,8 @@
                 this.selectedServer = serverData;
                 this.showServerAddEdit = true;
             },
-            'onServerChange': function(changedServer) {
-console.log('got a change');
-                //this.servers[changedServer.id] = changedServer;
+            'onServerChange': function(changedServer){
+                this.servers[changedServer.id] = Object.assign(this.servers[changedServer.id], changedServer);
             }
         },
         computed: {

@@ -46,6 +46,7 @@ Route::group(['middleware' => ['auth']], function () {
     // UserController
     Route::get('/u/{userName}', 'UserController@show');
     Route::get('/api/v1/u/{userName}', 'UserController@showJSON');
+    Route::get('/api/v1/user/me', 'UserController@showMeJSON');
 });
 
 // Requires Admin Authentication

@@ -2,6 +2,7 @@
     <div class="servers record">
         <h3 class="title">
             Server Management
+            <md-button class="md-raised md-primary float-right" v-on:click="editServer({})">Add New Server</md-button>
         </h3>
 
         <div class="container-fluid">
@@ -69,7 +70,10 @@
                 this.showServerAddEdit = true;
             },
             'onServerChange': function(changedServer){
-                this.servers[changedServer.id] = Object.assign(this.servers[changedServer.id], changedServer);
+                if(this.servers[changedServer.id] != null)
+                    this.servers[changedServer.id] = Object.assign(this.servers[changedServer.id], changedServer);
+                else
+                    this.servers[changedServer.id] = changedServer;
             }
         },
         computed: {

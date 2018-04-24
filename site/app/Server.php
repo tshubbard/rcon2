@@ -19,10 +19,13 @@ class Server extends Model
      * @var array
      */
     protected $fillable = [
+        'account_id',
         'name',
         'host',
         'port',
-        'disabled'
+        'password',
+        'disabled',
+        'timezone'
     ];
 
     /**

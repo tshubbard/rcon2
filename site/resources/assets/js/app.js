@@ -67,6 +67,12 @@ if (document.getElementById('app') !== null) {
         'router': router,
         'data': {
             'server_selected': null
+        },
+        'created': function(){
+            if(location.pathname == '/dashboard/')
+                $.get('/api/v1/user/me', function(data){
+                    sessionStorage.setItem('accounts', JSON.stringify(data.accounts));
+                }, 'json');
         }
     });
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Auth;
 
 class UserController extends Controller
 {
@@ -31,6 +32,22 @@ class UserController extends Controller
     public function showJSON(Request $request, $userName)
     {
         $user = User::where('name' , '=', $userName)->first();
+        // weird way to populate user accounts
+        $user->accounts;
+
+        return response()->json($user);
+    }
+
+    /**
+     * API - Display the current User in JSON
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $userName The user name of a user to return
+     * @return \Illuminate\Http\Response
+     */
+    public function showMeJSON(Request $request)
+    {
+        $user = Auth::user();
         // weird way to populate user accounts
         $user->accounts;
 

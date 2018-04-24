@@ -25,11 +25,11 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label for="server_name">Server Name</label>
                         <input id="server_name" type="text" class="form-control" name="server_name" v-model="item.name" required>
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-2" style="text-align: center">
                         <label for="disabled">Active</label>
                         <div>
                             <md-switch id="disabled" name="disabled" class="disabled"
@@ -37,15 +37,27 @@
                                        aria-label="Server Active on/off toggle"></md-switch>
                         </div>
                     </div>
+                    <div class="form-group col-md-4">
+                        <md-field>
+                            <label for="account_id">Account</label>
+                            <md-select id="account_id" v-model="item.account_id" required>
+                                <md-option v-for="(item, index) in accounts" :value="item.id" :key="item.id">{{item.name}}</md-option>
+                            </md-select>
+                        </md-field>
+                    </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label for="server_host">Server Host</label>
                         <input id="server_host" type="text" class="form-control" name="server_host" v-model="item.host" required>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label for="server_port">Server Port</label>
                         <input id="server_port" type="text" class="form-control" name="server_port" v-model="item.port" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="server_password">Server Password</label>
+                        <input id="server_password" type="text" class="form-control" name="server_password" v-model="item.password">
                     </div>
                 </div>
             </form>
@@ -74,10 +86,12 @@
         ],
         data: function() {
             return {
-                'item': {}
+                'item': {},
+                'accounts': {}
             }
         },
         created: function() {
+            this.accounts = JSON.parse(sessionStorage.getItem('accounts'));
         },
         methods: {
             /**
@@ -85,8 +99,11 @@
              */
             saveAddEditServerDialog: function() {
                 let url = '/api/v1/server';
-                let payload = _.pick(this.item, 'name', 'host', 'port', 'disabled');
+                let payload = _.pick(this.item, 'account_id', 'name', 'host', 'port', 'password', 'disabled');
                 let method;
+
+                if(payload.password == null || payload.password == '')
+                    delete payload.password;
 
                 if(this.item.id == null)
                     method = 'POST';
@@ -102,7 +119,7 @@
                 }
 
                 $.ajax({'type': method, 'url': url, 'data': payload, 'success': function(data){
-                    this.$emit('server-change', this.item);
+                    this.$emit('server-change', data.data);
                     this.showDialog = false;
                 }.bind(this), 'dataType': 'json'});
             },

@@ -62,7 +62,24 @@ class ServerController extends Controller
             ]);
         }
 
-        $requestInput['user_id'] = \Auth::user()->id();
+        $user = Auth::user();
+        $accounts = $user->accounts;
+        $account_valid = false;
+
+        foreach($accounts as $row)
+            if($row['id'] == $requestInput['account_id'])
+                $account_valid = true;
+
+        if(!$account_valid)
+            return response()->json([
+                'success' => false,
+                'data' => array(
+                    'errors' => 'Invalid account specified.'
+                )
+            ]);
+
+        $requestInput['timezone'] = 'America/New_York';
+
         $newServer = Server::create($requestInput);
 
         return response()->json([

@@ -23,6 +23,7 @@
         "bootstrap": "^4.0.0",
         "jquery": "^3.3.1",
         "popper.js": "^1.12",
+        "sweetalert2": "^7.19.1",
         "vue": "^2.5.7",
         "vue-material": "^1.0.0-beta-8",
         "vue-router": "^3.0.1"

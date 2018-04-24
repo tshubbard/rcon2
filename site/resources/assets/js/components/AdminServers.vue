@@ -70,7 +70,12 @@
                 this.showServerAddEdit = true;
             },
             'onServerChange': function(changedServer){
-                if(this.servers[changedServer.id] != null)
+                if(changedServer.deleted != null && changedServer.deleted)
+                {
+                    if(this.servers[changedServer.id] != null)
+                        delete this.servers[changedServer.id];
+                }
+                else if(this.servers[changedServer.id] != null)
                     this.servers[changedServer.id] = Object.assign(this.servers[changedServer.id], changedServer);
                 else
                     this.servers[changedServer.id] = changedServer;

@@ -126,7 +126,30 @@ class ServerController extends Controller
      */
     public function destroy($id)
     {
+        $server = Server::find($id);
+
+        $user = Auth::user();
+        $accounts = $user->accounts;
+        $account_valid = false;
+
+        foreach($accounts as $row)
+            if($row['id'] == $server['account_id'])
+                $account_valid = true;
+
+        if(!$account_valid)
+            return response()->json([
+                'success' => false,
+                'data' => array(
+                    'errors' => 'Invalid account permissions.'
+                )
+            ]);
+
         Server::destroy($id);
+
+        return response()->json([
+            'success' => true,
+            'data' => array('id' => $id, 'deleted' => true)
+        ]);
     }
 
 }

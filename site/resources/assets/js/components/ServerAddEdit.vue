@@ -18,12 +18,6 @@
         </md-toolbar>
         <md-dialog-content>
             <form name="addEditServerActionForm">
-
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <h5>Server Setup</h5>
-                    </div>
-                </div>
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="server_name">Server Name</label>
@@ -61,18 +55,22 @@
                     </div>
                 </div>
             </form>
-
         </md-dialog-content>
 
         <md-divider class="mt-4"></md-divider>
 
         <md-dialog-actions layout="row" layout-align="end">
-            <md-button v-on:click="showDialog = false" type="button">
-                Cancel
-            </md-button>
-            <md-button v-on:click="saveAddEditServerDialog()" class="md-primary">
-                Save
-            </md-button>
+            <div class="col-md-4" style="padding-left: 0px">
+                <md-button class="md-raised md-accent" v-on:click="deleteServer">Delete This Server</md-button>
+            </div>
+            <div class="col-md-8" style="text-align: right">
+                <md-button v-on:click="showDialog = false" type="button">
+                    Cancel
+                </md-button>
+                <md-button v-on:click="saveAddEditServerDialog()" class="md-primary">
+                    Save
+                </md-button>
+            </div>
         </md-dialog-actions>
 
     </md-dialog>
@@ -123,13 +121,21 @@
                     this.showDialog = false;
                 }.bind(this), 'dataType': 'json'});
             },
-
-            /**
-             * Handles deleting an event from a server event list
-             */
-            onDeleteServerEvent: function(serverEvent) {
-                console.log('onDeleteServerEvent: ', serverEvent);
-                // todo: make this work
+            deleteServer: function(){
+                swal({
+                    title: 'Are you sure?',
+                    text: 'Are you sure you wish to delete this server and all its associated data?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then(function(result){
+                    if (result.value) {
+                        this.item.delete = true;
+                        this.saveAddEditServerDialog();
+                    }
+                }.bind(this));
             },
             onDialogOpened: function(){
                 this.item = _.clone(this.serverData);

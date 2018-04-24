@@ -61,7 +61,7 @@
 
         <md-dialog-actions layout="row" layout-align="end">
             <div class="col-md-4" style="padding-left: 0px">
-                <md-button class="md-raised md-accent" v-on:click="deleteServer">Delete This Server</md-button>
+                <md-button class="md-raised md-accent" v-if="item.id != null" v-on:click="deleteServer">Delete This Server</md-button>
             </div>
             <div class="col-md-8" style="text-align: right">
                 <md-button v-on:click="showDialog = false" type="button">

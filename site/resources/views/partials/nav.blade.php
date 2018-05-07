@@ -28,6 +28,8 @@
                                      class-active="active"
                                      to="/admin/users">Users</router-link>
                     </li>
+                @endif
+                @if(Auth::user()->isAdmin() || Auth::user()->isMod())
                     <li class="nav-item">
                         <router-link class="nav-link"
                                      class-active="active"

@@ -561,9 +561,14 @@
                     .then(response => {
                         let eventData = _.clone(response.data.data);
 
+                        eventData.is_active = !!eventData.is_active;
+                        eventData.is_indefinite = !!eventData.is_indefinite;
+                        eventData.is_public = !!eventData.is_public;
                         eventData.commands = JSON.parse(eventData.commands);
+
                         console.log('response: ', response);
                         console.log('eventData: ', eventData);
+
                         this.$emit(eventName, eventData);
                         this.showDialog = false;
                     })

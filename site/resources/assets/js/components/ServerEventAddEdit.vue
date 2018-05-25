@@ -158,6 +158,33 @@
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
+                        <h5>Event Schedule</h5>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <md-switch id="is_indefinite" name="is_indefinite" class="is-indefinite"
+                                   v-model="eventData.is_indefinite"
+                                   :change="onChangeEventIndefinite(eventData)"
+                                   aria-label="Server Event Indefinite on/off toggle">
+                            {{scheduleMessage}}
+                        </md-switch>
+                    </div>
+                    <div class="form-group col-md-4" v-show="!eventData.is_indefinite">
+                        <div>Start Date</div>
+                        <md-datepicker v-model="eventData.start_date" md-immediately/>
+                    </div>
+                    <div class="form-group col-md-4" v-show="!eventData.is_indefinite">
+                        <div>End Date</div>
+                        <md-datepicker v-model="eventData.end_date" md-immediately/>
+                    </div>
+                </div>
+
+                <md-divider class="my-3"></md-divider>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
                         <h5>Add Commands</h5>
                     </div>
                 </div>
@@ -182,7 +209,8 @@
                         </md-field>
                         <div class="text-right">
                             <md-button class="md-raised md-dense md-primary"
-                                       @click.stop="addEventToCommandStack()">
+                                       @click.stop="addEventToCommandStack()"
+                                       :disabled="selectedServerEvent.command.length < 5">
                                 Add To Command Stack
                             </md-button>
                         </div>
@@ -247,26 +275,6 @@
                         <h5>Event Commands List</h5>
                     </div>
                 </div>
-
-                <div class="form-row">
-                   <div class="form-group col-md-4">
-                       <md-switch id="is_indefinite" name="is_indefinite" class="is-indefinite"
-                                  v-model="eventData.is_indefinite"
-                                  @change="toggleEventIndefinite(eventData)"
-                                  aria-label="Server Event Indefinite on/off toggle">
-                           Manually Turn Event On/Off
-                       </md-switch>
-                   </div>
-                    <div class="form-group col-md-4" v-show="!eventData.is_indefinite">
-                        <div>Start Date</div>
-                        <md-datepicker v-model="eventData.start_date" md-immediately/>
-                    </div>
-                    <div class="form-group col-md-4" v-show="!eventData.is_indefinite">
-                        <div>End Date</div>
-                        <md-datepicker v-model="eventData.end_date" md-immediately/>
-                    </div>
-                </div>
-
                 <md-table v-model="eventData.commands" md-card>
                     <md-table-row slot="md-table-row" slot-scope="{ item }">
                         <md-table-cell md-label="Order" md-sort-by="order" class="text-center" md-numeric>
@@ -437,6 +445,7 @@
                     targets: []
                 }],
                 eventTypeObj: {},
+                scheduleMessage: 'Event is Always Active',
                 selectedEventTypeText: '',
                 selectedServerEvent: {
                     command: '',
@@ -522,7 +531,6 @@
                         (payload.command_interval_hours * 60) +
                         payload.command_interval_minutes;
                 }
-                debugger;
 
                 if (payload.is_public === 'on' || payload.is_public === 'off') {
                     payload.is_public = payload.is_public === 'on' ? 1 : 0;
@@ -635,6 +643,14 @@
                 console.log('onAddItemToCommand: ', itemObj);
                 this.selectedServerEvent.command += ' ' + itemObj.console_id;
             },
+
+            onChangeEventIndefinite: function(eventData) {
+                if (eventData.is_indefinite) {
+                    this.scheduleMessage = 'Event is Always Active';
+                } else {
+                    this.scheduleMessage = 'Event Active Between Start & End Dates';
+                }
+            }
         },
         watch: {
             selectedEventType: function(eventType) {

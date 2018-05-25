@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/api/v1/serverEvent/{serverEvent}', 'ServerEventController@show');
     Route::post('/api/v1/serverEvent', 'ServerEventController@store');
     Route::put('/api/v1/serverEvent/{serverEvent}', 'ServerEventController@update');
+    Route::put('/api/v1/serverEvent/{serverEvent}/active/{isActive}', 'ServerEventController@updateActive');
     Route::delete('/api/v1/serverEvent/{serverEvent}', 'ServerEventController@destroy');
 
     // UserController

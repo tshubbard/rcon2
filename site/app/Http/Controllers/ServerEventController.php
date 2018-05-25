@@ -109,6 +109,37 @@ class ServerEventController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\ServerEvent  $serverEvent
+     * @return \Illuminate\Http\Response
+     */
+    public function updateActive(Request $request, ServerEvent $serverEvent, $isActive)
+    {
+        $requestInput = [
+            'is_active' => $isActive
+        ];
+        $validationRules = [
+            'is_active' => 'in:0,1',
+        ];
+        $validator = Validator::make($requestInput, $validationRules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'data' => array(
+                    'errors' => $validator->failed()
+                )
+            ]);
+        }
+        $serverEvent->update($requestInput);
+        $serverEvent->is_active = intval($isActive);
+
+        return response()->json($serverEvent);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\ServerEvent  $serverEvent

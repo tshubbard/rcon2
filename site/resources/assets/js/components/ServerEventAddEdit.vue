@@ -247,16 +247,26 @@
                         <h5>Event Commands List</h5>
                     </div>
                 </div>
-                <!--
+
                 <div class="form-row">
-                   <div class="form-group col-md-6">
-
+                   <div class="form-group col-md-4">
+                       <md-switch id="is_indefinite" name="is_indefinite" class="is-indefinite"
+                                  v-model="eventData.is_indefinite"
+                                  @change="toggleEventIndefinite(eventData)"
+                                  aria-label="Server Event Indefinite on/off toggle">
+                           Manually Turn Event On/Off
+                       </md-switch>
                    </div>
-                   <div class="form-group col-md-6">
-
-                   </div>
+                    <div class="form-group col-md-4" v-show="!eventData.is_indefinite">
+                        <div>Start Date</div>
+                        <md-datepicker v-model="eventData.start_date" md-immediately/>
+                    </div>
+                    <div class="form-group col-md-4" v-show="!eventData.is_indefinite">
+                        <div>End Date</div>
+                        <md-datepicker v-model="eventData.end_date" md-immediately/>
+                    </div>
                 </div>
-                -->
+
                 <md-table v-model="eventData.commands" md-card>
                     <md-table-row slot="md-table-row" slot-scope="{ item }">
                         <md-table-cell md-label="Order" md-sort-by="order" class="text-center" md-numeric>
@@ -624,7 +634,7 @@
             onAddItemToCommand: function(itemObj) {
                 console.log('onAddItemToCommand: ', itemObj);
                 this.selectedServerEvent.command += ' ' + itemObj.console_id;
-            }
+            },
         },
         watch: {
             selectedEventType: function(eventType) {

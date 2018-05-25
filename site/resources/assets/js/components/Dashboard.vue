@@ -141,6 +141,7 @@
                     this.servers.forEach(_.bind(function(server) {
                         server.events.forEach(_.bind(function(event) {
                             event.is_active = !!event.is_active;
+                            event.is_indefinite = !!event.is_indefinite;
                             event.is_public = !!event.is_public;
                             event.commands = JSON.parse(event.commands);
                             this.updateEventTimer(event);

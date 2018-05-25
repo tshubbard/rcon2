@@ -541,6 +541,9 @@
                     payload.is_active = payload.is_active === 'on' ? 1 : 0;
                 }
 
+                if (!payload.is_active) {
+                    payload.is_active = 0;
+                }
 
                 if (payload.id) {
                     method = 'put';

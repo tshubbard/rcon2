@@ -19,7 +19,14 @@
         </md-toolbar>
         <md-dialog-content>
             <form name="addEditServerActionEventForm">
-
+                <div v-if="errors.length" class="error-wrapper">
+                    <div class="errors alert-danger">
+                        <b>Please correct the following error(s):</b>
+                        <ul>
+                            <li v-for="error in errors">{{ error }}</li>
+                        </ul>
+                    </div>
+                </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <h5>Event Setup</h5>
@@ -174,11 +181,11 @@
                     </div>
                     <div class="form-group col-md-4" v-show="!eventData.is_indefinite">
                         <div>Start Date</div>
-                        <md-datepicker v-model="eventData.start_date" md-immediately/>
+                        <md-datepicker v-model="eventData.start_date" md-immediately required/>
                     </div>
                     <div class="form-group col-md-4" v-show="!eventData.is_indefinite">
                         <div>End Date</div>
-                        <md-datepicker v-model="eventData.end_date" md-immediately/>
+                        <md-datepicker v-model="eventData.end_date" md-immediately required/>
                     </div>
                 </div>
 
@@ -219,7 +226,7 @@
 
                     <div class="form-group col-md-4" v-if="serverCommandTargetList.length">
                         <md-tabs class="command-tabs" md-dynamic-height>
-                            <md-tab id="tab-fields" md-label="Event Target">
+                            <md-tab id="tab-fields" md-label="Event Target" class="events-tab">
                                 <md-list class="command-targets-list">
                                     <md-list-item v-for="item in serverCommandTargetList"
                                                   :key="item.id"
@@ -228,7 +235,7 @@
                                     </md-list-item>
                                 </md-list>
                             </md-tab>
-                            <md-tab id="tab-items" md-label="Items">
+                            <md-tab id="tab-items" md-label="Items" class="items-tab">
                                 <md-list-item v-for="category in items"
                                               class="command-items-list md-dense md-scrollbar list-style-type-none"
                                               :key="category.id" md-expand>
@@ -248,7 +255,7 @@
                     </div>
                     <div class="form-group col-md-4" v-show="serverCommandTargetList.length === 0">
                         <md-tabs class="command-tabs" md-dynamic-height>
-                            <md-tab id="tab-items" md-label="Items">
+                            <md-tab id="tab-items" md-label="Items" class="items-tab">
                                 <md-list-item v-for="category in items"
                                               class="command-items-list md-dense md-scrollbar list-style-type-none"
                                               :key="category.id" md-expand>
@@ -311,7 +318,7 @@
             <md-button @click.stop="showDialog = false" type="button">
                 Cancel
             </md-button>
-            <md-button @click.stop="saveAddEditServerEventDialog()" class="md-primary">
+            <md-button @click.stop="checkForm" class="md-primary">
                 Save
             </md-button>
         </md-dialog-actions>
@@ -321,6 +328,7 @@
 
 <script>
     import {HTTP} from '../app';
+    import {Utils} from '../utils';
 
     export default {
         props: [
@@ -526,6 +534,8 @@
                 let url = '/api/v1/serverEvent';
                 let eventName;
                 let payload = _.clone(this.eventData);
+                let tmpDate;
+                let tmpMonth;
 
                 if (payload.event_type === 'timer') {
                     payload.command_timer =
@@ -545,6 +555,35 @@
                     payload.is_active = 0;
                 }
 
+                if (payload.is_indefinite) {
+                    payload.start_date = null;
+                    payload.end_date = null;
+                } else {
+                    payload.is_indefinite = 0;
+                    if (payload.start_date) {
+                        tmpDate = new Date(payload.start_date);
+                        tmpMonth = tmpDate.getMonth();
+                        if (tmpMonth < 10) {
+                            tmpMonth = '0' + tmpMonth.toString();
+                        }
+                        payload.start_date = tmpDate.getUTCFullYear() + '-' +
+                            tmpMonth + '-' +
+                            tmpDate.getDate();
+                    }
+
+                    if (payload.start_date) {
+                        tmpDate = new Date(payload.end_date);
+                        tmpMonth = tmpDate.getMonth();
+                        if (tmpMonth < 10) {
+                            tmpMonth = '0' + tmpMonth.toString();
+                        }
+                        payload.end_date = tmpDate.getUTCFullYear() + '-' +
+                            tmpMonth + '-' +
+                            tmpDate.getDate();
+                    }
+                }
+                debugger;
+
                 if (payload.id) {
                     method = 'put';
                     url += '/' + payload.id;
@@ -559,13 +598,13 @@
 
                 HTTP[method](url, payload)
                     .then(response => {
-                        let eventData = _.clone(response.data.data);
+                        let eventData = _.clone(response.data);
 
                         eventData.is_active = !!eventData.is_active;
                         eventData.is_indefinite = !!eventData.is_indefinite;
                         eventData.is_public = !!eventData.is_public;
                         eventData.commands = JSON.parse(eventData.commands);
-
+                        Utils.updateEventTimer(event);
                         console.log('response: ', response);
                         console.log('eventData: ', eventData);
 
@@ -664,6 +703,36 @@
                     this.scheduleMessage = 'Event is Always Active';
                 } else {
                     this.scheduleMessage = 'Event Active Between Start & End Dates';
+                }
+            },
+
+            checkForm: function(evt) {
+                evt.preventDefault();
+
+                this.errors = [];
+                if(!this.eventData.name) {
+                    this.errors.push('Name is required');
+                }
+                if(!this.eventData.is_indefinite) {
+                    if (!this.eventData.start_date) {
+                        this.errors.push('Start Date is required');
+                    }
+                    if (!this.eventData.end_date) {
+                        this.errors.push('End Date is required');
+                    }
+
+                    if (this.eventData.start_date && this.eventData.end_date) {
+                        let startDate = new Date(this.eventData.start_date);
+                        let endDate = new Date(this.eventData.end_date);
+
+                        if (startDate.getTime() > endDate.getTime()) {
+                            this.errors.push('Start Date must be BEFORE the end date jackass...')
+                        }
+                    }
+                }
+
+                if(!this.errors.length) {
+                    this.saveAddEditServerEventDialog();
                 }
             }
         },

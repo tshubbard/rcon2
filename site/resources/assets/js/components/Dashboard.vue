@@ -104,6 +104,7 @@
 
 <script>
     import {HTTP} from '../app';
+    import {Utils} from '../utils';
     import ServerEventAddEdit from './ServerEventAddEdit';
 
     export default {
@@ -144,7 +145,7 @@
                             event.is_indefinite = !!event.is_indefinite;
                             event.is_public = !!event.is_public;
                             event.commands = JSON.parse(event.commands);
-                            this.updateEventTimer(event);
+                            Utils.updateEventTimer(event);
                         }, this));
                     }, this));
 
@@ -186,39 +187,6 @@
             //}
         },
         methods: {
-            /**
-             * Converts interval time to days/hours/minutes
-             */
-            updateEventTimer: function(event) {
-                let days;
-                let hours;
-                let totalTime = event.command_timer;
-
-                event.command_interval_days = 0;
-                event.command_interval_hours = 0;
-                event.command_interval_minutes = 5;
-
-                if (totalTime) {
-                    days = totalTime / 1440;
-
-                    if (days >= 1) {
-                        days = Math.floor(days);
-                        event.command_interval_days = days;
-                        totalTime -= (days * 1440);
-                    }
-
-                    hours = totalTime / 60;
-
-                    if (hours >= 1) {
-                        hours = Math.floor(hours);
-                        event.command_interval_hours = hours;
-                        totalTime -= (hours * 60);
-                    }
-
-                    event.command_interval_minutes = totalTime;
-                }
-            },
-
             /**
              * Updates the selected server when the dropdown is changed
              */

@@ -14,6 +14,7 @@ let mix = require('laravel-mix');
 mix
     .js([
             'node_modules/bootstrap/dist/js/bootstrap.js',
+            'resources/assets/js/utils.js',
             'resources/assets/js/app.js'
         ],
         'public/js/app.js'

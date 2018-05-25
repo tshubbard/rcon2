@@ -188,7 +188,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-4" v-if="serverCommandTargetList.length">
                         <md-tabs class="command-tabs" md-dynamic-height>
                             <md-tab id="tab-fields" md-label="Event Target">
                                 <md-list class="command-targets-list">
@@ -217,6 +217,27 @@
                             </md-tab>
                         </md-tabs>
                     </div>
+                    <div class="form-group col-md-4" v-show="serverCommandTargetList.length === 0">
+                        <md-tabs class="command-tabs" md-dynamic-height>
+                            <md-tab id="tab-items" md-label="Items">
+                                <md-list-item v-for="category in items"
+                                              class="command-items-list md-dense md-scrollbar list-style-type-none"
+                                              :key="category.id" md-expand>
+                                    <span class="md-list-item-text">{{category.name}}</span>
+
+                                    <md-list slot="md-expand" class="md-dense md-content">
+                                        <md-list-item v-for="item in category.items"
+                                                      class="md-inset list-style-type-none"
+                                                      :key="item.id"
+                                                      @click.stop="onAddItemToCommand(item)">
+                                            {{item.name}}
+                                        </md-list-item>
+                                    </md-list>
+                                </md-list-item>
+                            </md-tab>
+                        </md-tabs>
+                    </div>
+
                 </div>
 
                 <md-divider class="my-3"></md-divider>

@@ -632,7 +632,8 @@
                 // custom event types dont add "custom" to the beginning
                 var cmd = type === 'custom' ? '' : type;
 
-                if (this.selectedServerEvent.key && this.selectedServerEvent.key !== 'custom') {
+                if (this.selectedServerEvent.key && this.selectedServerEvent.key !== 'custom' &&
+                    (this.selectedServerEvent.command.indexOf(this.selectedServerEvent.key) !== -1)) {
                     // if there's already a selected event key, replace it in the string with the new key
                     cmd = this.selectedServerEvent.command.replace(this.selectedServerEvent.key, cmd);
                 } else {

@@ -181,11 +181,11 @@
                     </div>
                     <div class="form-group col-md-4" v-show="!eventData.is_indefinite">
                         <div>Start Date</div>
-                        <md-datepicker v-model="eventData.start_date" md-immediately required/>
+                        <md-datepicker v-model="eventData.start_date" md-immediately/>
                     </div>
                     <div class="form-group col-md-4" v-show="!eventData.is_indefinite">
                         <div>End Date</div>
-                        <md-datepicker v-model="eventData.end_date" md-immediately required/>
+                        <md-datepicker v-model="eventData.end_date" md-immediately/>
                     </div>
                 </div>
 
@@ -226,7 +226,7 @@
 
                     <div class="form-group col-md-4" v-if="serverCommandTargetList.length">
                         <md-tabs class="command-tabs" md-dynamic-height>
-                            <md-tab id="tab-fields" md-label="Event Target" class="events-tab">
+                            <md-tab id="tab-fields" md-label="Event Target">
                                 <md-list class="command-targets-list">
                                     <md-list-item v-for="item in serverCommandTargetList"
                                                   :key="item.id"
@@ -235,7 +235,7 @@
                                     </md-list-item>
                                 </md-list>
                             </md-tab>
-                            <md-tab id="tab-items" md-label="Items" class="items-tab">
+                            <md-tab id="tab-items" md-label="Items">
                                 <md-list-item v-for="category in items"
                                               class="command-items-list md-dense md-scrollbar list-style-type-none"
                                               :key="category.id" md-expand>
@@ -255,7 +255,7 @@
                     </div>
                     <div class="form-group col-md-4" v-show="serverCommandTargetList.length === 0">
                         <md-tabs class="command-tabs" md-dynamic-height>
-                            <md-tab id="tab-items" md-label="Items" class="items-tab">
+                            <md-tab id="tab-items" md-label="Items">
                                 <md-list-item v-for="category in items"
                                               class="command-items-list md-dense md-scrollbar list-style-type-none"
                                               :key="category.id" md-expand>
@@ -582,7 +582,6 @@
                             tmpDate.getDate();
                     }
                 }
-                debugger;
 
                 if (payload.id) {
                     method = 'put';

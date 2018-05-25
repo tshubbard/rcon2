@@ -60,7 +60,8 @@
                         <md-field>
                             <label for="event_type">Event Type</label>
                             <md-select id="event_type" name="event_type"
-                                       v-model="eventData.event_type">
+                                       v-model="eventData.event_type"
+                                       :disabled="hasEventsInStack">
                                 <md-option v-for="opt in eventTypes"
                                            :key="opt.id"
                                            :value="opt.id">
@@ -445,6 +446,7 @@
                     targets: []
                 }],
                 eventTypeObj: {},
+                hasEventsInStack: false,
                 scheduleMessage: 'Event is Always Active',
                 selectedEventTypeText: '',
                 selectedServerEvent: {
@@ -591,6 +593,8 @@
                 for (let i = 1; i < len; i++) {
                     this.eventData.commands[i - 1].order = i;
                 }
+
+                this.hasEventsInStack = !!this.eventData.commands.length;
             },
 
             addEventToCommandStack: function() {
@@ -607,6 +611,8 @@
                     command: '',
                     key: undefined
                 };
+
+                this.hasEventsInStack = !!this.eventData.commands.length;
             },
 
             /**
@@ -663,8 +669,9 @@
                 console.log('selectedEventType watcher ', this.serverCommandTargetList);
 
             },
-            eventData: function(a,b,c) {
+            eventData: function(event) {
                 console.log('eventData watcher ', arguments);
+                this.hasEventsInStack = !!event.commands.length;
             }
         },
         computed: {

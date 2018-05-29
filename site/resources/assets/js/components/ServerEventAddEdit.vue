@@ -117,7 +117,7 @@
                         <label for="interval-days">Days</label>
                         <md-field class="no-padding-top">
                             <md-select id="interval-days" name="interval-days" class="white-select-dropdown"
-                                       v-model="eventData.command_interval_days"
+                                       v-model="commandIntervalDays"
                                        aria-label="Interval Days Select">
                                 <md-option :value="opt.val"
                                            :key="opt.val"
@@ -131,7 +131,7 @@
                         <label for="interval-hours">Hours</label>
                         <md-field class="no-padding-top">
                             <md-select id="interval-hours" name="interval-hours" class="white-select-dropdown"
-                                       v-model="eventData.command_interval_hours"
+                                       v-model="commandIntervalHours"
                                        aria-label="Interval Hours Select">
                                 <md-option :value="opt.val"
                                            :key="opt.val"
@@ -145,7 +145,7 @@
                         <label for="interval-minutes">Minutes</label>
                         <md-field class="no-padding-top">
                             <md-select id="interval-minutes" name="interval-minutes" class="white-select-dropdown"
-                                       v-model="eventData.command_interval_minutes"
+                                       v-model="commandIntervalMinutes"
                                        aria-label="Interval Minutes Select">
                                 <md-option :value="opt.val"
                                            :key="opt.val"
@@ -174,7 +174,7 @@
                     <div class="form-group col-md-4">
                         <md-switch id="is_indefinite" name="is_indefinite" class="is-indefinite"
                                    v-model="eventData.is_indefinite"
-                                   :change="onChangeEventIndefinite(eventData)"
+                                   @change="onChangeEventIndefinite(eventData)"
                                    aria-label="Server Event Indefinite on/off toggle">
                             {{scheduleMessage}}
                         </md-switch>
@@ -338,6 +338,9 @@
         ],
         data: function() {
             return {
+                commandIntervalDays: 0,
+                commandIntervalHours: 0,
+                commandIntervalMinutes: 0,
                 errors: [],
                 eventTypes: [{
                     id: 'timer',
@@ -455,15 +458,15 @@
                 }],
                 eventTypeObj: {},
                 hasEventsInStack: false,
+                optionsDays: [],
+                optionsHours: [],
+                optionsMinutes: [],
                 scheduleMessage: 'Event is Always Active',
                 selectedEventTypeText: '',
                 selectedServerEvent: {
                     command: '',
                     key: undefined
                 },
-                optionsDays: [],
-                optionsHours: [],
-                optionsMinutes: [],
                 serverCommandTemplates: [{
                     name: 'say',
                     icon: 'chat'
@@ -643,6 +646,10 @@
                 this.hasEventsInStack = !!this.eventData.commands.length;
             },
 
+            onIntervalChange: function() {
+                console.log('onIntervalChange ', arguments);
+            },
+
             addEventToCommandStack: function() {
                 console.log('addEventToCommandStack  ', this.selectedServerEvent);
 
@@ -733,6 +740,37 @@
                 if(!this.errors.length) {
                     this.saveAddEditServerEventDialog();
                 }
+            },
+
+            /**
+             * Updates the schedule/timer help text message
+             */
+            updateIntervalText: function() {
+                let word;
+                this.selectedEventTypeText = 'Post server message every ';
+
+                if (this.eventData.command_interval_days) {
+                    word = this.eventData.command_interval_days === 1 ? 'day' : 'days';
+                    this.selectedEventTypeText += this.eventData.command_interval_days.toString() +
+                        ' ' + word + ', ';
+                }
+
+                if (this.eventData.command_interval_hours) {
+                    word = this.eventData.command_interval_hours === 1 ? 'hour' : 'hours';
+                    this.selectedEventTypeText += this.eventData.command_interval_hours.toString() +
+                        ' ' + word + ', ';
+                }
+
+                if (this.eventData.command_interval_minutes) {
+                    word = this.eventData.command_interval_minutes === 1 ? 'minute' : 'minutes';
+                    this.selectedEventTypeText += this.eventData.command_interval_minutes.toString() +
+                        ' ' + word + ', ';
+                }
+
+                this.selectedEventTypeText = this.selectedEventTypeText.substring(
+                    0,
+                    this.selectedEventTypeText.length - 2
+                );
             }
         },
         watch: {
@@ -749,7 +787,22 @@
             eventData: function(event) {
                 console.log('eventData watcher ', arguments);
                 this.hasEventsInStack = !!event.commands.length;
-            }
+                this.commandIntervalDays = event.command_interval_days;
+                this.commandIntervalHours = event.command_interval_hours;
+                this.commandIntervalMinutes = event.command_interval_minutes;
+            },
+            commandIntervalDays: function(value) {
+                this.eventData.command_interval_days = value;
+                this.updateIntervalText();
+            },
+            commandIntervalHours: function(value) {
+                this.eventData.command_interval_hours = value;
+                this.updateIntervalText();
+            },
+            commandIntervalMinutes: function(value) {
+                this.eventData.command_interval_minutes = value;
+                this.updateIntervalText();
+            },
         },
         computed: {
             selectedEventType: {
@@ -780,6 +833,9 @@
                         this.selectedEventTypeText = this.eventTypeObj[data.event_type].help;
                     }
                     this.data = data;
+
+                    console.log('this.data eventData computed ', this.data);
+
                 }
             }
         }

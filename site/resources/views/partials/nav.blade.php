@@ -61,11 +61,15 @@
 
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item" href="/u/{{Auth::user()->name}}">Profile</a>
+                            <router-link class="nav-link dropdown-item"
+                                         class-active="active"
+                                         to="/u/{{Auth::user()->name}}">Profile</router-link>
                         </li>
                         @if(Auth::user()->isAdmin())
                             <li>
-                                <a class="dropdown-item" href="/admin/">Admin</a>
+                                <router-link class="nav-link dropdown-item"
+                                             class-active="active"
+                                             to="/admin">Admin</router-link>
                             </li>
                         @endif
 

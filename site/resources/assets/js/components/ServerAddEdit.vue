@@ -63,11 +63,6 @@
                     <input id="server_password" class="form-control col-sm-6" type="text"
                            name="server_password" v-model="item.password">
                 </div>
-                <div class="form-group row">
-                    <label for="max_players" class="col-sm-3 col-form-label">Max Players</label>
-                    <input id="max_players" class="form-control col-sm-6" type="number"
-                           name="max_players" v-model="item.max_players">
-                </div>
             </form>
         </md-dialog-content>
 

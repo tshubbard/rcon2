@@ -516,6 +516,7 @@
              */
             onDialogOpened: function() {
                 this.selectedEventType = this.data.event_type;
+                this.errors = [];
             },
 
             /**
@@ -527,6 +528,7 @@
                     command: '',
                     key: undefined
                 };
+                this.errors = [];
             },
 
             /**
@@ -646,10 +648,6 @@
                 this.hasEventsInStack = !!this.eventData.commands.length;
             },
 
-            onIntervalChange: function() {
-                console.log('onIntervalChange ', arguments);
-            },
-
             addEventToCommandStack: function() {
                 console.log('addEventToCommandStack  ', this.selectedServerEvent);
 
@@ -716,9 +714,21 @@
                 evt.preventDefault();
 
                 this.errors = [];
+
                 if(!this.eventData.name) {
                     this.errors.push('Name is required');
                 }
+
+                if (this.eventData.event_type === 'timer') {
+                    let timeCheck = (this.eventData.command_interval_days * 1440) +
+                        (this.eventData.command_interval_hours * 60) +
+                        this.eventData.command_interval_minutes;
+
+                    if (timeCheck < 5) {
+                        this.errors.push('Scheduled Time interval must be greater than 5 minutes');
+                    }
+                }
+
                 if(!this.eventData.is_indefinite) {
                     if (!this.eventData.start_date) {
                         this.errors.push('Start Date is required');
@@ -747,30 +757,36 @@
              */
             updateIntervalText: function() {
                 let word;
+                let trim = false;
                 this.selectedEventTypeText = 'Post server message every ';
 
                 if (this.eventData.command_interval_days) {
+                    trim = true;
                     word = this.eventData.command_interval_days === 1 ? 'day' : 'days';
                     this.selectedEventTypeText += this.eventData.command_interval_days.toString() +
                         ' ' + word + ', ';
                 }
 
                 if (this.eventData.command_interval_hours) {
+                    trim = true;
                     word = this.eventData.command_interval_hours === 1 ? 'hour' : 'hours';
                     this.selectedEventTypeText += this.eventData.command_interval_hours.toString() +
                         ' ' + word + ', ';
                 }
 
                 if (this.eventData.command_interval_minutes) {
+                    trim = true;
                     word = this.eventData.command_interval_minutes === 1 ? 'minute' : 'minutes';
                     this.selectedEventTypeText += this.eventData.command_interval_minutes.toString() +
                         ' ' + word + ', ';
                 }
 
-                this.selectedEventTypeText = this.selectedEventTypeText.substring(
-                    0,
-                    this.selectedEventTypeText.length - 2
-                );
+                if (trim) {
+                    this.selectedEventTypeText = this.selectedEventTypeText.substring(
+                        0,
+                        this.selectedEventTypeText.length - 2
+                    );
+                }
             }
         },
         watch: {
@@ -833,9 +849,6 @@
                         this.selectedEventTypeText = this.eventTypeObj[data.event_type].help;
                     }
                     this.data = data;
-
-                    console.log('this.data eventData computed ', this.data);
-
                 }
             }
         }

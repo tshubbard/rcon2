@@ -63,16 +63,23 @@ if (document.getElementById('app') !== null) {
     Vue.use(VueRouter);
 
     var app = new Vue({
-        'el': '#app',
-        'router': router,
-        'data': {
-            'server_selected': null
+        el: '#app',
+        router: router,
+        data: {
+            errors: [],
+            server_selected: null
         },
-        'created': function(){
-            if(location.pathname == '/dashboard/')
-                $.get('/api/v1/user/me', function(data){
-                    sessionStorage.setItem('accounts', JSON.stringify(data.accounts));
-                }, 'json');
+        created: function() {
+            if(this.$route.path === '/dashboard') {
+                HTTP.get('/api/v1/user/me')
+                    .then(response => {
+                        sessionStorage.setItem('accounts', JSON.stringify(response.data.accounts));
+                    })
+                    .catch(e => {
+                        console.log('/api/v1/user/me error ', e);
+                        this.errors.push(e)
+                    });
+            }
         }
     });
 }

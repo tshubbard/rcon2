@@ -272,8 +272,6 @@ nav {
     }
 }
 .md-dialog {
-    max-width: 95% !important;
-
     &.add-edit-server,
     &.add-edit-server-event {
         padding-left: 0;
@@ -283,7 +281,27 @@ nav {
             margin-bottom: 20px;
         }
     }
+    &.add-edit-server {
+        .account-select {
+            padding-left: 0;
+            padding-right: 0;
+
+            .md-field {
+                margin: 0;
+                min-height: 24px;
+                padding-top: 0;
+            }
+        }
+        .active-switch {
+            .md-switch {
+                margin: 0;
+                padding-left: 0;
+            }
+        }
+    }
     &.add-edit-server-event {
+        max-width: 95% !important;
+
         label {
             font-weight: bold;
         }
@@ -444,5 +462,10 @@ nav {
         padding: 10px;
         width: 275px;
         margin: 0 auto;
+    }
+}
+.add-edit-server-buttons {
+    .server-actions {
+        top: 25px;
     }
 }

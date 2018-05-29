@@ -60,7 +60,7 @@
             }.bind(this), 'json');
         },
         methods: {
-            'editServer': function(serverData){
+            editServer: function(serverData){
                 if(serverData.disabled)
                     serverData.active = false;
                 else
@@ -69,7 +69,7 @@
                 this.selectedServer = serverData;
                 this.showServerAddEdit = true;
             },
-            'onServerChange': function(changedServer){
+            onServerChange: function(changedServer) {
                 if(changedServer.deleted != null && changedServer.deleted)
                 {
                     if(this.servers[changedServer.id] != null)

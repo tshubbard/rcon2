@@ -21,6 +21,16 @@
                         </md-select>
                     </md-field>
                 </div>
+                <div class="col-md-2 add-edit-server-buttons">
+                    <span class="server-actions" v-if="servers.length">
+                        <i class="material-icons clickable" aria-hidden="true"
+                           @click.stop="showEditServer()">edit</i>
+                    </span>
+                    <span class="server-actions">
+                        <i class="material-icons clickable" aria-hidden="true"
+                           @click.stop="showAddServer()">add_box</i>
+                    </span>
+                </div>
             </div>
         </div>
         <div class="container-fluid">
@@ -97,6 +107,14 @@
                 @close="showServerEventAddEdit = false">
 
         </server-event-add-edit>
+        <server-add-edit
+                :visible="showServerAddEdit"
+                :serverData="selectedServerForAddEdit"
+                v-on:server-change="onServerChange"
+                @close="showServerAddEdit = false">
+
+        </server-add-edit>
+
         </md-content>
 
     </div>
@@ -106,10 +124,12 @@
     import {HTTP} from '../app';
     import {Utils} from '../utils';
     import ServerEventAddEdit from './ServerEventAddEdit';
+    import ServerAddEdit from './ServerAddEdit';
 
     export default {
         components: {
-            ServerEventAddEdit
+            ServerEventAddEdit,
+            ServerAddEdit
         },
         data: function() {
             return {
@@ -120,6 +140,10 @@
                 selectedServer: {
                     events: []
                 },
+                selectedServerForAddEdit: {
+                    events: []
+                },
+                showServerAddEdit: false,
                 showServerEventAddEdit: false,
                 selectedServerEvent: {
                     actionType: 'Add'
@@ -223,6 +247,32 @@
 
                 this.showServerEventAddEdit = !this.showServerEventAddEdit;
                 console.log('showAddEditServerEvent ', this.selectedServerEvent, this.showServerEventAddEdit);
+            },
+
+            showEditServer: function() {
+                this.selectedServerForAddEdit = this.selectedServer;
+                this.showServerAddEdit = !this.showServerAddEdit;
+                console.log('showEditServer  ', this.showServerAddEdit);
+            },
+
+            showAddServer: function() {
+                this.selectedServerForAddEdit = {
+                    account_id: '',
+                    disabled: 0,
+                    host: '',
+                    name: '',
+                    password: '',
+                    port: '',
+                    max_players: ''
+                };
+                this.showServerAddEdit = !this.showServerAddEdit;
+
+                console.log('showAddServer  ', this.showServerAddEdit);
+
+            },
+
+            onServerChange: function(changedServer) {
+                debugger;
             },
 
             /**

@@ -174,7 +174,7 @@
                     <div class="form-group col-md-4">
                         <md-switch id="is_indefinite" name="is_indefinite" class="is-indefinite"
                                    v-model="eventData.is_indefinite"
-                                   @change="onChangeEventIndefinite(eventData)"
+                                   :change="onChangeEventIndefinite(eventData)"
                                    aria-label="Server Event Indefinite on/off toggle">
                             {{scheduleMessage}}
                         </md-switch>

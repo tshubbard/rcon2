@@ -284,31 +284,32 @@
                         <h5>Event Commands List</h5>
                     </div>
                 </div>
-                <md-table v-model="eventData.commands" md-card>
-                    <md-table-row slot="md-table-row" slot-scope="{ item }">
-                        <md-table-cell md-label="Order" md-sort-by="order" class="text-center" md-numeric>
-                            {{ item.order }}
-                        </md-table-cell>
-                        <md-table-cell md-label="Type/Key">
-                            {{ item.key }}
-                        </md-table-cell>
-                        <md-table-cell md-label="Command">
-                            {{ item.command }}
-                        </md-table-cell>
-                        <md-table-cell md-label="Actions">
 
-                            <md-button class="slim-button" @click.stop="onEditServerEvent(item)">
-                                <md-icon>mode_edit</md-icon>
-                            </md-button>
-
-                            <md-button class="slim-button" @click.stop="onDeleteServerEvent(item)">
-                                <md-icon>delete</md-icon>
-                            </md-button>
-
-                        </md-table-cell>
-                    </md-table-row>
-                </md-table>
-
+                <table class="table server-events-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 8.33%">Order</th>
+                            <th style="width: 8.33%">Type/Key</th>
+                            <th style="width: 66.66%">Command</th>
+                            <th style="width: 16.66%">Actions</th>
+                        </tr>
+                    </thead>
+                    <draggable v-model="eventDataCommands" :element="'tbody'">
+                        <tr class="server-event-row" v-for="item in sortByOrder(eventDataCommands)" :key="item.order">
+                            <td class="text-center">{{item.order}}</td>
+                            <td>{{item.key}}</td>
+                            <td>{{item.command}}</td>
+                            <td>
+                                <md-button class="slim-button" @click.stop="onEditServerEvent(item)">
+                                    <md-icon>mode_edit</md-icon>
+                                </md-button>
+                                <md-button class="slim-button" @click.stop="onDeleteServerEvent(item)">
+                                    <md-icon>delete</md-icon>
+                                </md-button>
+                            </td>
+                        </tr>
+                    </draggable>
+                </table>
             </form>
 
         </md-dialog-content>
@@ -330,8 +331,12 @@
 <script>
     import {HTTP} from '../app';
     import {Utils} from '../utils';
+    import draggable from 'vuedraggable';
 
     export default {
+        components: {
+            draggable
+        },
         props: [
             'visible',
             'data',
@@ -792,6 +797,10 @@
                         this.selectedEventTypeText.length - 2
                     );
                 }
+            },
+
+            sortByOrder: function(items) {
+                return _.sortBy(items, 'order');
             }
         },
         watch: {
@@ -826,6 +835,17 @@
             },
         },
         computed: {
+            eventDataCommands: {
+                get() {
+                    return this.eventData.commands;
+                },
+                set(commands) {
+                    _.each(commands, function(cmd, index) {
+                        cmd.order = index + 1;
+                    });
+                    this.eventData.commands = commands;
+                }
+            },
             selectedEventType: {
                 get() {
                     return this.eventData.event_type;
@@ -849,6 +869,8 @@
                     return this.data;
                 },
                 set(data) {
+                    console.log('eventData set data: ', data);
+
                     let evt = this.eventTypeObj[data.event_type];
                     if (evt) {
                         this.selectedEventTypeText = this.eventTypeObj[data.event_type].help;

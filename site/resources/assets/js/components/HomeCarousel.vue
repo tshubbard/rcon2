@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-cloak>
         <div id="index-carousel" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
                 <li data-target="#index-carousel" data-slide-to="0" class="active"></li>

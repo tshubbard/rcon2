@@ -213,13 +213,14 @@
                     <div class="form-group col-md-5">
                         <label>Command</label>
                         <md-field>
-                            <md-textarea v-model="selectedServerEvent.command"></md-textarea>
+                            <md-textarea ref="command" v-model="selectedServerEvent.command"></md-textarea>
                         </md-field>
                         <div class="text-right">
                             <md-button class="md-raised md-dense md-primary"
                                        @click.stop="addEventToCommandStack()"
                                        :disabled="selectedServerEvent.command.length < 5">
-                                Add To Command Stack
+                                <span v-show="selectedServerEvent.isEdit">Update Command</span>
+                                <span v-show="!selectedServerEvent.isEdit">Add To Command Stack</span>
                             </md-button>
                         </div>
                     </div>
@@ -465,6 +466,7 @@
                 selectedEventTypeText: '',
                 selectedServerEvent: {
                     command: '',
+                    isEdit: false,
                     key: undefined
                 },
                 serverCommandTemplates: [{
@@ -526,6 +528,7 @@
                 this.selectedEventType = {};
                 this.selectedServerEvent = {
                     command: '',
+                    isEdit: false,
                     key: undefined
                 };
                 this.errors = [];
@@ -630,7 +633,8 @@
             onEditServerEvent: function(serverEvent) {
                 console.log('onEditServerEvent: ', serverEvent);
                 this.selectedServerEvent = serverEvent;
-                //this.serverCommandTargetList = this.eventTypeObj[serverEvent.key];
+                this.selectedServerEvent.isEdit = true;
+                this.$refs.command.$el.focus();
             },
 
             /**
@@ -660,6 +664,7 @@
 
                 this.selectedServerEvent = {
                     command: '',
+                    isEdit: false,
                     key: undefined
                 };
 

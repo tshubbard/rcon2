@@ -52,4 +52,9 @@ class Server extends Model
     {
         return $this->belongsTo(Account::class);
     }
+
+    public function players()
+    {
+        return $this->hasMany(Player::class);
+    }
 }

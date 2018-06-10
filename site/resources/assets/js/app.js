@@ -28,6 +28,7 @@ if (document.getElementById('app') !== null) {
     const AdminIndex = Vue.component('admin-index', require('./components/AdminIndex.vue'));
     const AdminUsers = Vue.component('admin-users', require('./components/AdminUsers.vue'));
     const AdminServers = Vue.component('admin-servers', require('./components/AdminServers.vue'));
+    const AdminPlayers = Vue.component('admin-players', require('./components/AdminPlayers.vue'));
 
     var router = new VueRouter({
         //mode: 'history',
@@ -47,6 +48,9 @@ if (document.getElementById('app') !== null) {
             }, {
                 'path': '/admin/servers',
                 'component': AdminServers
+            }, {
+                'path': '/admin/players',
+                'component': AdminPlayers
             }, {
                 'path': '/dashboard',
                 'component': Dashboard

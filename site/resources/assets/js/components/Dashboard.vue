@@ -185,6 +185,8 @@
 
                     this.selectedServerId = this.selectedServer.id;
 
+                    sessionStorage.setItem('selected_server_id', this.selectedServerId);
+
                     console.log('user/servers data ', response);
                     console.log('this.servers ', this.servers);
                     console.log('selectedServer: ', this.selectedServer);

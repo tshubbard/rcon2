@@ -44,6 +44,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/api/v1/serverEvent/{serverEvent}/active/{isActive}', 'ServerEventController@updateActive');
     Route::delete('/api/v1/serverEvent/{serverEvent}', 'ServerEventController@destroy');
 
+    // PlayerController
+    Route::get('/api/v1/players/{serverId}', 'PlayerController@index');
+
     // UserController
     Route::get('/u/{userName}', 'UserController@show');
     Route::get('/api/v1/u/{userName}', 'UserController@showJSON');

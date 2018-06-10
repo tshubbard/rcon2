@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
 </head>
 <body>
-    <div id="app" class="site-wrapper">
+    <div id="app" class="site-wrapper" v-cloak>
         <header>
             <div class="container-fluid">
                 @include('partials.nav')

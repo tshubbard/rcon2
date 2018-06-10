@@ -1,5 +1,5 @@
 <template>
-    <div class="dashboard">
+    <div class="dashboard" v-cloak>
         <md-content>
 
         <div class="container-fluid">
@@ -24,11 +24,11 @@
                 <div class="col-md-2 add-edit-server-buttons">
                     <span class="server-actions" v-if="servers.length">
                         <i class="material-icons clickable" aria-hidden="true"
-                           @click.stop="showEditServer()">edit</i>
+                           @click.stop="showEditServer()" v-cloak>edit</i>
                     </span>
                     <span class="server-actions">
                         <i class="material-icons clickable" aria-hidden="true"
-                           @click.stop="showAddServer()">add_box</i>
+                           @click.stop="showAddServer()" v-cloak>add_box</i>
                     </span>
                 </div>
             </div>

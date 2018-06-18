@@ -461,6 +461,11 @@
                     name: 'Chinook Helicopter',
                     help: 'When the Chinook Helicopter with scientists spawns',
                     targets: []
+                }, {
+                    id: 'xmasrefill',
+                    name: 'Christmas Gift Drop',
+                    help: 'When the Christmas gifts are dropped by Santa',
+                    targets: []
                 }],
                 eventTypeObj: {},
                 hasEventsInStack: false,

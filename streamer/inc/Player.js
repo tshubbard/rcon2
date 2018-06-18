@@ -12,7 +12,7 @@ class Player {
 
 			data.forEach(function(row){
 				if(row.ConnectedSeconds > Util.hourToSeconds(8))
-					_servers[this.server_id].rcon.command('kick ' + row.SteamID + ' "Idle too long."');
+					_servers[this.server_id].rcon.command('kick ' + row.SteamID + ' "Connected for more than 8 hours."');
 				else
 					this.cache[row.SteamID] = {
 						'steam_id': row.SteamID,

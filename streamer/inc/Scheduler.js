@@ -10,7 +10,11 @@ class Scheduler extends EventEmitter {
 			'player.killed': {},
 			'player.spawned': {},
 			'player.connected': {},
-			'player.disconnected': {}
+			'player.disconnected': {},
+			'cargo_plane': {},
+			'patrolhelicopter': {},
+			'xmasrefill': {},
+			'ch47scientists.entity': {}
 		};
 	}
 
@@ -96,6 +100,10 @@ class Scheduler extends EventEmitter {
 					case('player.spawned'):
 					case('player.connected'):
 					case('player.disconnected'):
+					case('cargo_plane'):
+					case('patrolhelicopter'):
+					case('xmasrefill'):
+					case('ch47scientists.entity'):
 						if(start_date !== null && now < start_date)
 							delay = start_date.diff(now).toObject().milliseconds;
 						else
@@ -176,6 +184,10 @@ class Scheduler extends EventEmitter {
 			case('player.spawned'):
 			case('player.connected'):
 			case('player.disconnected'):
+			case('cargo_plane'):
+			case('patrolhelicopter'):
+			case('xmasrefill'):
+			case('ch47scientists.entity'):
 				Object.keys(this.triggers[event.type]).forEach(function(key){
 					this.triggers[event.type][key].command.forEach(function(command){
 						_servers[this.server_id].rcon.command(this.handleVariableSubstitution(event, command));
@@ -195,9 +207,10 @@ class Scheduler extends EventEmitter {
 			'player.disconnected': ['host', 'user.username', 'user.steam_id']
 		};
 
-		subs[event.type].forEach(function(item){
-			command = command.replace('${' + item + '}', eval('event.' + item));
-		});
+		if(subs[event.type] != null)
+			subs[event.type].forEach(function(item){
+				command = command.replace('${' + item + '}', eval('event.' + item));
+			});
 
 		return command;
 	}

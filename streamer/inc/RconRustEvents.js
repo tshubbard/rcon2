@@ -38,8 +38,7 @@ class RconRustEvents {
 		{
 			let name = msg.slice((msg.lastIndexOf('/')+1), msg.lastIndexOf('.'));
 
-			event.type = 'server.event';
-			event.name = name;
+			event.type = name;
 		}
 		else if(msg.indexOf(' was killed by ') != -1)
 		{

@@ -80,11 +80,23 @@ db.connect(function(error) {
 	}
 	else
 	{
-		db.query('TRUNCATE TABLE players_current', [], function (error, results, fields){
-			if (error) console.log('Error truncating players_current table.');
+		db.query('SET time_zone = \'UTC\'', [], function(error, results, fields){
+			if(error) console.log('Error setting time zone to UTC.');
 
-			StreamerEvents.emit('dbready');
+			db.query('SET NAMES \'utf8mb4\' COLLATE \'utf8mb4_unicode_ci\';', [], function(error, results, fields){
+				if(error) console.log('Error setting time zone to UTC.');
+
+				db.query('TRUNCATE TABLE players_current', [], function (error, results, fields){
+					if(error) console.log('Error truncating players_current table.');
+
+					StreamerEvents.emit('dbready');
+				});
+			});
 		});
+
+		setInterval(function(){
+			db.ping();
+		}, Util.minToMSeconds(1));
 	}
 });
 

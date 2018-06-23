@@ -75,6 +75,19 @@ class ServerEventController extends Controller
         $requestInput['created_by_user_id'] = Auth::user()->id;
         $newServerEvent = ServerEvent::create($requestInput);
 
+        $c = curl_init('http://localhost:7869/api/server');
+        curl_setopt_array($c, array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => array(
+                'server_id' => $newServerEvent->server_id,
+                'operation' => 'event.update',
+                'event_id' => $newServerEvent->id,
+                'event_type' => $newServerEvent->event_type
+            )
+        ));
+        curl_exec($c);
+
         return response()->json([
             'success' => true,
             'data' => $newServerEvent
@@ -103,7 +116,22 @@ class ServerEventController extends Controller
             ]);
         }
 
+        $current_type = $serverEvent->event_type;
+
         $serverEvent->update($requestInput);
+
+        $c = curl_init('http://localhost:7869/api/server');
+        curl_setopt_array($c, array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => array(
+                'server_id' => $serverEvent->server_id,
+                'operation' => 'event.update',
+                'event_id' => $serverEvent->id,
+                'event_type' => $current_type
+            )
+        ));
+        curl_exec($c);
 
         return response()->json($serverEvent);
     }
@@ -133,8 +161,22 @@ class ServerEventController extends Controller
                 )
             ]);
         }
+
         $serverEvent->update($requestInput);
         $serverEvent->is_active = intval($isActive);
+
+        $c = curl_init('http://localhost:7869/api/server');
+        curl_setopt_array($c, array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => array(
+                'server_id' => $serverEvent->server_id,
+                'operation' => 'event.update',
+                'event_id' => $serverEvent->id,
+                'event_type' => $serverEvent->event_type
+            )
+        ));
+        curl_exec($c);
 
         return response()->json($serverEvent);
     }
@@ -148,6 +190,20 @@ class ServerEventController extends Controller
     public function destroy(ServerEvent $serverEvent)
     {
         ServerEvent::destroy($serverEvent->id);
+
+        $c = curl_init('http://localhost:7869/api/server');
+        curl_setopt_array($c, array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => array(
+                'server_id' => $serverEvent->server_id,
+                'operation' => 'event.update',
+                'event_id' => $serverEvent->id,
+                'event_type' => $serverEvent->event_type
+            )
+        ));
+        curl_exec($c);
+
         return response()->json($serverEvent);
     }
 

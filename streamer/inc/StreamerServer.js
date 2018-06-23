@@ -76,7 +76,7 @@ class StreamerServer {
 							});
 						break;
 						case 'event.update':
-							_servers[message.server_id].scheduler.handleEventUpdate(message.id, message.event_type);
+							_servers[message.server_id].scheduler.handleEventChange(message.id, message.event_type);
 						break;
 					}
 				}

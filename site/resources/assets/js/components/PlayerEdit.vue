@@ -3,12 +3,12 @@
             :md-active.sync="showDialog"
             aria-label="Edit Player Dialog"
             @md-opened="onDialogOpened"
-            class="edit-player col-8">
+            class="edit-player">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h3>
-                    Edit Player - {{item.username}} / Why is this box so fucking big?
+                    Edit Player - {{item.username}}
                     <md-button class="md-icon-button close-button" v-on:click="showDialog = false">
                         <i class="material-icons clickable" aria-label="Close dialog">clear</i>
                     </md-button>

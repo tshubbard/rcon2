@@ -48,6 +48,8 @@ Route::group(['middleware' => ['auth']], function () {
     // PlayerController
     Route::get('/api/v1/players/{serverId}', 'PlayerController@index');
     Route::get('/api/v1/currentplayers/{serverId}', 'PlayerController@current');
+    Route::post('/api/v1/players/{playerId}/kick', 'PlayerController@kick');
+    Route::post('/api/v1/players/{playerId}/ban', 'PlayerController@ban');
 
     // UserController
     Route::get('/u/{userName}', 'UserController@show');

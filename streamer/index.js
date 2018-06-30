@@ -4,7 +4,7 @@ _config = {
 		'port': 3306,
 		'user': 'homestead',
 		'password': 'secret',
-		'database': 'rust-rcon',
+		'database': 'rcon2',
 		'dateStrings': true
 	},
 	'api': {
@@ -85,6 +85,14 @@ express_app.post('/api/server', function(req, res){
 		case 'event.update':
 			_servers[server_id].scheduler.handleEventChange(req.body.event_id, req.body.event_type);
 			return res.json({'result': 'success', 'message': 'Event updated.'});
+		break;
+		case 'player.kick':
+			_servers[server_id].rcon.command('kick ' + req.body.steam_id);
+			return res.json({'result': 'success', 'message': 'Player kicked.'});
+		break;
+		case 'player.ban':
+			_servers[server_id].rcon.command('banid ' + req.body.steam_id);
+			return res.json({'result': 'success', 'message': 'Player banned.'});
 		break;
 	}
 

@@ -84,8 +84,12 @@
         <md-divider class="mt-4"></md-divider>
 
         <md-dialog-actions layout="row" layout-align="end">
-            <div class="col-md-4 pl-0">
-                <md-button class="md-raised md-accent" v-if="item.id != null && !currentonly" v-on:click="deletePlayer">Delete This Player</md-button>
+            <div class="col-md-4 pl-0" v-if="!currentonly">
+                <md-button class="md-raised md-accent" v-if="item.id != null" v-on:click="deletePlayer">Delete This Player</md-button>
+            </div>
+            <div class="col-md-4 pl-0" v-if="currentonly">
+                <md-button class="md-raised md-accent" v-on:click="kickPlayer">Kick Player</md-button>
+                <md-button class="md-raised md-accent" v-on:click="banPlayer">Ban Player</md-button>
             </div>
             <div class="col-md-8 text-right">
                 <md-button class="md-raised md-primary" v-on:click="showDialog = false" type="button">
@@ -110,22 +114,6 @@
             }
         },
         methods: {
-            saveEditPlayerDialog: function() {
-                let url = '/api/v1/player';
-                let payload = {};
-                let method;
-
-                if(this.item.delete != null)
-                {
-                    method = 'DELETE';
-                    url += '/' + this.item.id;
-                }
-
-                $.ajax({'type': method, 'url': url, 'data': payload, 'success': function(data){
-                    this.$emit('player-change', data.data);
-                    this.showDialog = false;
-                }.bind(this), 'dataType': 'json'});
-            },
             deletePlayer: function(){
                 swal({
                     title: 'Are you sure?',
@@ -137,8 +125,46 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then(function(result){
                     if (result.value) {
-                        this.item.delete = true;
-                        this.saveEditPlayerDialog();
+                        $.ajax({'type': 'DELETE', 'url': ('/api/v1/player/' + this.item.id), 'data': {}, 'success': function(data){
+                            this.$emit('player-change', data.data);
+                            this.showDialog = false;
+                        }.bind(this), 'dataType': 'json'});
+                    }
+                }.bind(this));
+            },
+            kickPlayer: function(){
+                swal({
+                    title: 'Are you sure?',
+                    text: 'Are you sure you want to kick this player?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, kick them!'
+                }).then(function(result){
+                    if (result.value) {
+                        $.post(('/api/v1/players/' + this.item.id + '/kick'), {}, function(data){
+                            this.$emit('player-change', data.data);
+                            this.showDialog = false;
+                        }.bind(this), 'json');
+                    }
+                }.bind(this));
+            },
+            banPlayer: function(){
+                swal({
+                    title: 'Are you sure?',
+                    text: 'Are you sure you want to ban this player?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, ban them!'
+                }).then(function(result){
+                    if (result.value) {
+                        $.post(('/api/v1/players/' + this.item.id + '/ban'), {}, function(data){
+                            this.$emit('player-change', data.data);
+                            this.showDialog = false;
+                        }.bind(this), 'json');
                     }
                 }.bind(this));
             },

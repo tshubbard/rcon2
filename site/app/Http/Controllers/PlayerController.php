@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Player;
+use App\PlayerCurrent;
 use App\Server;
 use Validator;
 use Illuminate\Http\Request;
@@ -75,6 +76,86 @@ class PlayerController extends Controller
             ->get();
 
         return response()->json(['success' => true, 'players' => $players]);
+    }
+
+    /**
+     * Kick the specified player
+     *
+     * @param $playerId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function kick($playerId)
+    {
+        $player = Player::find($playerId);
+        $server = Server::find($player->server_id);
+
+        $user = Auth::user();
+        $accounts = $user->accounts;
+        $account_valid = false;
+
+        foreach($accounts as $row)
+            if($row['id'] == $server['account_id'])
+                $account_valid = true;
+
+        if(!$account_valid)
+            return response()->json([
+                'success' => false,
+                'data' => array(
+                    'errors' => 'Invalid account permissions.'
+                )
+            ]);
+
+        $c = curl_init('http://localhost:7869/api/server');
+        curl_setopt_array($c, array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => ('server_id=' . $player->server_id . '&operation=player.kick&steam_id=' . $player->steam_id)
+        ));
+        curl_exec($c);
+
+        PlayerCurrent::where('steam_id', $player->steam_id)->first()->delete();
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Ban the specified player
+     *
+     * @param $playerId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function ban($playerId)
+    {
+        $player = Player::find($playerId);
+        $server = Server::find($player->server_id);
+
+        $user = Auth::user();
+        $accounts = $user->accounts;
+        $account_valid = false;
+
+        foreach($accounts as $row)
+            if($row['id'] == $server['account_id'])
+                $account_valid = true;
+
+        if(!$account_valid)
+            return response()->json([
+                'success' => false,
+                'data' => array(
+                    'errors' => 'Invalid account permissions.'
+                )
+            ]);
+
+        $c = curl_init('http://localhost:7869/api/server');
+        curl_setopt_array($c, array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => ('server_id=' . $player->server_id . '&operation=player.ban&steam_id=' . $player->steam_id)
+        ));
+        curl_exec($c);
+
+        PlayerCurrent::where('steam_id', $player->steam_id)->first()->delete();
+
+        return response()->json(['success' => true]);
     }
 
     /**

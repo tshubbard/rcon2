@@ -5,6 +5,9 @@
 </template>
 <script>
     export default {
+        data: function() {
+            return {}
+        },
         created: function() {
             console.log('this: ', this);
         },

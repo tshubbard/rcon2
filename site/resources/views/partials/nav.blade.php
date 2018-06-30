@@ -41,6 +41,11 @@
                                      to="/admin/players">Players</router-link>
                     </li>
                 @endif
+                <li class="nav-item">
+                    <router-link class="nav-link"
+                                 class-active="active"
+                                 to="/serverEvents">Events List</router-link>
+                </li>
             @endauth
         </ul>
         <!-- Right Side Of Navbar -->

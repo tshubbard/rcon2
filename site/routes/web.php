@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('/api/v1/server/{serverId}', 'ServerController@destroy');
 
     // ServerEventController
+    Route::get('/api/v1/serverEvents', 'ServerEventController@eventsList');
     Route::get('/api/v1/serverEvents/{serverId}', 'ServerEventController@index');
     Route::get('/api/v1/serverEvent/{serverEvent}', 'ServerEventController@show');
     Route::post('/api/v1/serverEvent', 'ServerEventController@store');

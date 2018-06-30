@@ -1,5 +1,5 @@
 <template>
-    <div class="admin servers record">
+    <div class="admin servers m-3 record">
         <h3 class="title">
             Server Management
             <md-button class="md-raised md-primary float-right" v-on:click="editServer({})">Add New Server</md-button>

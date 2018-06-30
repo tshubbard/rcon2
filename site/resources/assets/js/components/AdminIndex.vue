@@ -1,5 +1,5 @@
 <template>
-    <div class="users record">
+    <div class="admin m-3 record">
         <h3 class="title">
             Admin Dashboard
         </h3>

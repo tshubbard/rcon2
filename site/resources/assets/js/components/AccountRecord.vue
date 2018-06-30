@@ -1,5 +1,5 @@
 <template>
-    <div class="users record">
+    <div class="account m-3 record">
         <h3 class="title">
             <span class="name">{{ account.name }}</span>
         </h3>

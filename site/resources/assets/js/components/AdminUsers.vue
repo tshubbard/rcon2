@@ -1,5 +1,5 @@
 <template>
-    <div class="admin users record">
+    <div class="admin users m-3 record">
         <h3 class="title">
             Users Management
         </h3>
@@ -75,13 +75,16 @@
             }
         },
         created: function() {
-            $.get('/api/v1/admin/users', function(data) {
-                console.log('data: ', data);
-
-                this.thisUser = data.thisUser;
-                this.users = data.users;
-
-            }.bind(this), 'json');
+            HTTP.get('/api/v1/admin/users')
+                .then(response => {
+                    console.log('response: ', response);
+                    this.thisUser = response.data.thisUser;
+                    this.users = response.data.users;
+                })
+                .catch(e => {
+                    console.log('/admin/users error: ', e);
+                    this.errors.push(e)
+                });
         },
         methods: {
             deleteUser: function(user) {

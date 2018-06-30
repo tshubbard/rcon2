@@ -1,5 +1,5 @@
 <template>
-    <div class="servers record">
+    <div class="players m-3 record">
         <h3 class="title" v-if="!currentonly">
             Players
         </h3>

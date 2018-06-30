@@ -14,7 +14,15 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <h5>Accounts Info</h5>
+
+                    <h5>
+                        Accounts Info
+                        <md-button class="md-raised md-primary zf-icon-button zf-top-minus-10"
+                                   @click.stop="showAddEditAccount()">
+                            <md-icon>add</md-icon>
+                        </md-button>
+                    </h5>
+
                     <div>
                         <ul>
                             <li v-for="acct in accounts">
@@ -27,14 +35,27 @@
                 </div>
             </div>
         </div>
+        <account-add-edit
+                :visible="showAccountAddEdit"
+                :accountData="selectedAccountForAddEdit"
+                v-on:account-change="onAccountChange"
+                @close="showAccountAddEdit = false">
+        </account-add-edit>
     </div>
 </template>
 <script>
+    import AccountAddEdit from './AccountAddEdit';
+
     export default {
+        components: {
+            AccountAddEdit
+        },
         data: function() {
             return {
                 user: [],
-                accounts: []
+                accounts: [],
+                showAccountAddEdit: false,
+                selectedAccountForAddEdit: {},
             }
         },
         created: function() {
@@ -47,6 +68,25 @@
             }.bind(this), 'json');
         },
         methods: {
+
+            showAddEditAccount: function(acct) {
+                if (acct) {
+                    this.selectedAccountForAddEdit = _.clone(event);
+                    this.selectedAccountForAddEdit.actionType = 'Edit';
+                } else {
+                    this.selectedAccountForAddEdit = {
+                        actionType: 'Add',
+                        name: undefined
+                    };
+                }
+
+                this.showAccountAddEdit = !this.showAccountAddEdit;
+                console.log('showAccountAddEdit ', this.selectedAccountForAddEdit, this.showAccountAddEdit);
+            },
+
+            onAccountChange: function(evt) {
+                debugger;
+            }
         },
         computed: {
         }

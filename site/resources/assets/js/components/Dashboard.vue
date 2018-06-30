@@ -28,7 +28,7 @@
                     </span>
                     <span class="server-actions">
                         <i class="material-icons clickable" aria-hidden="true"
-                           @click.stop="showAddServer()" v-cloak>add_box</i>
+                            v-cloak>add_box</i>
                     </span>
                 </div>
             </div>
@@ -42,11 +42,13 @@
                                 <div class="panel-top">
                                     <div class="md-hue-2">
                                         <div class="md-toolbar-tools">
-                                            <span class="server-actions float-right">
-                                                <i class="material-icons clickable" aria-hidden="true"
-                                                   @click.stop="showAddEditServerEvent()">add_box</i>
-                                            </span>
-                                            <h2 flex>Server Events</h2>
+                                            <h2 flex>
+                                                Server Events
+                                                <md-button class="md-raised md-primary zf-icon-button zf-panel-button zf-top-minus-5 float-right"
+                                                           @click.stop="showAddEditServerEvent()">
+                                                    <md-icon>add</md-icon>
+                                                </md-button>
+                                            </h2>
                                         </div>
                                     </div>
                                 </div>
@@ -58,12 +60,14 @@
                                                     aria-label="Server Event Active on/off toggle"></md-switch>
                                             <span class="server-event-name">{{event.name}}</span>
                                             <span class="server-actions float-right">
-                                                <i class="material-icons clickable"
-                                                   v-on:click="showAddEditServerEvent(event)"
-                                                   aria-hidden="true">mode_edit</i>
-                                                <i class="material-icons clickable"
-                                                   v-on:click="removeServerEvent(event)"
-                                                   aria-hidden="true">delete</i>
+                                                <md-button class="md-raised md-primary zf-icon-button zf-top-minus-5 my-0"
+                                                           @click.stop="showAddEditServerEvent(event)">
+                                                    <md-icon>mode_edit</md-icon>
+                                                </md-button>
+                                                <md-button class="md-raised md-accent zf-icon-button zf-top-minus-5 my-0 mr-0"
+                                                           @click.stop="removeServerEvent(event)">
+                                                    <md-icon>delete</md-icon>
+                                                </md-button>
                                             </span>
                                         </li>
                                     </ul>
@@ -105,14 +109,12 @@
                 v-on:event-changed="onServerEventChanged"
                 v-on:event-added="onServerEventAdded"
                 @close="showServerEventAddEdit = false">
-
         </server-event-add-edit>
         <server-add-edit
                 :visible="showServerAddEdit"
                 :serverData="selectedServerForAddEdit"
                 v-on:server-change="onServerChange"
                 @close="showServerAddEdit = false">
-
         </server-add-edit>
 
         </md-content>

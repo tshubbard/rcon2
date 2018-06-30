@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Account;
 use Illuminate\Http\Request;
+use Validator;
+use Auth;
 
 class AccountController extends Controller
 {
+    protected $validationRules = array(
+        'name' => 'required',
+    );
+
     /**
      * Display the specified resource.
      *
@@ -34,6 +40,44 @@ class AccountController extends Controller
         return response()->json($account);
     }
 
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $requestInput = $request->all();
+        $validator = Validator::make($requestInput, $this->validationRules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'data' => array(
+                    'errors' => $validator->failed()
+                )
+            ]);
+        }
+
+        $acct = Account::create($requestInput);
+        $user = Auth::user();
+        $user->accounts()->attach($acct->id);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Account  $account
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Account $account)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -55,17 +99,6 @@ class AccountController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Account  $account
@@ -76,17 +109,6 @@ class AccountController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Account  $account
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Account $account)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.

@@ -20,6 +20,8 @@ Route::group(['middleware' => ['auth']], function () {
     // AccountController
     Route::get('/a/{account}', 'AccountController@show');
     Route::get('/api/v1/a/{account}', 'AccountController@showJSON');
+    Route::post('/api/v1/account', 'AccountController@store');
+    Route::put('/api/v1/account', 'AccountController@update');
 
     // DashboardController
     Route::get('/dashboard/', 'DashboardController@index');

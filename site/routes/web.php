@@ -60,6 +60,8 @@ Route::group(['middleware' => ['admin']], function () {
 
     Route::get('/admin/users', 'AdminController@usersIndex');
     Route::get('/api/v1/admin/users', 'AdminController@usersIndexJSON');
+    Route::put('/api/v1/admin/user/{userId}', 'AdminController@update');
+    Route::delete('/api/v1/admin/user/{userId}', 'AdminController@destroy');
 
     Route::get('/api/v1/admin/servers', 'AdminController@serversIndexJSON');
 });

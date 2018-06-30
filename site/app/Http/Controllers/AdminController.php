@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use \App\User;
 use \App\Account;
+use Validator;
 
 class AdminController extends Controller
 {
@@ -100,6 +101,55 @@ class AdminController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $requestInput = $request->all();
+        $validator = Validator::make($requestInput, array(
+            'role_id' => 'required|numeric'
+        ));
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'data' => array(
+                    'errors' => $validator->failed()
+                )
+            ]);
+        }
+
+        $user = User::find($id);
+        $user->role_id = $requestInput['role_id'];
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'data' => $user
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($userId)
+    {
+        User::destroy($userId);
+
+        return response()->json([
+            'success' => true,
+            'data' => $userId
+        ]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -138,29 +188,6 @@ class AdminController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
     {
         //
     }

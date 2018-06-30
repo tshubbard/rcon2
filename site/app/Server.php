@@ -57,4 +57,9 @@ class Server extends Model
     {
         return $this->hasMany(Player::class);
     }
+
+    public function playerscurrent()
+    {
+        return $this->hasMany(PlayerCurrent::class);
+    }
 }

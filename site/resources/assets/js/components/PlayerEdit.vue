@@ -85,7 +85,7 @@
 
         <md-dialog-actions layout="row" layout-align="end">
             <div class="col-md-4 pl-0">
-                <md-button class="md-raised md-accent" v-if="item.id != null" v-on:click="deletePlayer">Delete This Player</md-button>
+                <md-button class="md-raised md-accent" v-if="item.id != null && !currentonly" v-on:click="deletePlayer">Delete This Player</md-button>
             </div>
             <div class="col-md-8 text-right">
                 <md-button class="md-raised md-primary" v-on:click="showDialog = false" type="button">
@@ -101,7 +101,8 @@
     export default {
         props: [
             'playerData',
-            'visible'
+            'visible',
+            'currentonly'
         ],
         data: function() {
             return {

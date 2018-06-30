@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                                 <div class="panel-body">
-                                    <p>User List Here</p>
+                                    <admin-players currentonly="true"></admin-players>
                                 </div>
                             </div>
                         </div>
@@ -125,6 +125,7 @@
     import {Utils} from '../utils';
     import ServerEventAddEdit from './ServerEventAddEdit';
     import ServerAddEdit from './ServerAddEdit';
+    import AdminPlayers from './AdminPlayers';
 
     export default {
         components: {

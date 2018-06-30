@@ -46,6 +46,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // PlayerController
     Route::get('/api/v1/players/{serverId}', 'PlayerController@index');
+    Route::get('/api/v1/currentplayers/{serverId}', 'PlayerController@current');
 
     // UserController
     Route::get('/u/{userName}', 'UserController@show');

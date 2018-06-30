@@ -32,4 +32,27 @@ class ServerEvent extends Model
         'start_date',
         'end_date',
     ];
+
+
+    /**
+     * Scope a query to only include public server events.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePublic($query)
+    {
+        return $query->where('is_public', '=', 1);
+    }
+
+    /**
+     * Scope a query to only include public server events.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeByVotes($query)
+    {
+        return $query->orderBy('votes', 'DESC');
+    }
 }

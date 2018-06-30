@@ -29,6 +29,7 @@ if (document.getElementById('app') !== null) {
     const AdminUsers = Vue.component('admin-users', require('./components/AdminUsers.vue'));
     const AdminServers = Vue.component('admin-servers', require('./components/AdminServers.vue'));
     const AdminPlayers = Vue.component('admin-players', require('./components/AdminPlayers.vue'));
+    const ServerEventsList = Vue.component('server-events-list', require('./components/ServerEventsList.vue'));
 
     var router = new VueRouter({
         //mode: 'history',
@@ -60,6 +61,9 @@ if (document.getElementById('app') !== null) {
             }, {
                 'path': '/u/:userName',
                 'component': UserRecord
+            }, {
+                'path': '/serverEvents',
+                'component': ServerEventsList
             }
         ]
     });

@@ -22,6 +22,14 @@ class ServerEventController extends Controller
         return response()->json($serverEvent);
     }
 
+    public function eventsList()
+    {
+        // GET /games
+        $events = ServerEvent::public()->byVotes()->get();
+
+        return response()->json($events);
+    }
+
     /**
      * Display the specified resource.
      *

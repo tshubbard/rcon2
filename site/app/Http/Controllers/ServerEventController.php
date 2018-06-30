@@ -79,12 +79,7 @@ class ServerEventController extends Controller
         curl_setopt_array($c, array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => array(
-                'server_id' => $newServerEvent->server_id,
-                'operation' => 'event.update',
-                'event_id' => $newServerEvent->id,
-                'event_type' => $newServerEvent->event_type
-            )
+            CURLOPT_POSTFIELDS => ('server_id=' . $newServerEvent->server_id . '&operation=event.update&event_id=' . $newServerEvent->id . '&event_type=' . $newServerEvent->event_type)
         ));
         curl_exec($c);
 
@@ -124,12 +119,7 @@ class ServerEventController extends Controller
         curl_setopt_array($c, array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => array(
-                'server_id' => $serverEvent->server_id,
-                'operation' => 'event.update',
-                'event_id' => $serverEvent->id,
-                'event_type' => $current_type
-            )
+            CURLOPT_POSTFIELDS => ('server_id=' . $serverEvent->server_id . '&operation=event.update&event_id=' . $serverEvent->id . '&event_type=' . $current_type)
         ));
         curl_exec($c);
 
@@ -169,14 +159,9 @@ class ServerEventController extends Controller
         curl_setopt_array($c, array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => array(
-                'server_id' => $serverEvent->server_id,
-                'operation' => 'event.update',
-                'event_id' => $serverEvent->id,
-                'event_type' => $serverEvent->event_type
-            )
+            CURLOPT_POSTFIELDS => ('server_id=' . $serverEvent->server_id . '&operation=event.update&event_id=' . $serverEvent->id . '&event_type=' . $serverEvent->event_type)
         ));
-        curl_exec($c);
+        $res = curl_exec($c);
 
         return response()->json($serverEvent);
     }
@@ -195,12 +180,7 @@ class ServerEventController extends Controller
         curl_setopt_array($c, array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => array(
-                'server_id' => $serverEvent->server_id,
-                'operation' => 'event.update',
-                'event_id' => $serverEvent->id,
-                'event_type' => $serverEvent->event_type
-            )
+            CURLOPT_POSTFIELDS => ('server_id=' . $serverEvent->server_id . '&operation=event.update&event_id=' . $serverEvent->id . '&event_type=' . $serverEvent->event_type)
         ));
         curl_exec($c);
 

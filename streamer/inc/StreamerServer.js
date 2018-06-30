@@ -20,6 +20,8 @@ class StreamerServer {
 						return false;
 					}
 
+					let response = null;
+
 					switch(message.type)
 					{
 						case 'stream.connect':
@@ -38,7 +40,7 @@ class StreamerServer {
 							_servers[message.server_id].rcon.command(message.command);
 						break;
 						case 'testserver':
-							let response = {
+							response = {
 								'type': 'testserver.result',
 								'host': message.host,
 								'port': message.port,
@@ -74,6 +76,17 @@ class StreamerServer {
 
 								rconTest = null;
 							});
+						break;
+						case 'dumpscheduler':
+							response = {
+								'type': 'dumpscheduler.result',
+								'result': {
+									'timers': _servers[message.server_id].scheduler.timers,
+									'triggers': _servers[message.server_id].scheduler.triggers
+								}
+							};
+
+							ws.send(JSON.stringify(response));
 						break;
 						case 'event.update':
 							_servers[message.server_id].scheduler.handleEventChange(message.id, message.event_type);

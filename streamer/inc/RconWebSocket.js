@@ -67,7 +67,7 @@ class RconWebSocket {
 		if (identifier === null)
 			identifier = -1;
 
-		if(typeof(msg) !== 'object')
+		if(typeof(msg) !== 'object' || msg.length == undefined)
 			msg = [msg];
 
 		msg.forEach(function(item){

@@ -11,6 +11,8 @@ const server_id = (server_id_location != -1 ? process.argv[(server_id_location+1
 const test = (test_location != -1 ? process.argv[(test_location+1)] : null);
 
 const Util = require('./inc/Util.js');
+
+const util = require('util');
 const WebSocket = require('ws');
 const readline = require('readline');
 
@@ -53,10 +55,23 @@ Socket.on('open', function(){
 			return;
 		}
 
+		let type;
+		line = line.trim();
+
+		switch(line)
+		{
+			case '*.dumpscheduler':
+				type = 'dumpscheduler';
+			break;
+			default:
+				type = 'stream.command';
+			break;
+		}
+
 		Socket.send(JSON.stringify({
-			'type': 'stream.command',
+			'type': type,
 			'server_id': server_id,
-			'command': line.trim()
+			'command': line
 		}));
 
 		rl.prompt();
@@ -65,7 +80,7 @@ Socket.on('open', function(){
 
 Socket.on('message', function(data){
 	console.log("\n");
-	console.log(JSON.parse(data));
+	console.log(util.inspect(JSON.parse(data), {'depth': null}));
 	console.log("\n");
 	rl.prompt();
 });

@@ -3,6 +3,8 @@ class Scheduler extends EventEmitter {
 	{
 		super();
 
+		this.initial_load = false;
+
 		this.server_id = server_id;
 		this.timers = {};
 		this.triggers = {
@@ -23,14 +25,14 @@ class Scheduler extends EventEmitter {
 		let sql;
 		let parameters;
 
-		if(id !== null)
+		if(id == null)
 		{
-			sql = 'SELECT id, event_type, command, command_trigger, `interval`, is_indefinite, start_date, end_date, lastrun_date FROM server_events WHERE server_id = ? AND is_active = 1 AND (is_indefinite = 1 OR ((start_date < NOW() OR TIMESTAMPDIFF(DAY, now(), start_date) <= 20) AND end_date > NOW()))';
+			sql = 'SELECT id, event_type, commands, command_trigger, command_timer, is_indefinite, start_date, end_date, lastrun_date FROM server_events WHERE server_id = ? AND is_active = 1 AND (is_indefinite = 1 OR ((start_date < NOW() OR TIMESTAMPDIFF(DAY, now(), start_date) <= 20) AND end_date > NOW()))';
 			parameters = [this.server_id];
 		}
 		else
 		{
-			sql = 'SELECT id, event_type, command, command_trigger, `interval`, is_indefinite, start_date, end_date, lastrun_date FROM server_events WHERE server_id = ? AND id = ? AND is_active = 1 AND (is_indefinite = 1 OR ((start_date < NOW() OR TIMESTAMPDIFF(DAY, now(), start_date) <= 20) AND end_date > NOW()))';
+			sql = 'SELECT id, event_type, commands, command_trigger, command_timer, is_indefinite, start_date, end_date, lastrun_date FROM server_events WHERE server_id = ? AND id = ? AND is_active = 1 AND (is_indefinite = 1 OR ((start_date < NOW() OR TIMESTAMPDIFF(DAY, now(), start_date) <= 20) AND end_date > NOW()))';
 			parameters = [this.server_id, id];
 		}
 
@@ -40,7 +42,7 @@ class Scheduler extends EventEmitter {
 			let now = DateTime.fromObject({'zone': _servers[this.server_id].timezone});
 
 			results.forEach(function(row){
-				row.command = JSON.parse(row.command);
+				row.commands = JSON.parse(row.commands);
 
 				let start_date = (row.is_indefinite == 0 && row.start_date !== null) ? DateTime.fromSQL(row.start_date, {'zone': _servers[this.server_id].timezone}) : null;
 				let end_date = (row.is_indefinite == 0 && row.end_date !== null) ? DateTime.fromSQL(row.end_date, {'zone': _servers[this.server_id].timezone}) : null;
@@ -50,7 +52,7 @@ class Scheduler extends EventEmitter {
 				{
 					case('timer'):
 						let lastrun_date = (row.lastrun_date !== null) ? DateTime.fromSQL(row.lastrun_date, {'zone': _servers[this.server_id].timezone}) : null;
-						let nextrun_date = (lastrun_date !== null) ? lastrun_date.plus({ 'minutes': row.interval }) : null;
+						let nextrun_date = (lastrun_date !== null) ? lastrun_date.plus({ 'minutes': row.command_timer }) : null;
 
 						if(start_date !== null && now < start_date)
 							delay = start_date.diff(now).toObject().milliseconds;
@@ -60,13 +62,13 @@ class Scheduler extends EventEmitter {
 							delay = 0;
 
 						setTimeout(function(){
-							_servers[this.server_id].rcon.command(row.command);
+							_servers[this.server_id].rcon.command(row.commands);
 							_servers[this.server_id].scheduler.updateLastRun(row.id);
 
 							this.timers[row.id] = setInterval(function(){
-								_servers[this.server_id].rcon.command(row.command);
+								_servers[this.server_id].rcon.command(row.commands);
 								_servers[this.server_id].scheduler.updateLastRun(row.id);
-							}.bind(this), Util.minToMSeconds(row.interval));
+							}.bind(this), Util.minToMSeconds(row.command_timer));
 						}.bind(this), delay);
 
 						if(end_date !== null && end_date.diff(now, 'days').toObject().days <= 20)
@@ -84,8 +86,8 @@ class Scheduler extends EventEmitter {
 
 						setTimeout(function(){
 							this.triggers['player.chat'][row.id] = {
-								'command': row.command,
-								'trigger': row.command_trigger
+								'command': row.commands,
+								'trigger': row.commands_trigger
 							};
 						}.bind(this), delay);
 
@@ -111,7 +113,7 @@ class Scheduler extends EventEmitter {
 
 						setTimeout(function(){
 							this.triggers[row.event_type][row.id] = {
-								'command': row.command
+								'command': row.commands
 							};
 						}.bind(this), delay);
 
@@ -125,7 +127,12 @@ class Scheduler extends EventEmitter {
 				}
 			}.bind(this));
 
-			this.on('rustEvent', this.handleEvent);
+			if(!this.initial_load)
+			{
+				this.on('rustEvent', this.handleEvent);
+				this.initial_load = true;
+			}
+
 		}.bind(this));
 	}
 
@@ -143,12 +150,12 @@ class Scheduler extends EventEmitter {
 	unloadTimer(id)
 	{
 		clearInterval(this.timers[id]);
-		this.timers[id] = null;
+		delete this.timers[id];
 	}
 
 	unloadTrigger(type, id)
 	{
-		this.triggers[type][id] = null;
+		delete this.triggers[type][id];
 	}
 
 	updateLastRun(id)

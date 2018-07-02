@@ -11,11 +11,15 @@ class User extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
+    use \Jrean\UserVerification\Traits\VerifiesUsers;
+    use \Jrean\UserVerification\Traits\UserVerification;
 
     protected $table = 'users';
 
     protected $dates = ['deleted_at'];
-
+    public $redirectIfVerified = '/';
+    public $redirectAfterVerification = '/';
+    public $redirectIfVerificationFails = '/email-verification/error';
     /**
      * The attributes that are mass assignable.
      *

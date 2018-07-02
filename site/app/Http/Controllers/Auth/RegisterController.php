@@ -29,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/dashboard/';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -75,7 +75,9 @@ class RegisterController extends Controller
         $user->save();
 
         $account = Account::create([
-            'name' => $data['orgname']
+            'name' => $data['orgname'],
+            'slug' => str_slug($data['orgname']),
+            'owner_id' => $user->id
         ]);
 
         $user->accounts()->attach($account->id);

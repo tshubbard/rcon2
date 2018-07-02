@@ -15,12 +15,16 @@ class AccountsTableSeeder extends Seeder
         DB::table('accounts')->insert([
             'id' => 1,
             'name' => 'Badass Admins',
+            'slug' => 'badass-admins',
+            'owner_id' => 1,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
         DB::table('accounts')->insert([
             'id' => 2,
             'name' => 'Dummy Users',
+            'slug' => 'dummy-users',
+            'owner_id' => 1,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);

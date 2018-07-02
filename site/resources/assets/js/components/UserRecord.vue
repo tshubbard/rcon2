@@ -26,7 +26,7 @@
                     <div>
                         <ul class="user-accounts">
                             <li v-for="acct in accounts">
-                                <router-link class="nav-link display-inline-block" :to="'/a/' + acct.name">
+                                <router-link class="nav-link display-inline-block" :to="'/a/' + acct.slug">
                                     {{acct.name}}
                                 </router-link>
                                 <span class="server-actions float-right">

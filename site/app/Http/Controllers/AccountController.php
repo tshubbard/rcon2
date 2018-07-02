@@ -28,12 +28,12 @@ class AccountController extends Controller
      * API - Display the specified Account in JSON
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string  $accountName The account name to return
+     * @param  string  $accountSlug The account name to return
      * @return \Illuminate\Http\Response
      */
-    public function showJSON(Request $request, $accountName)
+    public function showJSON(Request $request, $accountSlug)
     {
-        $account = Account::where('name' , '=', $accountName)->first();
+        $account = Account::where('slug' , '=', $accountSlug)->first();
         // weird way to populate account users
         $account->users;
 
@@ -61,6 +61,7 @@ class AccountController extends Controller
             ]);
         }
 
+        $requestInput['slug'] = str_slug($requestInput['name']);
         $acct = Account::create($requestInput);
         $user = Auth::user();
         $user->accounts()->attach($acct->id);
@@ -91,6 +92,8 @@ class AccountController extends Controller
         }
 
         $acct = Account::find($account->id);
+        $requestInput['slug'] = str_slug($requestInput['name']);
+
         $acct->update($requestInput);
         $user = Auth::user();
 

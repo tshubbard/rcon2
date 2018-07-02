@@ -16,6 +16,8 @@ class CreateAccountsTable extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->index();
+            $table->string('slug')->index();
+            $table->unsignedInteger('owner_id')->index();
             $table->timestamps();
             $table->softDeletes();
         });

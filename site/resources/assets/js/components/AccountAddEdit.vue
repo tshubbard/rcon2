@@ -9,7 +9,7 @@
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h3>
-                    Add/Edit Server
+                    Add/Edit Account
                     <md-button
                             class="md-icon-button close-button"
                             @click.stop="showDialog = false">
@@ -125,6 +125,7 @@
                 if (!this.item.id) {
                     method = 'post';
                     eventName = 'account-added';
+                    payload.owner_id = this.$parent.user.id;
                 } else {
                     method = 'put';
                     url += '/' + this.item.id;

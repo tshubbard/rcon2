@@ -6,9 +6,16 @@ use App\Account;
 use Illuminate\Http\Request;
 use Validator;
 use Auth;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 
 class AccountController extends Controller
 {
+    protected $errorMsgOwnerTriedToLeave = 'User is the Owner of the account they attempted to leave.';
+    protected $errorMsgUserNotMember = 'User does not belong to Account they are attempting to leave.';
+    protected $logMsgOwnerTriedToLeave = 'Account Owner tried to Leave';
+    protected $logMsgUserNotMember = 'User does not belong to Account they are attempting to leave';
+
     protected $validationRules = array(
         'name' => 'required',
     );
@@ -50,7 +57,10 @@ class AccountController extends Controller
     public function store(Request $request)
     {
         $requestInput = $request->all();
-        $validator = Validator::make($requestInput, $this->validationRules);
+        $validationRules = array_merge($this->validationRules, array(
+            'owner_id' => 'required|numeric'
+        ));
+        $validator = Validator::make($requestInput, $validationRules);
 
         if ($validator->fails()) {
             return response()->json([
@@ -61,9 +71,12 @@ class AccountController extends Controller
             ]);
         }
 
-        $requestInput['slug'] = str_slug($requestInput['name']);
-        $acct = Account::create($requestInput);
         $user = Auth::user();
+
+        $requestInput['slug'] = str_slug($requestInput['name']);
+        $requestInput['owner_id'] = $user->id;
+
+        $acct = Account::create($requestInput);
         $user->accounts()->attach($acct->id);
 
         return response()->json([
@@ -91,16 +104,71 @@ class AccountController extends Controller
             ]);
         }
 
+        $user = Auth::user();
+
         $acct = Account::find($account->id);
         $requestInput['slug'] = str_slug($requestInput['name']);
 
+        // don't update the owner_id if it is sent
+        unset($requestInput['owner_id']);
+
         $acct->update($requestInput);
-        $user = Auth::user();
 
         return response()->json([
             'record' => $acct,
             'accounts' => $user->accounts
         ]);
+    }
+
+    public function leave(Request $request, Account $account)
+    {
+        $user = Auth::user();
+
+        // Make sure User exists as a member of the Account
+        if ($account->users()->where('user_id', '=', $user->id)->exists()) {
+            // Make sure User is not the Owner of the Account
+            if ($account->owner_id === $user->id) {
+                Log::error($this->logMsgOwnerTriedToLeave, [
+                    'controller' => 'AccountController',
+                    'function' => 'leave',
+                    'user_id' => $user->id,
+                    'user_name' => $user->name,
+                    'account_id' => $account->id,
+                    'account_name' => $account->name,
+                ]);
+
+                return response()->json([
+                    'success' => false,
+                    'errors' => [
+                        $this->errorMsgOwnerTriedToLeave
+                    ]
+                ], 405);
+            } else {
+                // otherwise remove the account from the user
+                $user->accounts()->detach($account->id);
+                return response()->json([
+                    'success' => true,
+                    'record' => $account,
+                    'accounts' => $user->accounts
+                ]);
+            }
+        } else {
+            Log::error($this->logMsgUserNotMember, [
+                'controller' => 'AccountController',
+                'function' => 'leave',
+                'user_id' => $user->id,
+                'user_name' => $user->name,
+                'account_id' => $account->id,
+                'account_name' => $account->name,
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'errors' => [
+                    $this->errorMsgUserNotMember
+                ]
+            ], 405);
+        }
     }
 
     /**
@@ -111,7 +179,8 @@ class AccountController extends Controller
      */
     public function destroy(Account $account)
     {
-        Account::destroy($account->id);
+        $account->delete();
+        $account->users()->detach();
 
         return response()->json($account);
     }

@@ -1,5 +1,14 @@
 <template>
     <div class="user m-3 record" v-cloak>
+        <div v-if="errors.length" class="error-wrapper">
+            <div class="errors alert-danger">
+                <b>Please correct the following error(s):</b>
+                <ul>
+                    <li v-for="error in errors">{{ error }}</li>
+                </ul>
+            </div>
+        </div>
+
         <h3 class="title">
             <span class="name">{{ user.name }}</span>
         </h3>
@@ -33,11 +42,20 @@
 
                                     <md-button class="md-raised md-primary zf-icon-button zf-top-minus-15 my-0"
                                                @click.stop="showAddEditAccount(acct)">
+                                        <md-tooltip md-direction="top">Edit Account</md-tooltip>
                                         <md-icon>mode_edit</md-icon>
                                     </md-button>
-                                    <md-button class="md-raised md-accent zf-icon-button zf-top-minus-15 my-0 mr-0"
+                                    <md-button v-if="acct.owner_id === user.id"
+                                               class="md-raised md-accent zf-icon-button zf-top-minus-15 my-0 mr-0"
                                                @click.stop="removeAccount(acct)">
+                                        <md-tooltip md-direction="top">Delete Account</md-tooltip>
                                         <md-icon>delete</md-icon>
+                                    </md-button>
+                                    <md-button v-if="acct.owner_id !== user.id"
+                                               class="md-raised md-accent zf-icon-button zf-top-minus-15 my-0 mr-0"
+                                               @click.stop="leaveAccount(acct)">
+                                        <md-tooltip md-direction="top">Leave Account</md-tooltip>
+                                        <md-icon>exit_to_app</md-icon>
                                     </md-button>
                                 </span>
                             </li>
@@ -57,6 +75,16 @@
                 md-cancel-text="Cancel"
                 @md-cancel="onDeleteAccountCancel"
                 @md-confirm="onDeleteAccountConfirm"
+        />
+        <md-dialog-confirm
+                :md-active.sync="showLeaveAccount"
+                md-title="Leave Account"
+                v-model="selectedLeaveAccount"
+                md-content="Are you sure you want to leave this account?"
+                md-confirm-text="Leave Account"
+                md-cancel-text="Cancel"
+                @md-cancel="onLeaveAccountCancel"
+                @md-confirm="onLeaveAccountConfirm"
         />
 
         <account-add-edit
@@ -78,12 +106,15 @@
         },
         data: function() {
             return {
-                user: [],
                 accounts: [],
+                errors: [],
+                user: [],
+                selectedAccountForAddEdit: {},
+                selectedDeleteAccount: {},
+                selectedLeaveAccount: {},
                 showAccountAddEdit: false,
                 showDeleteAccount: false,
-                selectedAccountForAddEdit: {},
-                selectedDeleteAccount: {}
+                showLeaveAccount: false,
             }
         },
         created: function() {
@@ -115,6 +146,32 @@
                         this.errors.push(e)
                     });
             },
+
+            onLeaveAccountCancel: function() {
+                this.showLeaveAccount = false;
+            },
+
+            onLeaveAccountConfirm: function() {
+                console.log('onLeaveAccountConfirm ', this.selectedLeaveAccount);
+
+                HTTP.post('/api/v1/account/' + this.selectedLeaveAccount.id + '/leave')
+                    .then(response => {
+                        console.log('response.data ', response.data);
+                        this.accounts = _.reject(this.accounts, function(acct) {
+                            return +acct.id === +response.data.id;
+                        });
+                    })
+                    .catch(e => {
+                        this.errors = e.response.data.errors;
+                    });
+            },
+
+            leaveAccount: function(acct) {
+                this.selectedLeaveAccount = acct;
+                this.showLeaveAccount = true;
+                console.log('removeServerEvent ', acct);
+            },
+
 
             removeAccount: function(acct) {
                 this.selectedDeleteAccount = acct;
@@ -148,7 +205,6 @@
             },
 
             onAccountAdded: function(responseData) {
-                debugger;
                 this.accounts.push(responseData.record);
                 sessionStorage.setItem('accounts', JSON.stringify(responseData.accounts));
             }

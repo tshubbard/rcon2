@@ -15,7 +15,9 @@
 @color-bs-green:        #28A745;
 @color-bs-teal:         #20C997;
 
-
+[v-cloak] {
+    display: none;
+}
 .hidden {
     display: none !important;
 }
@@ -32,6 +34,9 @@ h4,
 h5,
 h6 {
     font-family: 'Titillium Web', sans-serif;
+}
+.display-inline-block {
+    display: inline-block;
 }
 #app {
     position: relative;
@@ -505,6 +510,9 @@ nav {
         width: 40px;
         min-width: 40px;
 
+        &.zf-top-minus-15 {
+            top: -15px;
+        }
         &.zf-top-minus-10 {
             top: -10px;
         }
@@ -519,4 +527,9 @@ nav {
         }
     }
 }
-
+.user-accounts {
+    li {
+        border-bottom: 1px solid @color-mist-dark;
+        margin-bottom: 15px;
+    }
+}

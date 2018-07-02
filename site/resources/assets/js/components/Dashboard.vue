@@ -316,7 +316,7 @@
                     })
                     .catch(e => {
                         this.errors.push(e)
-                    })
+                    });
             },
 
             /**
@@ -344,13 +344,10 @@
              * When the user creates a new event,
              * push the changes back to the dashboard
              *
-             * @param {object} changedEvent The changed/saved event
+             * @param {object} addedEvent The added event
              */
             onServerEventAdded: function(addedEvent) {
                 this.selectedServer.events.push(addedEvent);
-
-                debugger;
-
             }
         },
         computed: {

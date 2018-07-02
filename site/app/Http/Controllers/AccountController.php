@@ -64,6 +64,11 @@ class AccountController extends Controller
         $acct = Account::create($requestInput);
         $user = Auth::user();
         $user->accounts()->attach($acct->id);
+
+        return response()->json([
+            'record' => $acct,
+            'accounts' => $user->accounts
+        ]);
     }
 
     /**
@@ -75,7 +80,37 @@ class AccountController extends Controller
      */
     public function update(Request $request, Account $account)
     {
-        //
+        $requestInput = $request->all();
+        $validator = Validator::make($requestInput, $this->validationRules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->failed()
+            ]);
+        }
+
+        $acct = Account::find($account->id);
+        $acct->update($requestInput);
+        $user = Auth::user();
+
+        return response()->json([
+            'record' => $acct,
+            'accounts' => $user->accounts
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Account  $account
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Account $account)
+    {
+        Account::destroy($account->id);
+
+        return response()->json($account);
     }
 
     /**
@@ -105,18 +140,6 @@ class AccountController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Account $account)
-    {
-        //
-    }
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Account  $account
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Account $account)
     {
         //
     }

@@ -21,7 +21,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/a/{account}', 'AccountController@show');
     Route::get('/api/v1/a/{account}', 'AccountController@showJSON');
     Route::post('/api/v1/account', 'AccountController@store');
-    Route::put('/api/v1/account', 'AccountController@update');
+    Route::put('/api/v1/account/{account}', 'AccountController@update');
+    Route::delete('/api/v1/account/{account}', 'AccountController@destroy');
 
     // DashboardController
     Route::get('/dashboard/', 'DashboardController@index');

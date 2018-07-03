@@ -17,6 +17,7 @@ class CreateServersTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('account_id')->index();
             $table->string('name');
+            $table->string('slug')->index()->unique();
             $table->string('host');
             $table->string('password');
             $table->string('port');

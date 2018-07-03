@@ -38,6 +38,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     // ServerController
     Route::get('/api/v1/server/{serverId}', 'ServerController@show');
+    Route::get('/api/v1/s/{serverId}', 'ServerController@showJSON');
+
     Route::post('/api/v1/server', 'ServerController@store');
     Route::put('/api/v1/server/{serverId}', 'ServerController@update');
     Route::delete('/api/v1/server/{serverId}', 'ServerController@destroy');

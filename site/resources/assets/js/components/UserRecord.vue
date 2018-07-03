@@ -1,17 +1,10 @@
 <template>
     <div class="user m-3 record" v-cloak>
-        <div v-if="errors.length" class="error-wrapper">
-            <div class="errors alert-danger">
-                <b>Please correct the following error(s):</b>
-                <ul>
-                    <li v-for="error in errors">{{ error }}</li>
-                </ul>
-            </div>
-        </div>
-
         <h3 class="title">
             <span class="name">{{ user.name }}</span>
         </h3>
+
+        <errors-view :errors="errors"></errors-view>
 
         <div class="container-fluid">
             <div class="row record-body">
@@ -99,10 +92,12 @@
 <script>
     import {HTTP} from '../app';
     import AccountAddEdit from './AccountAddEdit';
+    import ErrorsView from './ErrorsView';
 
     export default {
         components: {
-            AccountAddEdit
+            AccountAddEdit,
+            ErrorsView
         },
         data: function() {
             return {

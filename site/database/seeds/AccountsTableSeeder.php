@@ -17,6 +17,7 @@ class AccountsTableSeeder extends Seeder
             'name' => 'Badass Admins',
             'slug' => 'badass-admins',
             'owner_id' => 1,
+            'description' => 'Just a couple badass admins doing some badass shit',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
@@ -25,6 +26,7 @@ class AccountsTableSeeder extends Seeder
             'name' => 'Dummy Users',
             'slug' => 'dummy-users',
             'owner_id' => 1,
+            'description' => 'Just a couple dummy users doing some dummy user shit',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);

@@ -43,6 +43,28 @@ class ServerController extends Controller
 
 
     /**
+     * API - Display the specified Server in JSON
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string|numeric  $serverSlug The server slug or id to return
+     * @return \Illuminate\Http\Response
+     */
+    public function showJSON(Request $request, $serverSlug)
+    {
+        if (is_numeric($serverSlug)) {
+            $field = 'id';
+        } else {
+            $field = 'slug';
+        }
+        $server = Server::where($field , '=', $serverSlug)->first();
+        // weird way to populate $server users
+        $server->users;
+        $server->servers;
+
+        return response()->json($server);
+    }
+
+    /**
      * Store a newly created resource in storage.  POST /server
      *
      * @param  \Illuminate\Http\Request  $request

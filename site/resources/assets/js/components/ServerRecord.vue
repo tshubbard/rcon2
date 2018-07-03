@@ -1,7 +1,7 @@
 <template>
-    <div class="account m-3 record">
+    <div class="server m-3 record">
         <h3 class="title">
-            <span class="name">{{ account.name }}</span>
+            <span class="name">{{ server.name }}</span>
         </h3>
 
         <errors-view :errors="errors"></errors-view>
@@ -12,7 +12,7 @@
                     <h5>Description</h5>
                     <div>
                         <span class="name" id="description" name="description">
-                            {{ account.description }}
+                            {{ server.description }}
                         </span>
                     </div>
                 </div>
@@ -21,24 +21,24 @@
                 <div class="col-md-6">
                     <h5>Servers</h5>
                     <div>
-                        <ul>
+                        <!--<ul>
                             <li v-for="server in servers">
                                 <router-link class="nav-link" :to="'/s/' + server.slug">
                                     {{server.name}}
                                 </router-link>
                             </li>
-                        </ul>
+                        </ul>-->
                     </div>
                 </div>
                 <div class="col-md-6">
                     <h5>Users</h5>
                     <div>
                         <ul>
-                            <li v-for="user in users">
-                                <router-link class="nav-link" :to="'/u/' + user.slug">
+                           <!-- <li v-for="user in users">
+                                <router-link class="nav-link" :to="'/u/' + user.name">
                                     {{user.name}}
                                 </router-link>
-                            </li>
+                            </li>-->
                         </ul>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
         },
         data: function() {
             return {
-                account: {},
+                server: {},
                 errors: [],
                 servers: [],
                 users: []
@@ -64,16 +64,16 @@
         },
         created: function() {
 
-            HTTP.get('/api/v1/a/' + this.$route.params.accountName)
+            HTTP.get('/api/v1/s/' + this.$route.params.serverName)
                 .then(response => {
-                    console.log('account data: ', response);
+                    console.log('server data: ', response);
 
-                    this.account = response.data;
+                    this.server = response.data;
                     this.servers = response.data.servers;
                     this.users = response.data.users;
                 })
                 .catch(e => {
-                    console.log('/api/v1/a/' + this.$route.params.accountName + ' error ', e);
+                    console.log('/api/v1/s/' + this.$route.params.serverName + ' error ', e);
                     this.errors.push(e)
                 });
         },

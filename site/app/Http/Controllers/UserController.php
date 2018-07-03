@@ -26,12 +26,17 @@ class UserController extends Controller
      * API - Display the specified User in JSON
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string  $userName The user name of a user to return
+     * @param  string|numeric  $userSlug The user slug or id of a user to return
      * @return \Illuminate\Http\Response
      */
-    public function showJSON(Request $request, $userName)
+    public function showJSON(Request $request, $userSlug)
     {
-        $user = User::where('name' , '=', $userName)->first();
+        if (is_numeric($userSlug)) {
+            $field = 'id';
+        } else {
+            $field = 'slug';
+        }
+        $user = User::where($field , '=', $userSlug)->first();
         // weird way to populate user accounts
         $user->accounts;
 

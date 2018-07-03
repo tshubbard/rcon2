@@ -35,14 +35,21 @@ class AccountController extends Controller
      * API - Display the specified Account in JSON
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string  $accountSlug The account name to return
+     * @param  string|numeric  $accountSlug The account slug or id to return
      * @return \Illuminate\Http\Response
      */
     public function showJSON(Request $request, $accountSlug)
     {
-        $account = Account::where('slug' , '=', $accountSlug)->first();
+        if (is_numeric($accountSlug)) {
+            $field = 'id';
+        } else {
+            $field = 'slug';
+        }
+        $account = Account::where($field , '=', $accountSlug)->first();
+
         // weird way to populate account users
         $account->users;
+        $account->servers;
 
         return response()->json($account);
     }

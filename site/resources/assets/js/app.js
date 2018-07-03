@@ -30,6 +30,7 @@ if (document.getElementById('app') !== null) {
     const AdminServers = Vue.component('admin-servers', require('./components/AdminServers.vue'));
     const AdminPlayers = Vue.component('admin-players', require('./components/AdminPlayers.vue'));
     const ServerEventsList = Vue.component('server-events-list', require('./components/ServerEventsList.vue'));
+    const ServerRecord = Vue.component('server-record', require('./components/ServerRecord.vue'));
 
     var router = new VueRouter({
         //mode: 'history',
@@ -58,6 +59,9 @@ if (document.getElementById('app') !== null) {
             }, {
                 'path': '/dashboard/:serverId',
                 'component': Dashboard
+            }, {
+                'path': '/s/:serverName',
+                'component': ServerRecord
             }, {
                 'path': '/u/:userName',
                 'component': UserRecord

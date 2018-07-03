@@ -41,7 +41,7 @@
     import ServerAddEdit from './ServerAddEdit';
 
     export default {
-	    components: {
+        components: {
             ServerAddEdit
         },
         data: function() {

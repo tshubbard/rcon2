@@ -73,7 +73,7 @@
                         <li>
                             <router-link class="nav-link dropdown-item"
                                          class-active="active"
-                                         to="/u/{{Auth::user()->name}}">Profile</router-link>
+                                         to="/u/{{Auth::user()->slug}}">Profile</router-link>
                         </li>
                         @if(Auth::user()->isAdmin())
                             <li>

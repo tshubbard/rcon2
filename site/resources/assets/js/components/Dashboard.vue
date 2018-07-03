@@ -46,6 +46,7 @@
                                                 Server Events
                                                 <md-button class="md-raised md-primary zf-icon-button zf-panel-button zf-top-minus-5 float-right"
                                                            @click.stop="showAddEditServerEvent()">
+                                                    <md-tooltip>Add New Server Event</md-tooltip>
                                                     <md-icon>add</md-icon>
                                                 </md-button>
                                             </h2>
@@ -62,10 +63,12 @@
                                             <span class="server-actions float-right">
                                                 <md-button class="md-raised md-primary zf-icon-button zf-top-minus-5 my-0"
                                                            @click.stop="showAddEditServerEvent(event)">
+                                                    <md-tooltip>Edit Server Event</md-tooltip>
                                                     <md-icon>mode_edit</md-icon>
                                                 </md-button>
                                                 <md-button class="md-raised md-accent zf-icon-button zf-top-minus-5 my-0 mr-0"
                                                            @click.stop="removeServerEvent(event)">
+                                                    <md-tooltip>Delete Server Event</md-tooltip>
                                                     <md-icon>delete</md-icon>
                                                 </md-button>
                                             </span>

@@ -18,7 +18,7 @@ Route::get('email-verification/error', 'Auth\RegisterController@getVerificationE
 Route::get('email-verification/check/{token}', 'Auth\RegisterController@getVerification')->name('email-verification.check');
 
 // Requires User Authentication
-Route::group(['middleware' => ['auth', 'isVerified']], function () {
+Route::group(['middleware' => ['auth']], function () {
     // AccountController
     Route::get('/a/{account}', 'AccountController@show');
     Route::get('/api/v1/a/{account}', 'AccountController@showJSON');

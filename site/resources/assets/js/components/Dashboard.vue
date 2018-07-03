@@ -54,8 +54,8 @@
                                     </div>
                                 </div>
                                 <div class="panel-body">
-                                    <ul class="server-events">
-                                        <li v-for="event in selectedServer.events" class="server-event">
+                                    <ul class="zf-list server-events">
+                                        <li v-for="event in selectedServer.events" class="zf-list-item server-event-item">
                                             <md-switch v-model="event.is_active"
                                                        v-on:change="toggleEventActive(event)"
                                                     aria-label="Server Event Active on/off toggle"></md-switch>

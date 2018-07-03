@@ -33,14 +33,12 @@ class PlayerController extends Controller
         }
 
         if (!$account_valid) {
-            return response()->json(
-                [
-                    'success' => false,
-                    'data' => array(
-                        'errors' => 'Invalid account permissions.',
-                    ),
-                ]
-            );
+            return response()->json([
+                'success' => false,
+                'data' => array(
+                    'errors' => 'Invalid account permissions.',
+                ),
+            ]);
         }
 
         return response()->json([

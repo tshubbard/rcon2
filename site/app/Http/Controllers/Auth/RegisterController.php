@@ -4,10 +4,16 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Account;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+use Jrean\UserVerification\Traits\VerifiesUsers;
+use Jrean\UserVerification\Facades\UserVerification;
 
 class RegisterController extends Controller
 {
@@ -23,7 +29,7 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
-
+    use VerifiesUsers;
     /**
      * Where to redirect users after registration.
      *
@@ -38,7 +44,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('guest', ['except' => ['getVerification', 'getVerificationError']]);
     }
 
     /**
@@ -51,7 +57,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'orgname' => 'required|string|max:255'
         ]);
@@ -60,18 +66,19 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param array $data
      * @return \App\User
      */
     protected function create(array $data)
     {
+        $this->validator($data)->validate();
+
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-
-        $user->role_id = 3;
+        $user->role_id = 1;
         $user->save();
 
         $account = Account::create([
@@ -79,9 +86,17 @@ class RegisterController extends Controller
             'slug' => str_slug($data['orgname']),
             'owner_id' => $user->id
         ]);
-
         $user->accounts()->attach($account->id);
 
-        return $user;
+        event(new Registered($user));
+
+        $this->guard()->login($user);
+
+        UserVerification::generate($user);
+
+        UserVerification::send($user, 'My Custom E-mail Subject');
+
+        return $this->registered($request, $user)
+            ?: redirect($this->redirectPath());
     }
 }

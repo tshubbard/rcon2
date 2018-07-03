@@ -7,12 +7,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
+
 class User extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
-    use \Jrean\UserVerification\Traits\VerifiesUsers;
-    use \Jrean\UserVerification\Traits\UserVerification;
+
 
     protected $table = 'users';
 

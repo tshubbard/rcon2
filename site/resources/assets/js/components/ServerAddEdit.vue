@@ -10,7 +10,7 @@
             <div class="md-toolbar-tools">
                 <h3>
                     Add/Edit Server
-                    <md-button class="md-icon-button close-button" v-on:click="showDialog = false">
+                    <md-button class="md-icon-button close-button" @click.stop="showDialog = false">
                         <i class="material-icons clickable" aria-label="Close dialog">clear</i>
                     </md-button>
                 </h3>
@@ -18,14 +18,8 @@
         </md-toolbar>
         <md-dialog-content>
             <form name="addEditServerActionForm">
-                <div v-if="errors.length" class="error-wrapper">
-                    <div class="errors alert-danger">
-                        <b>Please correct the following error(s):</b>
-                        <ul>
-                            <li v-for="error in errors">{{ error }}</li>
-                        </ul>
-                    </div>
-                </div>
+                <errors-view :errors="errors"></errors-view>
+
                 <div class="form-group row">
                     <label for="server_name" class="col-md-3 col-form-label">Server Name</label>
                     <input id="server_name" type="text" class="col-sm-6 form-control"
@@ -73,10 +67,14 @@
                 <md-button class="md-raised md-accent" v-if="item.id != null" v-on:click="deleteServer">Delete This Server</md-button>
             </div>
             <div class="col-md-8 text-right">
-                <md-button v-on:click="showDialog = false" type="button">
+                <md-button
+                        @click.stop="showDialog = false"
+                        class="md-raised">
                     Cancel
                 </md-button>
-                <md-button @click.stop="checkForm" class="md-primary">
+                <md-button
+                        @click.stop="checkForm"
+                        class="md-raised md-primary">
                     Save
                 </md-button>
             </div>
@@ -86,7 +84,12 @@
 </template>
 
 <script>
+    import ErrorsView from './ErrorsView';
+
     export default {
+        components: {
+            ErrorsView
+        },
         props: [
             'serverData',
             'visible'

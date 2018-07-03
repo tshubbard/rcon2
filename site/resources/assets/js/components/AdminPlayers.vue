@@ -1,6 +1,6 @@
 <template>
     <div class="players m-3 record">
-        <h3 class="title" v-if="!currentonly">
+        <h3 class="title" v-if="!currentOnly">
             Players
         </h3>
 
@@ -11,14 +11,14 @@
                         <th class="text-center">Steam ID</th>
                         <th class="text-center">Combat ID</th>
                         <th class="text-center">Name</th>
-                        <th class="text-center" v-if="!currentonly">Last Login</th>
+                        <th class="text-center" v-if="!currentOnly">Last Login</th>
                     </thead>
                     <tbody>
                         <tr v-for="row in players" v-on:click="editPlayer(row)">
                             <td class="text-center">{{row.steam_id}}</td>
                             <td class="text-center">{{row.short_id}}</td>
                             <td>{{row.username}}</td>
-                            <td v-if="!currentonly">{{row.last_login}}</td>
+                            <td v-if="!currentOnly">{{row.last_login}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -28,20 +28,22 @@
         <player-edit
                 :visible="showPlayerEdit"
                 :playerData="selectedPlayer"
-                :currentonly="currentonly"
+                :currentOnly="currentOnly"
+                v-on:player-change="onPlayerChange"
                 @close="showPlayerEdit = false">
         </player-edit>
     </div>
 </template>
 <script>
+    import {HTTP} from '../app';
     import PlayerEdit from './PlayerEdit';
 
     export default {
-	    components: {
+        components: {
             PlayerEdit
         },
         props: [
-            'currentonly'
+            'currentOnly'
         ],
         data: function() {
             return {
@@ -51,25 +53,31 @@
             }
         },
         created: function() {
-            let selected_server_id = sessionStorage.getItem('selected_server_id');
+            let serverId = sessionStorage.getItem('selected_server_id');
+            let url = '/api/v1/players/' + serverId;
 
-            let endpoint = (this.currentonly != null && this.currentonly) ? 'currentplayers' : 'players';
+            if (this.currentOnly) {
+                url += '/current';
+            }
 
-            $.get(('/api/v1/' + endpoint + '/' + selected_server_id), function(data) {
-                this.players = data.players;
-
-            }.bind(this), 'json');
+            HTTP.get(url)
+                .then(response => {
+                    this.players = response.data.players;
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
         },
         methods: {
-            editPlayer: function(playerData){
+            editPlayer: function(playerData) {
                 this.selectedPlayer = playerData;
                 this.showPlayerEdit = true;
             },
             onPlayerChange: function(changedPlayer) {
-                if(changedPlayer.deleted != null && changedPlayer.deleted)
-                {
-                    if(this.players[changedPlayer.id] != null)
-                        delete this.players[changedPlayer.id];
+                if (changedPlayer.deleted_at) {
+                    this.players = _.reject(this.players, function(player) {
+                        return player.id === changedPlayer.id;
+                    }, this);
                 }
             }
         }

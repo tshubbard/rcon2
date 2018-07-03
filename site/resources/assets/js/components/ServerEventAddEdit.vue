@@ -19,14 +19,8 @@
         </md-toolbar>
         <md-dialog-content>
             <form name="addEditServerActionEventForm">
-                <div v-if="errors.length" class="error-wrapper">
-                    <div class="errors alert-danger">
-                        <b>Please correct the following error(s):</b>
-                        <ul>
-                            <li v-for="error in errors">{{ error }}</li>
-                        </ul>
-                    </div>
-                </div>
+                <errors-view :errors="errors"></errors-view>
+
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <h5>Event Setup</h5>
@@ -317,10 +311,14 @@
         <md-divider class="mt-4"></md-divider>
 
         <md-dialog-actions layout="row" layout-align="end">
-            <md-button @click.stop="showDialog = false" type="button">
+            <md-button
+                    @click.stop="showDialog = false"
+                    class="md-raised">
                 Cancel
             </md-button>
-            <md-button @click.stop="checkForm" class="md-primary">
+            <md-button
+                    @click.stop="checkForm"
+                    class="md-raised md-primary">
                 Save
             </md-button>
         </md-dialog-actions>
@@ -332,10 +330,12 @@
     import {HTTP} from '../app';
     import {Utils} from '../utils';
     import draggable from 'vuedraggable';
+    import ErrorsView from './ErrorsView';
 
     export default {
         components: {
-            draggable
+            draggable,
+            ErrorsView
         },
         props: [
             'visible',

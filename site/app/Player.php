@@ -2,11 +2,18 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 class Player extends Model
 {
-    protected $dates = ['last_login', 'last_steam_sync'];
+    use SoftDeletes;
+
+    protected $dates = [
+        'deleted_at',
+        'last_login',
+        'last_steam_sync',
+    ];
 
     protected $table = 'players';
 

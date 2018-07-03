@@ -85,7 +85,7 @@
                                     </div>
                                 </div>
                                 <div class="panel-body">
-                                    <admin-players currentonly="true"></admin-players>
+                                    <admin-players current-only="true"></admin-players>
                                 </div>
                             </div>
                         </div>

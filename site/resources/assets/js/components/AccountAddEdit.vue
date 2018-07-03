@@ -20,14 +20,8 @@
         </md-toolbar>
         <md-dialog-content>
             <form name="addEditAccountForm">
-                <div v-if="errors.length" class="error-wrapper">
-                    <div class="errors alert-danger">
-                        <b>Please correct the following error(s):</b>
-                        <ul>
-                            <li v-for="error in errors">{{ error }}</li>
-                        </ul>
-                    </div>
-                </div>
+                <errors-view :errors="errors"></errors-view>
+
                 <div class="form-group row">
                     <label for="server_name" class="col-md-3 col-form-label">Account/Group Name</label>
                     <input id="server_name" type="text" class="col-sm-6 form-control"
@@ -59,8 +53,12 @@
 </template>
 <script>
     import {HTTP} from '../app';
+    import ErrorsView from './ErrorsView';
 
     export default {
+        components: {
+            ErrorsView
+        },
         props: [
             'accountData',
             'visible'

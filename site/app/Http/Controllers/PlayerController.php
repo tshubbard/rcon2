@@ -16,156 +16,187 @@ class PlayerController extends Controller
     /**
      * Gets the players for a specific server ID
      *
-     * @param $serverId
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Server $server
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function index($serverId)
+    public function index(Server $server)
     {
-        // get the server by ID and return it
-        $server = Server::find($serverId);
-
         $user = Auth::user();
         $accounts = $user->accounts;
         $account_valid = false;
 
-        foreach($accounts as $row)
-            if($row['id'] == $server['account_id'])
+        foreach ($accounts as $row) {
+            if ($row['id'] == $server['account_id']) {
                 $account_valid = true;
+            }
+        }
 
-        if(!$account_valid)
-            return response()->json([
-                'success' => false,
-                'data' => array(
-                    'errors' => 'Invalid account permissions.'
-                )
-            ]);
+        if (!$account_valid) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'data' => array(
+                        'errors' => 'Invalid account permissions.',
+                    ),
+                ]
+            );
+        }
 
-        return response()->json(['success' => true, 'players' => $server->players]);
+        return response()->json([
+            'players' => $server->players
+        ]);
     }
 
     /**
      * Gets the current players for a specific server ID
      *
-     * @param $serverId
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Server $server
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function current($serverId)
+    public function current(Server $server)
     {
-        // get the server by ID and return it
-        $server = Server::find($serverId);
-
         $user = Auth::user();
         $accounts = $user->accounts;
         $account_valid = false;
 
-        foreach($accounts as $row)
-            if($row['id'] == $server['account_id'])
+        foreach ($accounts as $row) {
+            if ($row['id'] == $server['account_id']) {
                 $account_valid = true;
+            }
+        }
 
-        if(!$account_valid)
-            return response()->json([
-                'success' => false,
-                'data' => array(
-                    'errors' => 'Invalid account permissions.'
-                )
-            ]);
+        if (!$account_valid) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'data' => array(
+                        'errors' => 'Invalid account permissions.',
+                    ),
+                ]
+            );
+        }
 
         $players = DB::table('players_current')
             ->join('players', 'players.steam_id', '=', 'players_current.steam_id')
             ->select('players.*')
             ->get();
 
-        return response()->json(['success' => true, 'players' => $players]);
+        return response()->json([
+            'players' => $players
+        ]);
     }
 
     /**
      * Kick the specified player
      *
-     * @param $playerId
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Player $playerId
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function kick($playerId)
+    public function kick(Player $player)
     {
-        $player = Player::find($playerId);
         $server = Server::find($player->server_id);
 
         $user = Auth::user();
         $accounts = $user->accounts;
         $account_valid = false;
 
-        foreach($accounts as $row)
-            if($row['id'] == $server['account_id'])
+        foreach ($accounts as $row) {
+            if ($row['id'] == $server['account_id']) {
                 $account_valid = true;
+            }
+        }
 
-        if(!$account_valid)
-            return response()->json([
-                'success' => false,
-                'data' => array(
-                    'errors' => 'Invalid account permissions.'
-                )
-            ]);
+        if (!$account_valid) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'data' => array(
+                        'errors' => 'Invalid account permissions.',
+                    ),
+                ]
+            );
+        }
 
         $c = curl_init('http://localhost:7869/api/server');
-        curl_setopt_array($c, array(
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => ('server_id=' . $player->server_id . '&operation=player.kick&steam_id=' . $player->steam_id)
-        ));
+        curl_setopt_array(
+            $c,
+            array(
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => ('server_id=' . $player->server_id . '&operation=player.kick&steam_id=' . $player->steam_id),
+            )
+        );
         curl_exec($c);
 
         PlayerCurrent::where('steam_id', $player->steam_id)->first()->delete();
 
-        return response()->json(['success' => true]);
+        return response()->json($player);
     }
 
     /**
      * Ban the specified player
      *
-     * @param $playerId
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Player $player
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function ban($playerId)
+    public function ban(Player $player)
     {
-        $player = Player::find($playerId);
         $server = Server::find($player->server_id);
 
         $user = Auth::user();
         $accounts = $user->accounts;
         $account_valid = false;
 
-        foreach($accounts as $row)
-            if($row['id'] == $server['account_id'])
+        foreach ($accounts as $row) {
+            if ($row['id'] == $server['account_id']) {
                 $account_valid = true;
+            }
+        }
 
-        if(!$account_valid)
-            return response()->json([
-                'success' => false,
-                'data' => array(
-                    'errors' => 'Invalid account permissions.'
-                )
-            ]);
+        if (!$account_valid) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'data' => array(
+                        'errors' => 'Invalid account permissions.',
+                    ),
+                ]
+            );
+        }
 
         $c = curl_init('http://localhost:7869/api/server');
-        curl_setopt_array($c, array(
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => ('server_id=' . $player->server_id . '&operation=player.ban&steam_id=' . $player->steam_id)
-        ));
+        curl_setopt_array(
+            $c,
+            array(
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => ('server_id=' . $player->server_id . '&operation=player.ban&steam_id=' . $player->steam_id),
+            )
+        );
         curl_exec($c);
 
         PlayerCurrent::where('steam_id', $player->steam_id)->first()->delete();
 
-        return response()->json(['success' => true]);
+        return response()->json($player);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Player $player
+     *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Player $player)
     {
+        $player->delete();
+        $player->server()->dissociate();
+
+        return response()->json($player);
     }
 
 }

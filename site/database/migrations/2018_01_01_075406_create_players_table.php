@@ -28,6 +28,8 @@ class CreatePlayersTable extends Migration
             $table->unsignedTinyInteger('steam_vacban_count')->nullable();
             $table->unsignedTinyInteger('steam_gameban_count')->nullable();
             $table->unsignedSmallInteger('steam_days_since_last_ban')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

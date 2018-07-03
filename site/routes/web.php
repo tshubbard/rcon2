@@ -54,10 +54,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('/api/v1/serverEvent/{serverEvent}', 'ServerEventController@destroy');
 
     // PlayerController
-    Route::get('/api/v1/players/{serverId}', 'PlayerController@index');
-    Route::get('/api/v1/currentplayers/{serverId}', 'PlayerController@current');
-    Route::post('/api/v1/players/{playerId}/kick', 'PlayerController@kick');
-    Route::post('/api/v1/players/{playerId}/ban', 'PlayerController@ban');
+    Route::get('/api/v1/players/{server}', 'PlayerController@index');
+    Route::get('/api/v1/players/{server}/current', 'PlayerController@current');
+    Route::post('/api/v1/player/{player}/kick', 'PlayerController@kick');
+    Route::post('/api/v1/player/{player}/ban', 'PlayerController@ban');
+    Route::delete('/api/v1/player/{player}', 'PlayerController@destroy');
 
     // UserController
     Route::get('/u/{userName}', 'UserController@show');

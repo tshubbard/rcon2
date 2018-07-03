@@ -9,7 +9,7 @@
             <div class="md-toolbar-tools">
                 <h3>
                     Edit Player - {{item.username}}
-                    <md-button class="md-icon-button close-button" v-on:click="showDialog = false">
+                    <md-button class="md-icon-button close-button" @click.stop="showDialog = false">
                         <i class="material-icons clickable" aria-label="Close dialog">clear</i>
                     </md-button>
                 </h3>
@@ -84,91 +84,112 @@
         <md-divider class="mt-4"></md-divider>
 
         <md-dialog-actions layout="row" layout-align="end">
-            <div class="col-md-4 pl-0" v-if="!currentonly">
-                <md-button class="md-raised md-accent" v-if="item.id != null" v-on:click="deletePlayer">Delete This Player</md-button>
+            <div class="col-md-4 pl-0" v-if="!currentOnly">
+                <md-button class="md-raised md-accent" v-if="item.id != null" @click.stop="deletePlayer">Delete This
+                    Player
+                </md-button>
             </div>
-            <div class="col-md-4 pl-0" v-if="currentonly">
-                <md-button class="md-raised md-accent" v-on:click="kickPlayer">Kick Player</md-button>
-                <md-button class="md-raised md-accent" v-on:click="banPlayer">Ban Player</md-button>
+            <div class="col-md-4 pl-0" v-if="currentOnly">
+                <md-button class="md-raised md-accent" @click.stop="kickPlayer">Kick Player</md-button>
+                <md-button class="md-raised md-accent" @click.stop="banPlayer">Ban Player</md-button>
             </div>
             <div class="col-md-8 text-right">
-                <md-button class="md-raised md-primary" v-on:click="showDialog = false" type="button">
+                <md-button class="md-raised md-primary" @click.stop="showDialog = false">
                     Close
                 </md-button>
             </div>
         </md-dialog-actions>
 
+        <md-dialog-confirm
+                :md-active.sync="showConfirmDialog"
+                :md-title="dialogTitle"
+                v-model="item"
+                :md-content="dialogContent"
+                :md-confirm-text="dialogConfirmText"
+                md-cancel-text="Cancel"
+                @md-cancel="onConfirmDialogCancel"
+                @md-confirm="onConfirmDialogConfirm"
+        />
+
     </md-dialog>
 </template>
 
 <script>
+    import {HTTP} from '../app';
+
     export default {
         props: [
             'playerData',
             'visible',
-            'currentonly'
+            'currentOnly'
         ],
         data: function() {
             return {
-                item: {}
+                dialogAction: '',
+                dialogTitle: '',
+                dialogContent: '',
+                dialogConfirmText: '',
+                item: {},
+                selectedDeletePlayer: {},
+                showConfirmDialog: false
             }
         },
         methods: {
-            deletePlayer: function(){
-                swal({
-                    title: 'Are you sure?',
-                    text: 'Are you sure you wish to delete this player and all their associated data?',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then(function(result){
-                    if (result.value) {
-                        $.ajax({'type': 'DELETE', 'url': ('/api/v1/player/' + this.item.id), 'data': {}, 'success': function(data){
-                            this.$emit('player-change', data.data);
-                            this.showDialog = false;
-                        }.bind(this), 'dataType': 'json'});
-                    }
-                }.bind(this));
+            onConfirmDialogCancel: function() {
+                this.showConfirmDialog = false;
             },
-            kickPlayer: function(){
-                swal({
-                    title: 'Are you sure?',
-                    text: 'Are you sure you want to kick this player?',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, kick them!'
-                }).then(function(result){
-                    if (result.value) {
-                        $.post(('/api/v1/players/' + this.item.id + '/kick'), {}, function(data){
-                            this.$emit('player-change', data.data);
-                            this.showDialog = false;
-                        }.bind(this), 'json');
-                    }
-                }.bind(this));
+
+            onConfirmDialogConfirm: function() {
+
+                let url = '/api/v1/player/' + this.item.id;
+                let method = 'delete';
+
+                if (this.dialogAction !== 'delete') {
+                    url += '/' + this.dialogAction;
+                    method = 'post';
+                }
+
+                HTTP[method](url)
+                    .then(response => {
+                        this.$emit('player-change', _.clone(response.data));
+                        this.showDialog = false;
+                    })
+                    .catch(e => {
+                        this.errors.push(e)
+                    });
             },
-            banPlayer: function(){
-                swal({
-                    title: 'Are you sure?',
-                    text: 'Are you sure you want to ban this player?',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, ban them!'
-                }).then(function(result){
-                    if (result.value) {
-                        $.post(('/api/v1/players/' + this.item.id + '/ban'), {}, function(data){
-                            this.$emit('player-change', data.data);
-                            this.showDialog = false;
-                        }.bind(this), 'json');
-                    }
-                }.bind(this));
+
+            deletePlayer: function() {
+                let name = this.item.username;
+
+                this.dialogAction = 'delete';
+                this.dialogTitle = 'Delete Player: ' + name;
+                this.dialogContent = 'Are you sure you wish to delete ' + name + ' and all their associated data?';
+                this.dialogConfirmText = 'Delete Player';
+                this.showConfirmDialog = true;
             },
-            onDialogOpened: function(){
+
+            kickPlayer: function() {
+                let name = this.item.username;
+
+                this.dialogAction = 'kick';
+                this.dialogTitle = 'Kick Player: ' + name;
+                this.dialogContent = 'Are you sure you wish to kick ' + name + ' from your server?';
+                this.dialogConfirmText = 'Yes, Kick Player!';
+                this.showConfirmDialog = true;
+            },
+
+            banPlayer: function() {
+                let name = this.item.username;
+
+                this.dialogAction = 'ban';
+                this.dialogTitle = 'Ban Player: ' + name;
+                this.dialogContent = 'Are you sure you wish to ban ' + name + ' from your server?';
+                this.dialogConfirmText = 'Yes, Ban Player!';
+                this.showConfirmDialog = true;
+            },
+
+            onDialogOpened: function() {
                 this.item = _.clone(this.playerData);
             }
         },

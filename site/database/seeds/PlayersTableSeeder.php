@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 
 class PlayersTableSeeder extends Seeder
 {
@@ -239,6 +240,8 @@ class PlayersTableSeeder extends Seeder
                 'steam_vacban_count' => $item['steam_vacban_count'],
                 'steam_gameban_count' => $item['steam_gameban_count'],
                 'steam_days_since_last_ban' => $item['steam_days_since_last_ban'],
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ]);
         }
     }

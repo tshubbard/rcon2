@@ -18,7 +18,7 @@ class CreateChatTable extends Migration
             $table->unsignedInteger('server_id')->index();
             $table->timestamp('added_on');
             $table->string('steam_id', 25)->index()->nullable();
-            $table->string('username', 50)->index();
+            $table->string('username', 150)->index();
             $table->string('message', 250);
         });
     }

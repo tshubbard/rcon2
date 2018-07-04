@@ -19,7 +19,7 @@ class CreatePlayersTable extends Migration
             $table->timestamp('last_login')->useCurrent();
             $table->string('steam_id', 25)->unique();
             $table->string('short_id', 15)->nullable()->index();
-            $table->string('username', 50)->index();
+            $table->string('username', 150)->index();
             $table->timestamp('last_steam_sync')->nullable();
             $table->string('steam_profile', 300)->nullable();
             $table->string('steam_avatar_small', 300)->nullable();

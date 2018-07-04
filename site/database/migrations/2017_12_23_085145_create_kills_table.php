@@ -18,9 +18,9 @@ class CreateKillsTable extends Migration
             $table->unsignedInteger('server_id')->index();
             $table->timestamp('created_at');
             $table->string('victim_steam_id', 25)->index()->nullable();
-            $table->string('victim_username', 50)->index()->nullable();
+            $table->string('victim_username', 150)->index()->nullable();
             $table->string('killer_steam_id', 25)->index()->nullable();
-            $table->string('killer_username', 50)->index()->nullable();
+            $table->string('killer_username', 150)->index()->nullable();
         });
     }
 

@@ -196,11 +196,11 @@
             deleteServer: function(server) {
                 let name = server.name;
                 this.showDeleteConfirmDialog = true;
-                this.dialogAction = 'delete';
+                this.dialogAction = 'removeServer';
                 this.dialogTitle = 'Delete Server: ' + name;
                 this.dialogContent = 'Are you sure you wish to delete ' + name + '?';
                 this.dialogConfirmText = 'Delete Server';
-                this.item = user;
+                this.item = server;
             },
 
             onServerAdded: function(data) {
@@ -231,7 +231,7 @@
             removeUser: function(user) {
                 let name = user.name;
                 this.showDeleteConfirmDialog = true;
-                this.dialogAction = 'remove';
+                this.dialogAction = 'removeUser';
                 this.dialogTitle = 'Remove User: ' + name;
                 this.dialogContent = 'Are you sure you wish to remove ' + name + ' from this Account?';
                 this.dialogConfirmText = 'Remove User';
@@ -251,20 +251,28 @@
             },
 
             onConfirmDialogCancel: function() {
-                this.showConfirmDialog = false;
+                this.showDeleteConfirmDialog = false;
             },
 
             onConfirmDialogConfirm: function() {
-                let url = '/api/v1/';
-                let method = 'post';
+                let url = '/api/v1/accounts/' + this.account.id + '/' + this.dialogAction + '/' + this.item.id;
 
-                debugger;
-                if (this.dialogAction === 'delete') {
-
-                } else if (this.dialogAction === 'remove') {
-                    url += 'accounts/' + this.account.id + '/remove/' + this.item.id;
-                }
-
+                HTTP.post(url)
+                    .then(response => {
+                        this.showDeleteConfirmDialog = false;
+                        if (this.dialogAction === 'removeUser') {
+                            this.users = _.reject(this.users, function(user) {
+                                return user.id === response.data.record.id;
+                            }, this);
+                        } else if (this.dialogAction === 'removeServer') {
+                            this.servers = _.reject(this.servers, function(server) {
+                                return server.id === response.data.record.id;
+                            }, this);
+                        }
+                    })
+                    .catch(e => {
+                        this.errors.push(e);
+                    });
             },
 
         },

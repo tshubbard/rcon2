@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Account;
+use App\User;
+use App\Server;
 use Illuminate\Http\Request;
 use Validator;
 use Auth;
@@ -14,9 +16,11 @@ class AccountController extends Controller
     protected $errorMsgOwnerTriedToLeave = 'User is the Owner of the account they attempted to leave.';
     protected $errorMsgUserNotMember = 'User does not belong to Account they are attempting to leave.';
     protected $errorMsgNotOwnerTriedToRemoveUser = 'Must be Account Owner to remove a User from Account';
+    protected $errorMsgNotOwnerTriedToRemoveServer = 'Must be Account Owner to remove a Server from Account';
     protected $logMsgOwnerTriedToLeave = 'Account Owner tried to Leave';
     protected $logMsgUserNotMember = 'User does not belong to Account they are attempting to leave';
     protected $logMsgNotOwnerTriedToRemoveUser = 'Non-Account Owner tried to remove a User from the Account';
+    protected $logMsgNotOwnerTriedToRemoveServer = 'Non-Account Owner tried to remove a Server from the Account';
 
     protected $validationRules = array(
         'name' => 'required',
@@ -156,6 +160,36 @@ class AccountController extends Controller
         return response()->json([
             'success' => true,
             'record' => $user
+        ]);
+    }
+
+    public function removeServer(Request $request, Account $account, Server $server) {
+        $thisUser = Auth::user();
+
+        if ($account->owner_id != $thisUser->id) {
+            Log::error($this->logMsgNotOwnerTriedToRemoveServer, [
+                'controller' => 'AccountController',
+                'function' => 'leave',
+                'this_user_id' => $thisUser->id,
+                'this_user_name' => $thisUser->name,
+                'server_id' => $server->id,
+                'server_name' => $server->name,
+                'account_id' => $account->id,
+                'account_name' => $account->name,
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'errors' => [
+                    $this->errorMsgNotOwnerTriedToRemoveServer
+                ]
+            ], 405);
+        }
+
+        $server->account()->dissociate();
+        return response()->json([
+            'success' => true,
+            'record' => $server
         ]);
     }
 

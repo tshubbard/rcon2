@@ -200,6 +200,7 @@
                 this.dialogTitle = 'Delete Server: ' + name;
                 this.dialogContent = 'Are you sure you wish to delete ' + name + '?';
                 this.dialogConfirmText = 'Delete Server';
+                this.item = user;
             },
 
             onServerAdded: function(data) {
@@ -234,6 +235,7 @@
                 this.dialogTitle = 'Remove User: ' + name;
                 this.dialogContent = 'Are you sure you wish to remove ' + name + ' from this Account?';
                 this.dialogConfirmText = 'Remove User';
+                this.item = user;
             },
 
             onUserAdded: function(data) {
@@ -253,6 +255,15 @@
             },
 
             onConfirmDialogConfirm: function() {
+                let url = '/api/v1/';
+                let method = 'post';
+
+                debugger;
+                if (this.dialogAction === 'delete') {
+
+                } else if (this.dialogAction === 'remove') {
+                    url += 'accounts/' + this.account.id + '/remove/' + this.item.id;
+                }
 
             },
 

@@ -22,10 +22,12 @@ Route::group(['middleware' => ['auth']], function () {
     // AccountController
     Route::get('/a/{account}', 'AccountController@show');
     Route::get('/api/v1/a/{account}', 'AccountController@showJSON');
-    Route::post('/api/v1/account', 'AccountController@store');
-    Route::post('/api/v1/account/{account}/leave', 'AccountController@leave');
-    Route::put('/api/v1/account/{account}', 'AccountController@update');
-    Route::delete('/api/v1/account/{account}', 'AccountController@destroy');
+    Route::post('/api/v1/accounts', 'AccountController@store');
+    Route::post('/api/v1/accounts/{account}/leave', 'AccountController@leave');
+    Route::post('/api/v1/accounts/{account}/remove-user/{user}', 'AccountController@removeUser');
+    Route::post('/api/v1/accounts/{account}/remove-server/{user}', 'AccountController@removeUser');
+    Route::put('/api/v1/accounts/{account}', 'AccountController@update');
+    Route::delete('/api/v1/accounts/{account}', 'AccountController@destroy');
 
     // DashboardController
     Route::get('/dashboard/', 'DashboardController@index');
@@ -56,9 +58,9 @@ Route::group(['middleware' => ['auth']], function () {
     // PlayerController
     Route::get('/api/v1/players/{server}', 'PlayerController@index');
     Route::get('/api/v1/players/{server}/current', 'PlayerController@current');
-    Route::post('/api/v1/player/{player}/kick', 'PlayerController@kick');
-    Route::post('/api/v1/player/{player}/ban', 'PlayerController@ban');
-    Route::delete('/api/v1/player/{player}', 'PlayerController@destroy');
+    Route::post('/api/v1/players/{player}/kick', 'PlayerController@kick');
+    Route::post('/api/v1/players/{player}/ban', 'PlayerController@ban');
+    Route::delete('/api/v1/players/{player}', 'PlayerController@destroy');
 
     // UserController
     Route::get('/u/{userName}', 'UserController@show');

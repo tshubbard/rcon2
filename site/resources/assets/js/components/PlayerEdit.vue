@@ -83,22 +83,29 @@
 
         <md-divider class="mt-4"></md-divider>
 
-        <md-dialog-actions layout="row" layout-align="end">
-            <div class="col-md-4 pl-0" v-if="!currentOnly">
-                <md-button class="md-raised md-accent" v-if="item.id != null" @click.stop="deletePlayer">Delete This
-                    Player
-                </md-button>
+        <div class="container-fluid mb-4">
+            <div class="row">
+                <div class="col">
+                    <div class="pl-0" v-if="!currentOnly">
+                        <md-button class="md-raised md-accent" v-if="item.id != null" @click.stop="deletePlayer">Delete This
+                            Player
+                        </md-button>
+                    </div>
+                    <div class="pl-0" v-if="currentOnly">
+                        <md-button class="md-raised md-accent" @click.stop="kickPlayer">Kick Player</md-button>
+                        <md-button class="md-raised md-accent" @click.stop="banPlayer">Ban Player</md-button>
+                    </div>
+                </div>
+                <div class="col text-right">
+                    <md-button class="md-raised md-primary" @click.stop="showDialog = false">
+                        Close
+                    </md-button>
+                </div>
+
             </div>
-            <div class="col-md-4 pl-0" v-if="currentOnly">
-                <md-button class="md-raised md-accent" @click.stop="kickPlayer">Kick Player</md-button>
-                <md-button class="md-raised md-accent" @click.stop="banPlayer">Ban Player</md-button>
-            </div>
-            <div class="col-md-8 text-right">
-                <md-button class="md-raised md-primary" @click.stop="showDialog = false">
-                    Close
-                </md-button>
-            </div>
-        </md-dialog-actions>
+
+
+        </div>
 
         <md-dialog-confirm
                 :md-active.sync="showConfirmDialog"
@@ -141,7 +148,7 @@
 
             onConfirmDialogConfirm: function() {
 
-                let url = '/api/v1/player/' + this.item.id;
+                let url = '/api/v1/players/' + this.item.id;
                 let method = 'delete';
 
                 if (this.dialogAction !== 'delete') {

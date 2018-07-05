@@ -23,7 +23,6 @@ class PlayersCurrentTableSeeder extends Seeder
             array("server_id" => 1, "steam_id" =>"76561198106681757"),
             array("server_id" => 1, "steam_id" =>"76561198420774871"),
             array("server_id" => 1, "steam_id" =>"76561198099001888"),
-            array("server_id" => 1, "steam_id" =>"76561198799966583"),
             array("server_id" => 1, "steam_id" =>"76561198282368175"),
             array("server_id" => 1, "steam_id" =>"76561198076362687"),
             array("server_id" => 1, "steam_id" =>"76561198429672498"),

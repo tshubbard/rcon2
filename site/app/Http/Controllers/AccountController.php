@@ -13,8 +13,10 @@ class AccountController extends Controller
 {
     protected $errorMsgOwnerTriedToLeave = 'User is the Owner of the account they attempted to leave.';
     protected $errorMsgUserNotMember = 'User does not belong to Account they are attempting to leave.';
+    protected $errorMsgNotOwnerTriedToRemoveUser = 'Must be Account Owner to remove a User from Account';
     protected $logMsgOwnerTriedToLeave = 'Account Owner tried to Leave';
     protected $logMsgUserNotMember = 'User does not belong to Account they are attempting to leave';
+    protected $logMsgNotOwnerTriedToRemoveUser = 'Non-Account Owner tried to remove a User from the Account';
 
     protected $validationRules = array(
         'name' => 'required',
@@ -124,6 +126,36 @@ class AccountController extends Controller
         return response()->json([
             'record' => $acct,
             'accounts' => $user->accounts
+        ]);
+    }
+
+    public function removeUser(Request $request, Account $account, User $user) {
+        $thisUser = Auth::user();
+
+        if ($account->owner_id != $thisUser->id) {
+            Log::error($this->logMsgNotOwnerTriedToRemoveUser, [
+                'controller' => 'AccountController',
+                'function' => 'leave',
+                'this_user_id' => $thisUser->id,
+                'this_user_name' => $thisUser->name,
+                'user_id' => $user->id,
+                'user_name' => $user->name,
+                'account_id' => $account->id,
+                'account_name' => $account->name,
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'errors' => [
+                    $this->errorMsgNotOwnerTriedToRemoveUser
+                ]
+            ], 405);
+        }
+
+        $user->accounts()->detach($account->id);
+        return response()->json([
+            'success' => true,
+            'record' => $user
         ]);
     }
 

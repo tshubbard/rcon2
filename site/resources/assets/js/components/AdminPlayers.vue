@@ -1,28 +1,58 @@
 <template>
-    <div class="players m-3 record">
-        <h3 class="title" v-if="!currentOnly">
-            Players
-        </h3>
+    <div class="record" v-bind:class="[ !currentOnly ? 'players m-3' : '' ]">
+        <div v-if="!currentOnly">
+            <h3 class="title">
+                Players
+            </h3>
 
-        <div class="container-fluid">
-            <div class="row record-body">
-                <table class="admin-servers-table table table-hover">
-                    <thead>
+            <div class="container-fluid">
+                <div class="row record-body">
+                    <table class="admin-servers-table table table-hover">
+                        <thead>
                         <th class="text-center">Steam ID</th>
                         <th class="text-center">Combat ID</th>
                         <th class="text-center">Name</th>
                         <th class="text-center" v-if="!currentOnly">Last Login</th>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         <tr v-for="row in players" v-on:click="editPlayer(row)">
                             <td class="text-center">{{row.steam_id}}</td>
                             <td class="text-center">{{row.short_id}}</td>
                             <td>{{row.username}}</td>
                             <td v-if="!currentOnly">{{row.last_login}}</td>
                         </tr>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+        </div>
+        <div v-if="currentOnly">
+            <md-content class="max-height-list-400 md-scrollbar">
+                <div>
+            <md-list class="md-double-line zf-list players-list">
+                <md-list-item v-for="row in players" :key="row.id">
+                    <md-icon class="md-primary">person</md-icon>
+                    <div class="md-list-item-text">
+                        <span>
+                            {{row.username}}
+                        </span>
+                        <span>
+                            Max Players: {{row.short_id}}
+                        </span>
+                    </div>
+                    <md-button class="md-icon-button md-list-action"
+                               @click.stop="editPlayer(row)">
+                        <md-tooltip>Edit Server</md-tooltip>
+                        <md-icon>mode_edit</md-icon>
+                    </md-button>
+                    <md-button class="md-icon-button md-list-action"
+                               @click.stop="deletePlayer(row)">
+                        <md-tooltip>Delete Server from Account</md-tooltip>
+                        <md-icon>delete</md-icon>
+                    </md-button>
+                </md-list-item>
+            </md-list></div>
+            </md-content>
         </div>
 
         <player-edit
@@ -47,6 +77,7 @@
         ],
         data: function() {
             return {
+                errors: [],
                 players: {},
                 showPlayerEdit: false,
                 selectedPlayer: {}
@@ -79,6 +110,10 @@
                         return player.id === changedPlayer.id;
                     }, this);
                 }
+            },
+
+            deletePlayer: function(playerData) {
+
             }
         }
     }

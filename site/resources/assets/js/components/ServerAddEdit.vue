@@ -124,7 +124,7 @@
              * Validates the server info and saves or provides user feedback on errors
              */
             saveAddEditServerDialog: function() {
-                let url = '/api/v1/server';
+                let url = '/api/v1/servers';
                 let payload = _.pick(this.item, 'account_id', 'name', 'host', 'port', 'password', 'disabled');
                 let method;
                 let eventName;
@@ -134,14 +134,14 @@
                 }
 
                 if (this.item.id == null) {
-                    method = 'POST';
+                    method = 'post';
                     eventName = 'server-added';
                 } else if (this.item.delete) {
-                    method = 'DELETE';
+                    method = 'delete';
                     url += '/' + this.item.id;
                     eventName = 'server-deleted';
                 } else {
-                    method = 'PUT';
+                    method = 'put';
                     url += '/' + this.item.id;
                     eventName = 'server-changed';
                 }

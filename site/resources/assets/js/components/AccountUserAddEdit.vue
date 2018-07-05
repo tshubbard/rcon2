@@ -105,17 +105,18 @@
             },
 
             saveAddEditAccountDialog: function() {
-                let url = '/api/v1/account';
+                let url = '/api/v1/accounts';
                 let eventName;
                 let payload = _.pick(this.item, 'name');
                 let method;
 
+                debugger;
                 if (!this.item.id) {
                     method = 'post';
                     eventName = 'account-user-added';
                     payload.owner_id = this.$parent.user.id;
                 } else if (this.item.delete) {
-                    method = 'DELETE';
+                    method = 'delete';
                     url += '/' + this.item.id;
                     eventName = 'account-user-deleted';
                 } else {
@@ -137,6 +138,11 @@
                     });
             },
 
+            removeUser: function() {
+                this.showConfirmDialog = true;
+            },
+
+
             onRemoveUserCancel: function() {
                 this.showConfirmDialog = false;
             },
@@ -154,8 +160,10 @@
             },
 
             checkForm: function(evt) {
-                evt.preventDefault();
-                evt.stopImmediatePropagation();
+                if (evt) {
+                    evt.preventDefault();
+                    evt.stopImmediatePropagation();
+                }
 
                 if (!this.isSaving) {
                     this.isSaving = true;

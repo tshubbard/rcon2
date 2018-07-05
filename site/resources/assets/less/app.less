@@ -529,13 +529,27 @@ nav {
         margin-bottom: 20px;
     }
 }
+.zf-list-panel {
+    .panel-title {
+    }
+    .panel-body {
+        border-top: 1px solid @color-steel;
+        border-left: 1px solid @color-steel;
+    }
+}
 .zf-list {
     padding-left: 5px;
     list-style: none;
 
+    &.users-list,
+    &.servers-list {
+        .nav-link {
+            padding-left: 0;
+        }
+    }
     .zf-list-item {
         font-size: 0.85rem;
-        border-bottom: 1px solid @color-mist-dark;
+        border-bottom: 1px solid @color-steel;
         padding: 5px 0;
     }
     .users-list-item,

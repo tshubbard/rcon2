@@ -38,42 +38,45 @@
                 <div class="col-md-12">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="dashboard-panel col-md-6">
+                            <div class="zf-list-panel col-md-6">
                                 <div class="panel-top">
                                     <div class="md-hue-2">
                                         <div class="md-toolbar-tools">
-                                            <h2 flex>
+                                            <h5 class="panel-title">
                                                 Server Events
-                                                <md-button class="md-raised md-primary zf-icon-button zf-panel-button zf-top-minus-5 float-right"
+                                                <md-button class="md-raised md-primary zf-icon-button zf-top-minus-5 my-0"
                                                            @click.stop="showAddEditServerEvent()">
                                                     <md-tooltip>Add New Server Event</md-tooltip>
                                                     <md-icon>add</md-icon>
                                                 </md-button>
-                                            </h2>
+                                            </h5>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="panel-body">
-                                    <ul class="zf-list server-events">
-                                        <li v-for="event in selectedServer.events" class="zf-list-item server-event-item">
+                                    <md-list class="md-double-line zf-list servers-list">
+                                        <md-list-item v-for="event in selectedServer.events" :key="event.id">
                                             <md-switch v-model="event.is_active"
                                                        v-on:change="toggleEventActive(event)"
-                                                    aria-label="Server Event Active on/off toggle"></md-switch>
-                                            <span class="server-event-name">{{event.name}}</span>
-                                            <span class="server-actions float-right">
-                                                <md-button class="md-raised md-primary zf-icon-button zf-top-minus-5 my-0"
-                                                           @click.stop="showAddEditServerEvent(event)">
-                                                    <md-tooltip>Edit Server Event</md-tooltip>
-                                                    <md-icon>mode_edit</md-icon>
-                                                </md-button>
-                                                <md-button class="md-raised md-accent zf-icon-button zf-top-minus-5 my-0 mr-0"
-                                                           @click.stop="removeServerEvent(event)">
-                                                    <md-tooltip>Delete Server Event</md-tooltip>
-                                                    <md-icon>delete</md-icon>
-                                                </md-button>
-                                            </span>
-                                        </li>
-                                    </ul>
+                                                       aria-label="Server Event Active on/off toggle"></md-switch>
+                                            <div class="md-list-item-text">
+                                                <span>
+                                                    {{event.name}}
+                                                </span>
+                                                <span>Event Type: {{event.event_type}}</span>
+                                            </div>
+                                            <md-button class="md-icon-button md-list-action"
+                                                       @click.stop="showAddEditServerEvent(event)">
+                                                <md-tooltip>Edit Server Event</md-tooltip>
+                                                <md-icon>mode_edit</md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button md-list-action"
+                                                       @click.stop="removeServerEvent(event)">
+                                                <md-tooltip>Delete Server Event</md-tooltip>
+                                                <md-icon>delete</md-icon>
+                                            </md-button>
+                                        </md-list-item>
+                                    </md-list>
                                 </div>
                             </div>
                             <div class="dashboard-panel col-md-6">

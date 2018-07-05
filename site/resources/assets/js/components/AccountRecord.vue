@@ -19,8 +19,8 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
-                    <h5>
+                <div class="col-md-6 zf-list-panel">
+                    <h5 class="panel-title">
                         Servers
                         <md-button class="md-raised md-primary zf-icon-button zf-top-minus-5 my-0"
                                    @click.stop="addEditServer()">
@@ -28,30 +28,34 @@
                             <md-icon>add</md-icon>
                         </md-button>
                     </h5>
-                    <div>
-                        <ul class="zf-list servers-list">
-                            <li v-for="server in servers" class="zf-list-item servers-list-item">
-                                <router-link class="nav-link" :to="'/s/' + server.slug">
-                                    {{server.name}}
-                                </router-link>
-                                <div class="actions">
-                                    <md-button class="md-raised md-primary zf-icon-button my-0"
-                                               @click.stop="addEditServer(server)">
-                                        <md-tooltip>Edit Server</md-tooltip>
-                                        <md-icon>mode_edit</md-icon>
-                                    </md-button>
-                                     <md-button class="md-raised md-accent zf-icon-button my-0 mr-0"
-                                                @click.stop="deleteServer(server)">
-                                        <md-tooltip>Delete Server from Account</md-tooltip>
-                                        <md-icon>delete</md-icon>
-                                    </md-button>
+                    <div class="panel-body">
+                        <md-list class="md-double-line zf-list servers-list">
+                            <md-list-item v-for="server in servers" :key="server.id">
+                                <md-icon class="md-primary">computer</md-icon>
+                                <div class="md-list-item-text">
+                                    <span>
+                                        <router-link class="nav-link" :to="'/s/' + server.slug">
+                                            {{server.name}}
+                                        </router-link>
+                                    </span>
+                                    <span>Max Players: {{server.max_players}}</span>
                                 </div>
-                            </li>
-                        </ul>
+                                <md-button class="md-icon-button md-list-action"
+                                           @click.stop="addEditServer(server)">
+                                    <md-tooltip>Edit Server</md-tooltip>
+                                    <md-icon>mode_edit</md-icon>
+                                </md-button>
+                                <md-button class="md-icon-button md-list-action"
+                                           @click.stop="deleteServer(server)">
+                                    <md-tooltip>Delete Server from Account</md-tooltip>
+                                    <md-icon>delete</md-icon>
+                                </md-button>
+                            </md-list-item>
+                        </md-list>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <h5>
+                <div class="col-md-6 zf-list-panel">
+                    <h5 class="panel-title">
                         Users
                         <md-button class="md-raised md-primary zf-icon-button zf-top-minus-5 my-0"
                                    @click.stop="addEditUser()">
@@ -59,26 +63,30 @@
                             <md-icon>add</md-icon>
                         </md-button>
                     </h5>
-                    <div>
-                        <ul class="zf-list users-list">
-                            <li v-for="user in users" class="zf-list-item users-list-item">
-                                <router-link class="nav-link" :to="'/u/' + user.slug">
-                                    {{user.name}}
-                                </router-link>
-                                <div class="actions">
-                                     <md-button class="md-raised md-primary zf-icon-button my-0"
-                                                @click.stop="addEditUser(user)">
-                                        <md-tooltip>Edit User on Account</md-tooltip>
-                                        <md-icon>mode_edit</md-icon>
-                                    </md-button>
-                                     <md-button class="md-raised md-accent zf-icon-button my-0 mr-0"
-                                                @click.stop="removeUser(user)">
-                                        <md-tooltip>Delete User from Account</md-tooltip>
-                                        <md-icon>delete</md-icon>
-                                    </md-button>
+                    <div class="panel-body">
+                        <md-list class="md-double-line zf-list users-list">
+                            <md-list-item v-for="user in users" :key="user.id">
+                                <md-icon class="md-primary">person</md-icon>
+                                <div class="md-list-item-text">
+                                    <span>
+                                        <router-link class="nav-link" :to="'/u/' + user.slug">
+                                            {{user.name}}
+                                        </router-link>
+                                    </span>
+                                    <span>Max Players: {{user.name}}</span>
                                 </div>
-                            </li>
-                        </ul>
+                                <md-button class="md-icon-button md-list-action"
+                                           @click.stop="addEditUser(user)">
+                                    <md-tooltip>Edit User on Account</md-tooltip>
+                                    <md-icon>mode_edit</md-icon>
+                                </md-button>
+                                <md-button class="md-icon-button md-list-action"
+                                           @click.stop="removeUser(user)">
+                                    <md-tooltip>Delete User from Account</md-tooltip>
+                                    <md-icon>delete</md-icon>
+                                </md-button>
+                            </md-list-item>
+                        </md-list>
                     </div>
                 </div>
             </div>

@@ -35,6 +35,13 @@
         <md-divider class="mt-4"></md-divider>
 
         <md-dialog-actions layout="row" layout-align="end">
+            <div class="col-md-4 pl-0">
+                <md-button class="md-raised md-accent"
+                           v-if="item.id != null"
+                           v-on:click="removeUser">
+                    Remove User
+                </md-button>
+            </div>
             <div class="col-md-8 text-right">
                 <md-button
                         @click.stop="showDialog = false"
@@ -49,6 +56,16 @@
             </div>
         </md-dialog-actions>
 
+        <md-dialog-confirm
+                :md-active.sync="showConfirmDialog"
+                md-title="Remove User from Account?"
+                v-model="item"
+                md-content="Are you sure you wish to remove this user from this Account?"
+                md-confirm-text="Remove User"
+                md-cancel-text="Cancel"
+                @md-cancel="onRemoveUserCancel"
+                @md-confirm="onRemoveUserConfirm"
+        />
     </md-dialog>
 </template>
 <script>
@@ -67,7 +84,8 @@
             return {
                 errors: [],
                 isSaving: false,
-                item: {}
+                item: {},
+                showConfirmDialog: false,
             }
         },
         created: function() {
@@ -81,10 +99,52 @@
                 console.log('this.item: ', this.item);
 
             },
+
             onDialogClosed: function(){
                 this.errors = [];
             },
 
+            saveAddEditAccountDialog: function() {
+                let url = '/api/v1/account';
+                let eventName;
+                let payload = _.pick(this.item, 'name');
+                let method;
+
+                if (!this.item.id) {
+                    method = 'post';
+                    eventName = 'account-user-added';
+                    payload.owner_id = this.$parent.user.id;
+                } else if (this.item.delete) {
+                    method = 'DELETE';
+                    url += '/' + this.item.id;
+                    eventName = 'account-user-deleted';
+                } else {
+                    method = 'put';
+                    url += '/' + this.item.id;
+                    eventName = 'account-user-changed';
+                }
+
+                HTTP[method](url, payload)
+                    .then(response => {
+                        this.$emit(eventName, _.clone(response.data));
+                        this.isSaving = false;
+                        this.showDialog = false;
+                    })
+                    .catch(e => {
+                        this.isSaving = false;
+
+                        this.errors.push(e)
+                    });
+            },
+
+            onRemoveUserCancel: function() {
+                this.showConfirmDialog = false;
+            },
+
+            onRemoveUserConfirm: function() {
+                this.item.delete = true;
+                this.checkForm();
+            },
 
             enterClicked: function(evt) {
                 evt.preventDefault();
@@ -112,35 +172,6 @@
                 if(!this.errors.length) {
                     this.saveAddEditAccountDialog();
                 }
-            },
-
-            saveAddEditAccountDialog: function() {
-                let url = '/api/v1/account';
-                let eventName;
-                let payload = _.pick(this.item, 'name');
-                let method;
-
-                if (!this.item.id) {
-                    method = 'post';
-                    eventName = 'account-user-added';
-                    payload.owner_id = this.$parent.user.id;
-                } else {
-                    method = 'put';
-                    url += '/' + this.item.id;
-                    eventName = 'account-user-changed';
-                }
-
-                HTTP[method](url, payload)
-                    .then(response => {
-                        this.$emit(eventName, _.clone(response.data));
-                        this.isSaving = false;
-                        this.showDialog = false;
-                    })
-                    .catch(e => {
-                        this.isSaving = false;
-
-                        this.errors.push(e)
-                    });
             },
         },
         computed: {

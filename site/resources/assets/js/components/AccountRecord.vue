@@ -38,7 +38,9 @@
                                             {{server.name}}
                                         </router-link>
                                     </span>
-                                    <span>Max Players: {{server.max_players}}</span>
+                                    <span>
+                                        Max Players: {{server.max_players}}
+                                    </span>
                                 </div>
                                 <md-button class="md-icon-button md-list-action"
                                            @click.stop="addEditServer(server)">
@@ -73,7 +75,9 @@
                                             {{user.name}}
                                         </router-link>
                                     </span>
-                                    <span>Max Players: {{user.name}}</span>
+                                    <span>
+                                        Account Role: {{user.role_id}}
+                                    </span>
                                 </div>
                                 <md-button class="md-icon-button md-list-action"
                                            @click.stop="addEditUser(user)">
@@ -95,15 +99,17 @@
         <account-user-add-edit
                 :visible="showUserAddEdit"
                 :userData="selectedUserForAddEdit"
-                v-on:account-user-changed="onUserChanged"
                 v-on:account-user-added="onUserAdded"
+                v-on:account-user-deleted="onUserDeleted"
+                v-on:account-user-changed="onUserChanged"
                 @close="showUserAddEdit = false">
         </account-user-add-edit>
         <server-add-edit
                 :visible="showServerAddEdit"
                 :serverData="selectedServerForAddEdit"
-                v-on:server-added="onServerChange"
-                v-on:server-changed="onServerChange"
+                v-on:server-added="onServerAdded"
+                v-on:server-deleted="onServerDeleted"
+                v-on:server-changed="onServerChanged"
                 @close="showServerAddEdit = false">
         </server-add-edit>
 
@@ -196,8 +202,16 @@
                 this.dialogConfirmText = 'Delete Server';
             },
 
-            onServerChange: function() {
+            onServerAdded: function(data) {
+                console.log('onServerAdded ', data);
+            },
 
+            onServerDeleted: function(data) {
+                console.log('onServerDeleted ', data);
+            },
+
+            onServerChanged: function(data) {
+                console.log('onServerChanged ', data);
             },
 
             addEditUser: function(user) {
@@ -222,12 +236,16 @@
                 this.dialogConfirmText = 'Remove User';
             },
 
-            onUserChanged: function() {
-
+            onUserAdded: function(data) {
+                console.log('onUserAdded ', data);
             },
 
-            onUserAdded: function() {
+            onUserDeleted: function(data) {
+                console.log('onUserDeleted ', data);
+            },
 
+            onUserChanged: function(data) {
+                console.log('onUserChanged ', data);
             },
 
             onConfirmDialogCancel: function() {

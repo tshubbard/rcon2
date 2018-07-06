@@ -40,18 +40,14 @@
                         <div class="row">
                             <div class="zf-list-panel col-md-6">
                                 <div class="panel-top">
-                                    <div class="md-hue-2">
-                                        <div class="md-toolbar-tools">
-                                            <h5 class="panel-title">
-                                                Server Events
-                                                <md-button class="md-raised md-primary zf-icon-button zf-top-minus-5 my-0"
-                                                           @click.stop="showAddEditServerEvent()">
-                                                    <md-tooltip>Add New Server Event</md-tooltip>
-                                                    <md-icon>add</md-icon>
-                                                </md-button>
-                                            </h5>
-                                        </div>
-                                    </div>
+                                    <h5 class="panel-title">
+                                        Server Events
+                                        <md-button class="md-raised md-primary zf-icon-button zf-top-minus-5 my-0"
+                                                   @click.stop="showAddEditServerEvent()">
+                                            <md-tooltip>Add New Server Event</md-tooltip>
+                                            <md-icon>add</md-icon>
+                                        </md-button>
+                                    </h5>
                                 </div>
                                 <div class="panel-body">
                                     <md-list class="md-double-line zf-list servers-list">
@@ -79,13 +75,11 @@
                                     </md-list>
                                 </div>
                             </div>
-                            <div class="dashboard-panel col-md-6">
+                            <div class="zf-list-panel col-md-6">
                                 <div class="panel-top">
-                                    <div class="md-hue-2">
-                                        <div class="md-toolbar-tools">
-                                            <h2 flex md-truncate>Active Users</h2>
-                                        </div>
-                                    </div>
+                                    <h5 class="panel-title">
+                                        Active Users
+                                    </h5>
                                 </div>
                                 <div class="panel-body">
                                     <admin-players current-only="true"></admin-players>

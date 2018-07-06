@@ -530,11 +530,17 @@ nav {
     }
 }
 .zf-list-panel {
+    padding: 4px;
+
     .panel-title {
+        line-height: 2rem;
     }
     .panel-body {
         border-top: 1px solid @color-steel;
         border-left: 1px solid @color-steel;
+        height: 400px;
+        max-height: 400px;
+        overflow-y: scroll;
     }
 }
 .zf-list {
@@ -563,8 +569,4 @@ nav {
             float: right;
         }
     }
-}
-.max-height-list-400 {
-    max-height: 400px;
-    overflow-y: scroll;
 }

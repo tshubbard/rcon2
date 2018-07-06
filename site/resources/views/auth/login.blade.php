@@ -9,10 +9,11 @@
                 {{ csrf_field() }}
 
                 <div class="form-group row">
-                    <label for="email" class="col-md-2 col-form-label">E-mail</label>
-                    <div class="col-md-8">
-                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
-
+                    <div class="col-md">
+                        <md-field>
+                            <label>Email</label>
+                            <md-input type="email" name="email" value="{{ old('email') }}" required></md-input>
+                        </md-field>
                         @if ($errors->has('email'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('email') }}</strong>
@@ -21,10 +22,11 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="password" class="col-md-2 col-form-label">Password</label>
-                    <div class="col-md-8">
-                        <input id="password" type="password" class="form-control" name="password" required>
-
+                    <div class="col-md">
+                        <md-field>
+                            <label>Password</label>
+                            <md-input type="password" name="password" value="{{ old('password') }}" required></md-input>
+                        </md-field>
                         @if ($errors->has('password'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('password') }}</strong>

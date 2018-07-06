@@ -119,16 +119,15 @@ class AccountController extends Controller
 
         $user = Auth::user();
 
-        $acct = Account::find($account->id);
         $requestInput['slug'] = str_slug($requestInput['name']);
 
         // don't update the owner_id if it is sent
         unset($requestInput['owner_id']);
 
-        $acct->update($requestInput);
+        $account->update($requestInput);
 
         return response()->json([
-            'record' => $acct,
+            'record' => $account,
             'accounts' => $user->accounts
         ]);
     }

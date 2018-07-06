@@ -20,6 +20,7 @@ class Account extends Model
         'name',
         'slug',
         'owner_id',
+        'description',
     ];
 
     /**

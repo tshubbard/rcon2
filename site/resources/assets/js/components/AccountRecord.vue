@@ -6,20 +6,43 @@
 
         <errors-view :errors="errors"></errors-view>
 
-        <div class="container-fluid record-body">
-            <div class="row">
-                <div class="col-md-6">
+        <div class="record-body">
+            <div class="account-details md-layout md-gutter">
+                <div class="md-layout-item">
                     <h5>Description</h5>
                     <div>
-                        <span class="name" id="description" name="description">
+                        <div v-if="!isEdit"
+                              class="description"
+                              name="description"
+                              @click.stop="isEdit = true;">
                             {{ account.description }}
-                        </span>
+                        </div>
+
+                        <div v-if="isEdit">
+                            <md-field>
+                                <md-textarea class="description"
+                                             v-model="account.description"
+                                             name="description"
+                                             md-counter="255"
+                                             @keyup="onDescriptionChanged"
+                                ></md-textarea>
+                            </md-field>
+                            <div class="zf-suffix-icon save" v-if="hasDescriptionChanged"
+                                @click="saveDescription">
+                                <md-icon class="md-size-2x">save</md-icon>
+                            </div>
+                        </div>
+
+
                     </div>
+                </div>
+                <div class="md-layout-item">
+
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-6 zf-list-panel">
+            <div class="md-layout md-gutter">
+                <div class="md-layout-item zf-list-panel">
                     <h5 class="panel-title">
                         Servers
                         <md-button class="md-raised md-primary zf-icon-button zf-top-minus-5 my-0"
@@ -34,7 +57,7 @@
                                 <md-icon class="md-primary">computer</md-icon>
                                 <div class="md-list-item-text">
                                     <span>
-                                        <router-link class="nav-link" :to="'/s/' + server.slug">
+                                        <router-link class="nav-link" :to="'/dashboard/' + server.slug">
                                             {{server.name}}
                                         </router-link>
                                     </span>
@@ -56,7 +79,7 @@
                         </md-list>
                     </div>
                 </div>
-                <div class="col-md-6 zf-list-panel">
+                <div class="md-layout-item zf-list-panel">
                     <h5 class="panel-title">
                         Users
                         <md-button class="md-raised md-primary zf-icon-button zf-top-minus-5 my-0"
@@ -145,6 +168,8 @@
                 dialogContent: '',
                 dialogConfirmText: '',
                 errors: [],
+                hasDescriptionChanged: false,
+                isEdit: false,
                 item: {},
                 servers: [],
                 selectedServerForAddEdit: {
@@ -154,6 +179,7 @@
                 showUserAddEdit: false,
                 showDeleteConfirmDialog: false,
                 showServerAddEdit: false,
+                synceAccountData: {},
                 users: []
             }
         },
@@ -164,6 +190,7 @@
                     console.log('account data: ', response);
 
                     this.account = response.data;
+                    this.synceAccountData = _.clone(this.account);
                     this.servers = response.data.servers;
                     this.users = response.data.users;
                 })
@@ -191,6 +218,28 @@
                 }
 
                 this.showServerAddEdit = true;
+            },
+
+            onDescriptionChanged: function() {
+                this.hasDescriptionChanged = this.account.description !== this.synceAccountData.description;
+            },
+
+            saveDescription: function() {
+                let url = '/api/v1/accounts/' + this.account.id;
+                let payload = _.pick(this.account, 'name', 'description');
+
+                this.hasDescriptionChanged = false;
+                this.isEdit = false;
+
+                HTTP.put(url, payload)
+                    .then(response => {
+                        this.showDeleteConfirmDialog = false;
+                        this.account = response.data.record;
+                        this.synceAccountData = _.clone(this.account);
+                    })
+                    .catch(e => {
+                        this.errors.push(e);
+                    });
             },
 
             deleteServer: function(server) {

@@ -9,8 +9,8 @@
             <div class="md-toolbar-tools">
                 <h3>
                     Edit Player - {{item.username}}
-                    <md-button class="md-icon-button close-button" @click.stop="showDialog = false">
-                        <i class="material-icons clickable" aria-label="Close dialog">clear</i>
+                    <md-button class="md-icon-button close-button mr-2 mt-2" @click.stop="showDialog = false">
+                        <i class="material-icons clickable pt-2" aria-label="Close dialog">clear</i>
                     </md-button>
                 </h3>
             </div>
@@ -22,58 +22,58 @@
                 </div>
                 <div class="col-8">
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-5">
                             Last Login:
                         </div>
-                        <div class="col-4">
+                        <div class="col-7">
                             {{item.last_login}}
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-5">
                             Steam Profile:
                         </div>
-                        <div class="col-4">
-                            <a :href="item.steam_profile" target="_new">{{item.steam_profile}}</a>
+                        <div class="col-7">
+                            <a :href="item.steam_profile" target="_new">{{item.steamName}}</a>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-5">
                             Steam ID:
                         </div>
-                        <div class="col-4">
+                        <div class="col-7">
                             {{item.steam_id}}
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-5">
                             Combat ID:
                         </div>
-                        <div class="col-4">
+                        <div class="col-7">
                             {{item.short_id}}
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-5">
                             VAC Bans:
                         </div>
-                        <div class="col-4">
+                        <div class="col-7">
                             {{item.steam_vacban_count}}
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-5">
                             Game Bans:
                         </div>
-                        <div class="col-4">
+                        <div class="col-7">
                             {{item.steam_gameban_count}}
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-5">
                             Days Since Last Ban:
                         </div>
-                        <div class="col-4">
+                        <div class="col-7">
                             {{item.steam_days_since_last_ban}}
                         </div>
                     </div>
@@ -81,9 +81,9 @@
             </div>
         </md-dialog-content>
 
-        <md-divider class="mt-4"></md-divider>
+        <md-divider class="my-2"></md-divider>
 
-        <div class="container-fluid mb-4">
+        <div class="container-fluid mb-2">
             <div class="row">
                 <div class="col">
                     <div class="pl-0" v-if="!currentOnly">
@@ -123,6 +123,7 @@
 
 <script>
     import {HTTP} from '../app';
+    import format from 'date-fns/format';
 
     export default {
         props: [
@@ -197,7 +198,12 @@
             },
 
             onDialogOpened: function() {
-                this.item = _.clone(this.playerData);
+                let tmp = _.clone(this.playerData);
+                let steamUrl = tmp.steam_profile.split('/');
+                tmp.steamName = steamUrl[steamUrl.length - 1] || steamUrl[steamUrl.length - 2];
+                tmp.last_login = format(tmp.last_login, 'MM-DD-YYYY');
+
+                this.item = tmp;
             }
         },
         computed: {

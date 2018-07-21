@@ -24,7 +24,7 @@ class CreateServersTable extends Migration
             $table->string('timezone');
             $table->integer('order')->nullable();
             $table->integer('max_players')->nullable();
-            $table->unsignedTinyinteger('disabled')->default(0);
+            $table->unsignedTinyinteger('is_active')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

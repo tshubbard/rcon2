@@ -27,8 +27,8 @@
                 </div>
                 <div class="form-group row active-switch">
                     <label for="disabled" class="col-md-3 col-form-label">Active</label>
-                    <md-switch id="disabled" name="disabled" class="col-sm-6"
-                               v-model="item.active"
+                    <md-switch id="is_active" name="is_active" value="1" class="col-sm-6"
+                               v-model="item.is_active"
                                aria-label="Server Active on/off toggle"></md-switch>
                 </div>
                 <div class="form-group row">
@@ -124,8 +124,8 @@
              * Validates the server info and saves or provides user feedback on errors
              */
             saveAddEditServerDialog: function() {
-                let url = HTTP.buildUrl('servers');
-                let payload = _.pick(this.item, 'account_id', 'name', 'host', 'port', 'password', 'disabled');
+                let url = HTTP.buildUrl('server');
+                let payload = _.pick(this.item, 'account_id', 'name', 'host', 'port', 'password', 'is_active');
                 let method;
                 let eventName;
 

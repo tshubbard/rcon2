@@ -24,7 +24,7 @@ class Server extends Model
         'host',
         'port',
         'password',
-        'disabled',
+        'is_active',
         'timezone'
     ];
 

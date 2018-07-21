@@ -102,7 +102,18 @@ class ServerController extends Controller
 
         $requestInput['timezone'] = 'America/New_York';
 
+        if(empty($requestInput['is_active']))
+            $requestInput['is_active'] = 0;
+
         $newServer = Server::create($requestInput);
+
+        $c = curl_init('http://localhost:7869/api/server');
+        curl_setopt_array($c, array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => ('server_id=' . $newServer->id . '&operation=server.update')
+        ));
+        curl_exec($c);
 
         return response()->json([
             'success' => true,
@@ -131,8 +142,19 @@ class ServerController extends Controller
             ]);
         }
 
+        if(empty($requestInput['is_active']))
+            $requestInput['is_active'] = 0;
+
         $newServer = Server::find($id);
         $newServer->update($requestInput);
+
+        $c = curl_init('http://localhost:7869/api/server');
+        curl_setopt_array($c, array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => ('server_id=' . $id . '&operation=server.update')
+        ));
+        curl_exec($c);
 
         return response()->json([
             'success' => true,
@@ -167,6 +189,14 @@ class ServerController extends Controller
             ]);
 
         Server::destroy($id);
+
+        $c = curl_init('http://localhost:7869/api/server');
+        curl_setopt_array($c, array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => ('server_id=' . $id . '&operation=server.update')
+        ));
+        curl_exec($c);
 
         return response()->json([
             'success' => true,

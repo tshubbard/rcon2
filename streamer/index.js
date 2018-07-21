@@ -26,6 +26,7 @@ DateTime = require('luxon').DateTime;
 
 Util = require('./inc/Util.js');
 Player = require('./inc/Player.js');
+RconServer = require('./inc/RconServer.js');
 RconWebSocket = require('./inc/RconWebSocket.js');
 RconRustEvents = require('./inc/RconRustEvents.js');
 RconConnectionEvents = require('./inc/RconConnectionEvents.js');
@@ -39,30 +40,10 @@ StreamerEvents = new EventEmitter;
 // **** Setup Server Connections ****
 // **********************************
 
+_servers = {};
+
 StreamerEvents.on('dbready', function(){
-	db.query('SELECT id, host, password, port, timezone FROM servers WHERE disabled = 0', function(error, results, fields){
-		if(error)
-		{
-			console.log('Error retrieving list of servers.');
-			process.exit();
-		}
-
-		_servers = {};
-
-		results.forEach(function(server){
-			_servers[server.id] = {
-				'intervals': [],
-				'timezone': server.timezone
-			};
-
-			_servers[server.id].rcon = new RconWebSocket((server.host + ':' + server.port), server.password);
-			_servers[server.id].player = new Player(server.id);
-			_servers[server.id].scheduler = new Scheduler(server.id);
-
-			_servers[server.id].rcon.connect();
-			RconConnectionEvents.bindEvents(server);
-		});
-	});
+	RconServer.load();
 });
 
 // ***********************
@@ -85,6 +66,10 @@ express_app.post('/api/server', function(req, res){
 		case 'event.update':
 			_servers[server_id].scheduler.handleEventChange(req.body.event_id, req.body.event_type);
 			return res.json({'result': 'success', 'message': 'Event updated.'});
+		break;
+		case 'server.update':
+			RconServer.load(req.body.server_id);
+			return res.json({'result': 'success', 'message': 'Server updated.'});
 		break;
 		case 'player.kick':
 			_servers[server_id].rcon.command('kick ' + req.body.steam_id);

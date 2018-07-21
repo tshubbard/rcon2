@@ -23,7 +23,8 @@
                 <errors-view :errors="errors"></errors-view>
 
                 <div class="form-group row">
-                    <label for="user_name" class="col-md-3 col-form-label">User Name</label>
+                    <label for="user_name" class="col-md-3 col-form-label" v-if="!item.id">Email</label>
+                    <label for="user_name" class="col-md-3 col-form-label" v-if="item.id">User Name</label>
                     <input id="user_name" type="text" class="col-sm-6 form-control"
                            @keyup.enter="enterClicked"
                            @keydown.enter="enterClicked"

@@ -97,7 +97,7 @@
                                         </router-link>
                                     </span>
                                     <span>
-                                        Account Role: {{user.role_id}}
+                                        Account Role: {{user.role_name}}
                                     </span>
                                 </div>
                                 <md-button class="md-icon-button"
@@ -215,7 +215,34 @@
                         max_players: ''
                     };
                 }
-
+                a = {
+                    account: {
+                        billing: true,
+                        delete: true,
+                        edit: true,
+                        view: true,
+                    },
+                    events: {
+                        create: true,
+                        delete: true,
+                        edit: true,
+                        toggleOnOff: true,
+                        view: true,
+                    },
+                    players: {
+                        ban: true,
+                        delete: true,
+                        kick: true,
+                        view: true,
+                    },
+                    servers: {
+                        create: true,
+                        delete: true,
+                        edit: true,
+                        editServerPW: true,
+                        view: true,
+                    },
+                };
                 this.showServerAddEdit = true;
             },
 

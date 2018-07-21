@@ -61,6 +61,16 @@ class User extends Authenticatable
         return $this->belongsToMany(Account::class, 'account_user');
     }
 
+    public function role()
+    {
+        return $this->hasOne(\App\Role::class, 'id', 'role_id');
+    }
+
+    public function accountRoles()
+    {
+
+    }
+
     /**
      * Returns the User's role_id
      *
@@ -117,10 +127,5 @@ class User extends Authenticatable
     {
         // todo: hardcoded "3"/"4" is probably bad
         return $this->role_id === 3 || $this->role_id === 4;
-    }
-
-    public function role()
-    {
-        return $this->hasOne(\App\Role::class, 'id', 'role_id');
     }
 }

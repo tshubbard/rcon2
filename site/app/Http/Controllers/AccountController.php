@@ -55,6 +55,9 @@ class AccountController extends Controller
 
         // weird way to populate account users
         $account->users;
+        foreach($account->users as &$user) {
+            $user->role_name = $user->role->name;
+        }
         $account->servers;
 
         return response()->json($account);

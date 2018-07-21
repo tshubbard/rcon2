@@ -8,13 +8,13 @@
 
         <div class="record-body">
             <div class="account-details md-layout md-gutter">
-                <div class="md-layout-item">
-                    <h5>Description</h5>
+                <div class="md-layout-item zf-list-panel">
+                    <h5 class="panel-title">Description</h5>
                     <div>
                         <div v-if="!isEdit"
                               class="description"
                               name="description"
-                              @click.stop="isEdit = true;">
+                              @click.stop="isEdit = true">
                             {{ account.description }}
                         </div>
 
@@ -65,12 +65,12 @@
                                         Max Players: {{server.max_players}}
                                     </span>
                                 </div>
-                                <md-button class="md-icon-button md-list-action"
+                                <md-button class="md-icon-button"
                                            @click.stop="addEditServer(server)">
                                     <md-tooltip>Edit Server</md-tooltip>
                                     <md-icon>mode_edit</md-icon>
                                 </md-button>
-                                <md-button class="md-icon-button md-list-action"
+                                <md-button class="md-icon-button"
                                            @click.stop="deleteServer(server)">
                                     <md-tooltip>Delete Server from Account</md-tooltip>
                                     <md-icon>delete</md-icon>
@@ -102,12 +102,12 @@
                                         Account Role: {{user.role_id}}
                                     </span>
                                 </div>
-                                <md-button class="md-icon-button md-list-action"
+                                <md-button class="md-icon-button"
                                            @click.stop="addEditUser(user)">
                                     <md-tooltip>Edit User on Account</md-tooltip>
                                     <md-icon>mode_edit</md-icon>
                                 </md-button>
-                                <md-button class="md-icon-button md-list-action"
+                                <md-button class="md-icon-button"
                                            @click.stop="removeUser(user)">
                                     <md-tooltip>Delete User from Account</md-tooltip>
                                     <md-icon>delete</md-icon>

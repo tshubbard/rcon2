@@ -18,6 +18,7 @@ class CreateAccountsTable extends Migration
             $table->string('name')->index();
             $table->string('slug')->index()->unique();
             $table->unsignedInteger('owner_id')->index();
+            $table->unsignedSmallInteger('user_count')->default(0);
             $table->text('description');
             $table->timestamps();
             $table->softDeletes();

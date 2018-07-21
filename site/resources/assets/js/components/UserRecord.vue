@@ -6,18 +6,17 @@
 
         <errors-view :errors="errors"></errors-view>
 
-        <div class="container-fluid">
-            <div class="row record-body">
-                <div class="col-md-6">
+        <div class="record-body">
+            <div class="user-details md-layout md-gutter">
+                <div class="md-layout-item">
                     <h5>User Info</h5>
                     <div>
                         <label for="name">Email: </label>
                         <span class="name" id="name" name="name">{{ user.email }}</span>
                     </div>
                 </div>
-                <div class="col-md-6">
-
-                    <h5 v-cloak>
+                <div class="md-layout-item zf-list-panel">
+                    <h5 class="panel-title" v-cloak>
                         Accounts Info
                         <md-button class="md-raised md-primary zf-icon-button zf-top-minus-10"
                                    @click.stop="showAddEditAccount()">
@@ -25,35 +24,39 @@
                         </md-button>
                     </h5>
 
-                    <div>
-                        <ul class="user-accounts">
-                            <li v-for="acct in accounts">
-                                <router-link class="nav-link display-inline-block" :to="'/a/' + acct.slug">
-                                    {{acct.name}}
-                                </router-link>
-                                <span class="server-actions float-right">
-
-                                    <md-button class="md-raised md-primary zf-icon-button zf-top-minus-15 my-0"
-                                               @click.stop="showAddEditAccount(acct)">
-                                        <md-tooltip md-direction="top">Edit Account</md-tooltip>
-                                        <md-icon>mode_edit</md-icon>
-                                    </md-button>
-                                    <md-button v-if="acct.owner_id === user.id"
-                                               class="md-raised md-accent zf-icon-button zf-top-minus-15 my-0 mr-0"
-                                               @click.stop="removeAccount(acct)">
-                                        <md-tooltip md-direction="top">Delete Account</md-tooltip>
-                                        <md-icon>delete</md-icon>
-                                    </md-button>
-                                    <md-button v-if="acct.owner_id !== user.id"
-                                               class="md-raised md-accent zf-icon-button zf-top-minus-15 my-0 mr-0"
-                                               @click.stop="leaveAccount(acct)">
-                                        <md-tooltip md-direction="top">Leave Account</md-tooltip>
-                                        <md-icon>exit_to_app</md-icon>
-                                    </md-button>
-                                </span>
-                            </li>
-                        </ul>
-
+                    <div class="panel-body">
+                        <md-list class="md-double-line zf-list servers-list">
+                            <md-list-item v-for="acct in accounts" :key="acct.id">
+                                <md-icon class="md-primary">group</md-icon>
+                                <div class="md-list-item-text">
+                                    <span>
+                                        <router-link class="nav-link display-inline-block" :to="'/a/' + acct.slug">
+                                            {{acct.name}}
+                                        </router-link>
+                                    </span>
+                                    <span>
+                                        Members: {{acct.user_count}}
+                                    </span>
+                                </div>
+                                <md-button class="md-icon-button"
+                                           @click.stop="showAddEditAccount(acct)">
+                                    <md-tooltip md-direction="top">Edit Account</md-tooltip>
+                                    <md-icon>mode_edit</md-icon>
+                                </md-button>
+                                <md-button v-if="acct.owner_id === user.id"
+                                           class="md-icon-button"
+                                           @click.stop="removeAccount(acct)">
+                                    <md-tooltip md-direction="top">Delete Account</md-tooltip>
+                                    <md-icon>delete</md-icon>
+                                </md-button>
+                                <md-button v-if="acct.owner_id !== user.id"
+                                           class="md-icon-button"
+                                           @click.stop="leaveAccount(acct)">
+                                    <md-tooltip md-direction="top">Leave Account</md-tooltip>
+                                    <md-icon>exit_to_app</md-icon>
+                                </md-button>
+                            </md-list-item>
+                        </md-list>
                     </div>
                 </div>
             </div>

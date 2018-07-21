@@ -61,12 +61,12 @@
                                                 </span>
                                                 <span>Event Type: {{event.event_type}}</span>
                                             </div>
-                                            <md-button class="md-icon-button md-list-action"
+                                            <md-button class="md-icon-button"
                                                        @click.stop="showAddEditServerEvent(event)">
                                                 <md-tooltip>Edit Server Event</md-tooltip>
                                                 <md-icon>mode_edit</md-icon>
                                             </md-button>
-                                            <md-button class="md-icon-button md-list-action"
+                                            <md-button class="md-icon-button"
                                                        @click.stop="removeServerEvent(event)">
                                                 <md-tooltip>Delete Server Event</md-tooltip>
                                                 <md-icon>delete</md-icon>

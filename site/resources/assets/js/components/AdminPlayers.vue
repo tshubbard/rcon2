@@ -38,12 +38,12 @@
                             Max Players: {{row.short_id}}
                         </span>
                     </div>
-                    <md-button class="md-icon-button md-list-action"
+                    <md-button class="md-icon-button"
                                @click.stop="editPlayer(row)">
                         <md-tooltip>User Info</md-tooltip>
                         <md-icon>info</md-icon>
                     </md-button>
-                    <md-button class="md-icon-button md-list-action"
+                    <md-button class="md-icon-button"
                                @click.stop="deletePlayer(row)">
                         <md-tooltip>Delete User Info</md-tooltip>
                         <md-icon>delete</md-icon>

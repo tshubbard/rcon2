@@ -38,6 +38,7 @@
     </div>
 </template>
 <script>
+    import {HTTP} from '../app';
     import ServerAddEdit from './ServerAddEdit';
 
     export default {
@@ -52,12 +53,18 @@
             }
         },
         created: function() {
-            $.get('/api/v1/admin/servers', function(data) {
-                console.log('data: ', data);
+            let url = HTTP.buildUrl('admin/servers');
 
-                this.servers = data.servers;
+            HTTP.get(url)
+                .then(response => {
+                    console.log('server data: ', response);
+                    this.servers = response.data.servers;
+                })
+                .catch(e => {
+                    console.error('[API Error] ', url, e);
 
-            }.bind(this), 'json');
+                    this.errors.push(e)
+                });
         },
         methods: {
             editServer: function(serverData){

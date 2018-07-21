@@ -75,38 +75,42 @@
             }
         },
         created: function() {
-            HTTP.get('/api/v1/admin/users')
+            let url = HTTP.buildUrl('admin/users');
+            HTTP.get(url)
                 .then(response => {
                     console.log('response: ', response);
                     this.thisUser = response.data.thisUser;
                     this.users = response.data.users;
                 })
                 .catch(e => {
-                    console.log('/admin/users error: ', e);
+                    console.error('[API Error] ', url, e);
                     this.errors.push(e)
                 });
         },
         methods: {
             deleteUser: function(user) {
-                HTTP.delete('/api/v1/admin/user/' + user.id)
+                let url = HTTP.buildUrl('admin/users/' + user.id);
+                HTTP.delete(url)
                     .then(response => {
                         this.users = _.reject(this.users, user);
                     })
                     .catch(e => {
-                        console.log('/admin/users/' + user.id + ' deleteUser error: ', e);
+                        console.error('[API Error] ', url, e);
                         this.errors.push(e)
                     });
             },
 
             changeRoleId: function(user, isPromotion) {
                 let roleId = +user.role_id;
+                let url = HTTP.buildUrl('admin/users/' + user.id);
+
                 if (isPromotion) {
                     roleId++;
                 } else {
                     roleId--;
                 }
 
-                HTTP.put('/api/v1/admin/user/' + user.id, {
+                HTTP.put(url, {
                         role_id: roleId
                     })
                     .then(_.bind(response => {
@@ -117,7 +121,7 @@
                         }, this);
                     }, this))
                     .catch(e => {
-                        console.log('/admin/users/' + user.id + ' changeAdmin error: ', e);
+                        console.error('[API Error] ', url, e);
                         this.errors.push(e)
                     });
 

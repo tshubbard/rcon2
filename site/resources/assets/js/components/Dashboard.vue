@@ -160,8 +160,10 @@
         created: function() {
             let serverId = +this.$route.params.serverId;
             let items = localStorage.getItem('rustItems');
+            let serverUrl = HTTP.buildUrl('user/servers');
+            let itemsUrl = HTTP.buildUrl('items');
 
-            HTTP.get('/api/v1/user/servers')
+            HTTP.get(serverUrl)
                 .then(response => {
                     this.servers = response.data;
 
@@ -195,21 +197,21 @@
                     console.log('selectedServer: ', this.selectedServer);
                 })
                 .catch(e => {
-                    console.log('/api/v1/user/servers error ', e);
+                    console.error('[API Error] ', serverUrl, e);
 
                     this.errors.push(e)
                 });
 
             // todo: set up a latest items ID/hash/timestamp so we dont get this every time
             //if (!items) {
-                HTTP.get('/api/v1/items')
+                HTTP.get(itemsUrl)
                     .then(response => {
                         console.log('ITEMS data: ', response.data);
                         this.rustItems = response.data.items;
                         localStorage.setItem('rustItems', JSON.stringify(this.rustItems));
                     })
                     .catch(e => {
-                        console.log('/api/v1/items error ', e);
+                        console.error('[API Error] ', itemsUrl, e);
 
                         this.errors.push(e)
                     });
@@ -287,11 +289,14 @@
              */
             toggleEventActive: function(event) {
                 let active = event.is_active ? 1 : 0;
-                HTTP.put('/api/v1/serverEvent/' + event.id + '/active/' + active)
+                let url = HTTP.buildUrl('serverEvent/' + event.id + '/active/' + active);
+                HTTP.put(url)
                     .then(response => {
                         console.log('response.data ', response.data);
                     })
                     .catch(e => {
+                        console.error('[API Error] ', url, e);
+
                         this.errors.push(e)
                     })
             },
@@ -306,8 +311,8 @@
              */
             onDeleteServerEventConfirm: function() {
                 console.log('onDeleteServerEventConfirm ', this.selectedDeleteEvent);
-
-                HTTP.delete('/api/v1/serverEvent/' + this.selectedDeleteEvent.id)
+                let url = HTTP.buildUrl('serverEvent/' + this.selectedDeleteEvent.id);
+                HTTP.delete(url)
                     .then(response => {
                         console.log('response.data ', response.data);
                         this.selectedServer.events = _.reject(this.selectedServer.events, function(evt) {
@@ -315,6 +320,8 @@
                         });
                     })
                     .catch(e => {
+                        console.error('[API Error] ', url, e);
+
                         this.errors.push(e)
                     });
             },

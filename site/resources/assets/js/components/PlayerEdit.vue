@@ -149,7 +149,7 @@
 
             onConfirmDialogConfirm: function() {
 
-                let url = '/api/v1/players/' + this.item.id;
+                let url = HTTP.buildUrl('players/' + this.item.id);
                 let method = 'delete';
 
                 if (this.dialogAction !== 'delete') {
@@ -163,6 +163,8 @@
                         this.showDialog = false;
                     })
                     .catch(e => {
+                        console.error('[API Error] ', url, e);
+
                         this.errors.push(e)
                     });
             },

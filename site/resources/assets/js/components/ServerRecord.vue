@@ -63,8 +63,8 @@
             }
         },
         created: function() {
-
-            HTTP.get('/api/v1/s/' + this.$route.params.serverName)
+            let url = HTTP.buildUrl('s/' + this.$route.params.serverName);
+            HTTP.get(url)
                 .then(response => {
                     console.log('server data: ', response);
 
@@ -73,7 +73,7 @@
                     this.users = response.data.users;
                 })
                 .catch(e => {
-                    console.log('/api/v1/s/' + this.$route.params.serverName + ' error ', e);
+                    console.error('[API Error] ', url, e);
                     this.errors.push(e)
                 });
         },

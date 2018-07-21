@@ -18,6 +18,14 @@ export const HTTP = axios.create({
         Authorization: 'Bearer {token}'
     }
 });
+HTTP._apiVersion = 'v1';
+HTTP.buildUrl = function(path) {
+    if (path[0] === '/') {
+        // remove the leading slash
+        path = path.substr(1);
+    }
+    return '/api/' + this._apiVersion + '/' + path;
+};
 
 if (document.getElementById('app') !== null) {
 
@@ -83,12 +91,13 @@ if (document.getElementById('app') !== null) {
         },
         created: function() {
             if(this.$route.path === '/dashboard') {
-                HTTP.get('/api/v1/user/me')
+                let url = HTTP.buildUrl('user/me');
+                HTTP.get(url)
                     .then(response => {
                         sessionStorage.setItem('accounts', JSON.stringify(response.data.accounts));
                     })
                     .catch(e => {
-                        console.log('/api/v1/user/me error ', e);
+                        console.error('[API Error] ', url, e);
                         this.errors.push(e)
                     });
             }

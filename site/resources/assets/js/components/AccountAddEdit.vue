@@ -115,7 +115,7 @@
             },
 
             saveAddEditAccountDialog: function() {
-                let url = '/api/v1/account';
+                let url = HTTP.buildUrl('accounts');
                 let eventName;
                 let payload = _.pick(this.item, 'name');
                 let method;

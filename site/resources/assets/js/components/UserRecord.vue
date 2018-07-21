@@ -113,12 +113,14 @@
             }
         },
         created: function() {
-            HTTP.get('/api/v1/u/' + this.$route.params.userName)
+            let url = HTTP.buildUrl('u/' + this.$route.params.userName)
+            HTTP.get(url)
                 .then(response => {
                     this.user = response.data;
                     this.accounts = response.data.accounts;
                 })
                 .catch(e => {
+                    console.error('[API Error] ', url, e);
                     this.errors.push(e)
                 });
         },
@@ -129,8 +131,8 @@
 
             onDeleteAccountConfirm: function() {
                 console.log('onDeleteAccountConfirm ', this.selectedDeleteAccount);
-
-                HTTP.delete('/api/v1/account/' + this.selectedDeleteAccount.id)
+                let url = HTTP.buildUrl('account/' + this.selectedDeleteAccount.id);
+                HTTP.delete(url)
                     .then(response => {
                         console.log('response.data ', response.data);
                         this.accounts = _.reject(this.accounts, function(acct) {
@@ -138,6 +140,7 @@
                         });
                     })
                     .catch(e => {
+                        console.error('[API Error] ', url, e);
                         this.errors.push(e)
                     });
             },
@@ -148,8 +151,8 @@
 
             onLeaveAccountConfirm: function() {
                 console.log('onLeaveAccountConfirm ', this.selectedLeaveAccount);
-
-                HTTP.post('/api/v1/account/' + this.selectedLeaveAccount.id + '/leave')
+                let url = HTTP.buildUrl('account/' + this.selectedLeaveAccount.id + '/leave');
+                HTTP.post(url)
                     .then(response => {
                         console.log('response.data ', response.data);
                         this.accounts = _.reject(this.accounts, function(acct) {
@@ -157,6 +160,7 @@
                         });
                     })
                     .catch(e => {
+                        console.error('[API Error] ', url, e);
                         this.errors = e.response.data.errors;
                     });
             },

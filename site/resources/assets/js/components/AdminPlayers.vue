@@ -82,7 +82,7 @@
         },
         created: function() {
             let serverId = sessionStorage.getItem('selected_server_id');
-            let url = '/api/v1/players/' + serverId;
+            let url = HTTP.buildUrl('players/' + serverId);
 
             if (this.currentOnly) {
                 url += '/current';

@@ -105,7 +105,7 @@
             },
 
             saveAddEditAccountDialog: function() {
-                let url = '/api/v1/accounts';
+                let url = HTTP.buildUrl('accounts');
                 let eventName;
                 let payload = _.pick(this.item, 'name');
                 let method;
@@ -132,6 +132,7 @@
                         this.showDialog = false;
                     })
                     .catch(e => {
+                        console.error('[API Error] ', url, e);
                         this.isSaving = false;
 
                         this.errors.push(e)

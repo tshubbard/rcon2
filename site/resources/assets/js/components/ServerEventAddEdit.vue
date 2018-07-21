@@ -549,7 +549,7 @@
              */
             saveAddEditServerEventDialog: function() {
                 let method;
-                let url = '/api/v1/serverEvent';
+                let url = HTTP.buildUrl('serverEvent');
                 let eventName;
                 let payload = _.clone(this.eventData);
                 let tmpDate;
@@ -629,7 +629,7 @@
                         this.showDialog = false;
                     })
                     .catch(e => {
-                        console.log('/api/v1/serverEvent error ', e);
+                        console.error('[API Error] ', url, e);
 
                         this.errors.push(e)
                     });

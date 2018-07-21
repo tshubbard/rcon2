@@ -42,8 +42,8 @@
         },
         created: function() {
             console.log('this: ', this);
-
-            HTTP.get('/api/v1/serverEvents')
+            let url = HTTP.buildUrl('serverEvents');
+            HTTP.get(url)
                 .then(response => {
                     this.serverEvents = response.data;
 
@@ -51,7 +51,7 @@
 
                 })
                 .catch(e => {
-                    console.log('/admin/users error: ', e);
+                    console.error('[API Error] ', url, e);
                     this.errors.push(e)
                 });
         },

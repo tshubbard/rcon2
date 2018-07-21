@@ -184,8 +184,8 @@
             }
         },
         created: function() {
-
-            HTTP.get('/api/v1/a/' + this.$route.params.accountName)
+            let url = HTTP.buildUrl('a/' + this.$route.params.accountName);
+            HTTP.get(url)
                 .then(response => {
                     console.log('account data: ', response);
 
@@ -195,7 +195,8 @@
                     this.users = response.data.users;
                 })
                 .catch(e => {
-                    console.log('/api/v1/a/' + this.$route.params.accountName + ' error ', e);
+                    console.error('[API Error] ', url, e);
+
                     this.errors.push(e)
                 });
         },
@@ -225,7 +226,7 @@
             },
 
             saveDescription: function() {
-                let url = '/api/v1/accounts/' + this.account.id;
+                let url = HTTP.buildUrl('accounts/' + this.account.id);
                 let payload = _.pick(this.account, 'name', 'description');
 
                 this.hasDescriptionChanged = false;
@@ -238,6 +239,7 @@
                         this.synceAccountData = _.clone(this.account);
                     })
                     .catch(e => {
+                        console.error('[API Error] ', url, e);
                         this.errors.push(e);
                     });
             },
@@ -304,7 +306,7 @@
             },
 
             onConfirmDialogConfirm: function() {
-                let url = '/api/v1/accounts/' + this.account.id + '/' + this.dialogAction + '/' + this.item.id;
+                let url = HTTP.buildUrl('accounts/' + this.account.id + '/' + this.dialogAction + '/' + this.item.id);
 
                 HTTP.post(url)
                     .then(response => {
@@ -320,6 +322,7 @@
                         }
                     })
                     .catch(e => {
+                        console.error('[API Error] ', url, e);
                         this.errors.push(e);
                     });
             },

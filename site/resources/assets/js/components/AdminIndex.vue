@@ -23,6 +23,8 @@
     </div>
 </template>
 <script>
+    import {HTTP} from '../app';
+
     export default {
         data: function() {
             return {
@@ -34,12 +36,19 @@
             }
         },
         created: function() {
-            $.get('/api/v1/admin', function(data) {
-                console.log('data: ', data);
+            let url = HTTP.buildUrl('admin');
 
-                this.data = data;
+            HTTP.get(url)
+                .then(response => {
+                    console.log('data: ', response.data);
 
-            }.bind(this), 'json');
+                    this.data = response.data;
+                })
+                .catch(e => {
+                    console.error('[API Error] ', url, e);
+
+                    this.errors.push(e)
+                });
         },
         methods: {
         },

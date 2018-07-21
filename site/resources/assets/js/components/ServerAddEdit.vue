@@ -124,7 +124,7 @@
              * Validates the server info and saves or provides user feedback on errors
              */
             saveAddEditServerDialog: function() {
-                let url = '/api/v1/servers';
+                let url = HTTP.buildUrl('servers');
                 let payload = _.pick(this.item, 'account_id', 'name', 'host', 'port', 'password', 'disabled');
                 let method;
                 let eventName;
@@ -153,6 +153,8 @@
                         this.showConfirmDialog = false;
                     })
                     .catch(e => {
+                        console.error('[API Error] ', url, e);
+
                         this.errors.push(e);
                     });
             },

@@ -22,5 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PlayersTableSeeder::class);
         $this->call(PlayersCurrentTableSeeder::class);
         $this->call(KillsTableSeeder::class);
+        $this->call(TagsTableSeeder::class);
+        $this->call(ServerEventTagTableSeeder::class);
     }
 }

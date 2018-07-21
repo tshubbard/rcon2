@@ -32,8 +32,6 @@
                                 <md-icon class="md-size-2x">save</md-icon>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
                 <div class="md-layout-item">
@@ -45,7 +43,7 @@
                 <div class="md-layout-item zf-list-panel">
                     <h5 class="panel-title">
                         Servers
-                        <md-button class="md-raised md-primary zf-icon-button zf-top-minus-5 my-0"
+                        <md-button class="md-raised md-primary zf-icon-button my-0"
                                    @click.stop="addEditServer()">
                             <md-tooltip>Add Server</md-tooltip>
                             <md-icon>add</md-icon>
@@ -82,7 +80,7 @@
                 <div class="md-layout-item zf-list-panel">
                     <h5 class="panel-title">
                         Users
-                        <md-button class="md-raised md-primary zf-icon-button zf-top-minus-5 my-0"
+                        <md-button class="md-raised md-primary zf-icon-button my-0"
                                    @click.stop="addEditUser()">
                             <md-tooltip>Add User to Account</md-tooltip>
                             <md-icon>add</md-icon>

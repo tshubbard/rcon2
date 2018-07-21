@@ -404,8 +404,6 @@ class ItemsTableSeeder extends Seeder
                 'name' => $item['name'],
                 'console_id' => $item['console_id'],
                 'item_type_id' => $item['item_type_id'],
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ]);
         }
     }

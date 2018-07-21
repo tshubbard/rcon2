@@ -17,11 +17,11 @@ class RolesTableSeeder extends Seeder
         ]);
         DB::table('roles')->insert([
             'id' => 2,
-            'name' => 'User',
+            'name' => 'Site User',
         ]);
         DB::table('roles')->insert([
             'id' => 3,
-            'name' => 'Moderator',
+            'name' => 'Site Moderator',
         ]);
         DB::table('roles')->insert([
             'id' => 4,

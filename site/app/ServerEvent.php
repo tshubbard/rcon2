@@ -33,6 +33,11 @@ class ServerEvent extends Model
         'end_date',
     ];
 
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'server_event_tag', 'server_event_id', 'tag_id');
+
+    }
 
     /**
      * Scope a query to only include public server events.

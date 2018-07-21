@@ -549,7 +549,7 @@
              */
             saveAddEditServerEventDialog: function() {
                 let method;
-                let url = HTTP.buildUrl('serverEvent');
+                let url = HTTP.buildUrl('serverEvents');
                 let eventName;
                 let payload = _.clone(this.eventData);
                 let tmpDate;

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAccountUserTable extends Migration
+class ServerEventTagTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateAccountUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('account_user', function (Blueprint $table) {
+        Schema::create('server_event_tag', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id')->index();
-            $table->unsignedInteger('account_id')->index();
+            $table->unsignedInteger('server_event_id')->index();
+            $table->unsignedInteger('tag_id')->index();
         });
     }
 
@@ -27,6 +27,7 @@ class CreateAccountUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('account_user');
+        Schema::dropIfExists('server_event_tag');
+
     }
 }

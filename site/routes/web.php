@@ -48,12 +48,11 @@ Route::group(['middleware' => ['auth']], function () {
 
     // ServerEventController
     Route::get('/api/v1/serverEvents', 'ServerEventController@eventsList');
-    Route::get('/api/v1/serverEvents/{serverId}', 'ServerEventController@index');
-    Route::get('/api/v1/serverEvent/{serverEvent}', 'ServerEventController@show');
-    Route::post('/api/v1/serverEvent', 'ServerEventController@store');
-    Route::put('/api/v1/serverEvent/{serverEvent}', 'ServerEventController@update');
-    Route::put('/api/v1/serverEvent/{serverEvent}/active/{isActive}', 'ServerEventController@updateActive');
-    Route::delete('/api/v1/serverEvent/{serverEvent}', 'ServerEventController@destroy');
+    Route::get('/api/v1/serverEvents/{serverEvent}', 'ServerEventController@show');
+    Route::post('/api/v1/serverEvents', 'ServerEventController@store');
+    Route::put('/api/v1/serverEvents/{serverEvent}', 'ServerEventController@update');
+    Route::put('/api/v1/serverEvents/{serverEvent}/active/{isActive}', 'ServerEventController@updateActive');
+    Route::delete('/api/v1/serverEvents/{serverEvent}', 'ServerEventController@destroy');
 
     // PlayerController
     Route::get('/api/v1/players/{server}', 'PlayerController@index');

@@ -86,6 +86,10 @@ class DashboardController extends Controller
                     ['server_id', '=', $serverData['id']],
                     ['deleted_at', '=', null]
                 ])->get();
+
+                foreach($server['events'] as &$event) {
+                    $event->tags;
+                }
             }
         }
 

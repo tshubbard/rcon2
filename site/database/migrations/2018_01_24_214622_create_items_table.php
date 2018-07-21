@@ -18,7 +18,6 @@ class CreateItemsTable extends Migration
             $table->string('name')->index();
             $table->string('console_id')->index();
             $table->unsignedMediumInteger('item_type_id');
-            $table->timestamps();
         });
     }
 

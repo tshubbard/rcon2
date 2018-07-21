@@ -42,7 +42,7 @@
                                 <div class="panel-top">
                                     <h5 class="panel-title">
                                         Server Events
-                                        <md-button class="md-raised md-primary zf-icon-button zf-top-minus-5 my-0"
+                                        <md-button class="md-raised md-primary zf-icon-button my-0"
                                                    @click.stop="showAddEditServerEvent()">
                                             <md-tooltip>Add New Server Event</md-tooltip>
                                             <md-icon>add</md-icon>
@@ -289,7 +289,7 @@
              */
             toggleEventActive: function(event) {
                 let active = event.is_active ? 1 : 0;
-                let url = HTTP.buildUrl('serverEvent/' + event.id + '/active/' + active);
+                let url = HTTP.buildUrl('serverEvents/' + event.id + '/active/' + active);
                 HTTP.put(url)
                     .then(response => {
                         console.log('response.data ', response.data);
@@ -311,7 +311,7 @@
              */
             onDeleteServerEventConfirm: function() {
                 console.log('onDeleteServerEventConfirm ', this.selectedDeleteEvent);
-                let url = HTTP.buildUrl('serverEvent/' + this.selectedDeleteEvent.id);
+                let url = HTTP.buildUrl('serverEvents/' + this.selectedDeleteEvent.id);
                 HTTP.delete(url)
                     .then(response => {
                         console.log('response.data ', response.data);

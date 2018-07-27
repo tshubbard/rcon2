@@ -35,8 +35,8 @@ if (document.getElementById('app') !== null) {
     const HomeCarousel = Vue.component('home-carousel', require('./components/HomeCarousel.vue'));
     const AdminIndex = Vue.component('admin-index', require('./components/AdminIndex.vue'));
     const AdminUsers = Vue.component('admin-users', require('./components/AdminUsers.vue'));
-    const AdminServers = Vue.component('admin-servers', require('./components/AdminServers.vue'));
-    const AdminPlayers = Vue.component('admin-players', require('./components/AdminPlayers.vue'));
+    const ServersList = Vue.component('servers-list', require('./components/ServersList.vue'));
+    const PlayersList = Vue.component('players-list', require('./components/PlayersList.vue'));
     const ServerEventsList = Vue.component('server-events-list', require('./components/ServerEventsList.vue'));
     const ServerRecord = Vue.component('server-record', require('./components/ServerRecord.vue'));
 
@@ -56,11 +56,11 @@ if (document.getElementById('app') !== null) {
                 'path': '/admin/users',
                 'component': AdminUsers
             }, {
-                'path': '/admin/servers',
-                'component': AdminServers
+                'path': '/servers',
+                'component': ServersList
             }, {
-                'path': '/admin/players',
-                'component': AdminPlayers
+                'path': '/players',
+                'component': PlayersList
             }, {
                 'path': '/dashboard',
                 'component': Dashboard

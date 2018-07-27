@@ -7,7 +7,7 @@
 
         <div class="container-fluid">
             <div class="row record-body">
-                <table class="admin-servers-table table table-hover">
+                <table class="servers-list-table table table-hover">
                     <thead>
                         <th class="text-center">ID</th>
                         <th class="text-center">Name</th>
@@ -53,12 +53,12 @@
             }
         },
         created: function() {
-            let url = HTTP.buildUrl('admin/servers');
+            let url = HTTP.buildUrl('servers');
 
             HTTP.get(url)
                 .then(response => {
                     console.log('server data: ', response);
-                    this.servers = response.data.servers;
+                    this.servers = response.data;
                 })
                 .catch(e => {
                     console.error('[API Error] ', url, e);

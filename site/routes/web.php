@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth']], function () {
     // ServerController
     Route::get('/api/v1/server/{serverId}', 'ServerController@show');
     Route::get('/api/v1/s/{serverId}', 'ServerController@showJSON');
+    Route::get('/api/v1/servers', 'ServerController@serversIndexJSON');
 
     Route::post('/api/v1/server', 'ServerController@store');
     Route::put('/api/v1/server/{serverId}', 'ServerController@update');
@@ -76,6 +77,4 @@ Route::group(['middleware' => ['admin']], function () {
     Route::get('/api/v1/admin/users', 'AdminController@usersIndexJSON');
     Route::put('/api/v1/admin/users/{userId}', 'AdminController@update');
     Route::delete('/api/v1/admin/users/{userId}', 'AdminController@destroy');
-
-    Route::get('/api/v1/admin/servers', 'AdminController@serversIndexJSON');
 });

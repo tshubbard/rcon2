@@ -65,6 +65,29 @@ class ServerController extends Controller
     }
 
     /**
+     * API - Send the servers on a user's account in JSON
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function serversIndexJSON(Request $request)
+    {
+        // get all the accounts a user is assigned to
+        $accounts = Auth::user()->accounts;
+        $servers = [];
+
+        // loop over accounts and get servers for each account
+        foreach($accounts as $account) {
+            foreach($account->servers as $server) {
+                $server_array = $server->toArray();
+                $servers[$server_array['id']] = $server_array;
+            }
+        }
+
+        return response()->json($servers);
+    }
+
+    /**
      * Store a newly created resource in storage.  POST /server
      *
      * @param  \Illuminate\Http\Request  $request

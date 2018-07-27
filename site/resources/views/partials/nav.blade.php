@@ -29,18 +29,16 @@
                                      to="/admin/users">Users</router-link>
                     </li>
                 @endif
-                @if(Auth::user()->isAdmin() || Auth::user()->isMod())
-                    <li class="nav-item">
-                        <router-link class="nav-link"
-                                     class-active="active"
-                                     to="/admin/servers">Servers</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link class="nav-link"
-                                     class-active="active"
-                                     to="/admin/players">Players</router-link>
-                    </li>
-                @endif
+                <li class="nav-item">
+                    <router-link class="nav-link"
+                                 class-active="active"
+                                 to="/servers">Servers</router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link class="nav-link"
+                                 class-active="active"
+                                 to="/players">Players</router-link>
+                </li>
                 <li class="nav-item">
                     <router-link class="nav-link"
                                  class-active="active"

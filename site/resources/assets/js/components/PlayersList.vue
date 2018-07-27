@@ -7,7 +7,7 @@
 
             <div class="container-fluid">
                 <div class="row record-body">
-                    <table class="admin-servers-table table table-hover">
+                    <table class="servers-list-table table table-hover">
                         <thead>
                         <th class="text-center">Steam ID</th>
                         <th class="text-center">Combat ID</th>

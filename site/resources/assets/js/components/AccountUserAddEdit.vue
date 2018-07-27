@@ -9,7 +9,7 @@
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h3>
-                    Add/Edit User on Account
+                    {{addEditLabel}} User on Account
                     <md-button
                             class="md-icon-button close-button"
                             @click.stop="showDialog = false">
@@ -83,6 +83,7 @@
         ],
         data: function() {
             return {
+                addEditLabel: '',
                 errors: [],
                 isSaving: false,
                 item: {},
@@ -96,6 +97,7 @@
             onDialogOpened: function(){
                 this.errors = [];
                 this.item = _.clone(this.userData);
+                this.addEditLabel = this.item.id ? 'Edit' : 'Add';
 
                 console.log('this.item: ', this.item);
 

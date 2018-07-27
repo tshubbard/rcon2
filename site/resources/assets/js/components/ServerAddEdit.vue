@@ -9,7 +9,7 @@
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h3>
-                    Add/Edit Server
+                    {{addEditLabel}} Server
                     <md-button class="md-icon-button close-button" @click.stop="showDialog = false">
                         <i class="material-icons clickable" aria-label="Close dialog">clear</i>
                     </md-button>
@@ -110,6 +110,7 @@
         ],
         data: function() {
             return {
+                addEditLabel: '',
                 accounts: {},
                 errors: [],
                 item: {},
@@ -201,6 +202,7 @@
             onDialogOpened: function() {
                 this.errors = [];
                 this.item = _.clone(this.serverData);
+                this.addEditLabel = this.item.id ? 'Edit' : 'Add';
             },
             onDialogClosed: function() {
                 this.errors = [];

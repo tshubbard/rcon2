@@ -29,6 +29,11 @@
                 <li class="nav-item">
                     <router-link class="nav-link"
                                  class-active="active"
+                                 to="/chat">Chat</router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link class="nav-link"
+                                 class-active="active"
                                  to="/serverEvents">Events List</router-link>
                 </li>
             </ul>

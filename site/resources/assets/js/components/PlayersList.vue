@@ -21,17 +21,21 @@
                 <div class="row">
                     <table class="servers-list-table table table-hover">
                         <thead>
-                        <th class="text-center">Steam ID</th>
-                        <th class="text-center">Combat ID</th>
-                        <th class="text-center">Name</th>
-                        <th class="text-center" v-if="!currentOnly">Last Login</th>
+                        <th class="text-center"style="width: 25%">Name</th>
+                        <th class="text-center" style="width: 16.66%">Combat ID</th>
+                        <th class="text-center" style="width: 16.66%">Steam ID</th>
+                        <th class="text-center" v-if="!currentOnly" style="width: 16.66%">Last Login</th>
+                        <th class="text-center" style="width: 16.66%">Game Bans</th>
+                        <th class="text-center" style="width: 16.66%">VAC Ban</th>
                         </thead>
                         <tbody>
                         <tr v-for="row in players" v-on:click="editPlayer(row)">
-                            <td class="text-center">{{row.steam_id}}</td>
-                            <td class="text-center">{{row.short_id}}</td>
                             <td>{{row.username}}</td>
+                            <td class="text-center">{{row.short_id}}</td>
+                            <td class="text-center">{{row.steam_id}}</td>
                             <td v-if="!currentOnly">{{row.last_login}}</td>
+                            <td class="text-center">{{row.steam_gameban_count}}</td>
+                            <td class="text-center">{{row.steam_vacban_count}}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -144,9 +148,11 @@
                 if (term.length === 0) {
                     this.players = _.clone(this.syncedPlayers);
                 } else {
-                    this.players = _.filter(this.players, function(player) {
+                    term = term.toLowerCase();
+                    this.players = _.filter(this.syncedPlayers, function(player) {
+                        let userName = player.username.toLowerCase();
                         return (player.short_id && player.short_id.indexOf(term) !== -1) ||
-                            (player.username && player.username.indexOf(term) !== -1) ||
+                            (userName && userName.indexOf(term) !== -1) ||
                             (player.steam_id && player.steam_id.indexOf(term) !== -1);
                     }, this);
                 }

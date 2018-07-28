@@ -131,6 +131,7 @@
             let itemsUrl = HTTP.buildUrl('items');
 
             this.$bus.$on('server-changed', _.bind(this.onSelectedServerChanged, this));
+            this.$bus.$emit('get-selected-server');
 
             HTTP.post(itemsUrl, {
                     items_hash: itemDate
@@ -205,13 +206,15 @@
             },
 
             onSelectedServerChanged: function(changedServer) {
+                console.log('changedServer ', changedServer);
+
                 if (!_.isEmpty(changedServer)) {
                     // add any data parsing we need
                     changedServer.events.forEach(_.bind(function(event) {
                         event.is_active = !!event.is_active;
                         event.is_indefinite = !!event.is_indefinite;
                         event.is_public = !!event.is_public;
-                        event.commands = JSON.parse(event.commands);
+                        event.commands = _.isString(event.commands) ? JSON.parse(event.commands) : event.commands;
                         Utils.updateEventTimer(event);
                     }, this));
 

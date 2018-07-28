@@ -86,7 +86,7 @@ class ServerController extends Controller
         foreach($accounts as $account) {
             foreach($account->servers as $server) {
                 $server_array = $server->toArray();
-                $servers[$server_array['id']] = $server_array;
+                $servers[] = $server_array;
             }
         }
 

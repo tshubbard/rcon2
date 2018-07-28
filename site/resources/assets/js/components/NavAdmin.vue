@@ -88,7 +88,6 @@
 </template>
 <script>
     import ServerSelect from './ServerSelect';
-
     export default {
         props: [
             'authedUserData'

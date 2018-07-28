@@ -10,7 +10,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="app-navbar-collapse">
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav">
                 <li class="nav-item">
                     <router-link class="nav-link"
                                  class-active="active"
@@ -37,10 +37,11 @@
                                  to="/serverEvents">Events List</router-link>
                 </li>
             </ul>
+            <server-select></server-select>
+
             <!-- Right Side Of Navbar -->
             <ul class="nav justify-content-end">
                 <!-- Authentication Links -->
-                <server-select></server-select>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                        aria-expanded="false" aria-haspopup="true">

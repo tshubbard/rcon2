@@ -2,23 +2,7 @@
     <div class="dashboard" v-cloak>
         <md-content>
 
-        <div class="container-fluid">
-            <div class="row dashboard-summary">
-                <div class="col-md-5">
-                </div>
-                <div class="col-md-2 add-edit-server-buttons">
-                    <span class="server-actions" v-if="servers.length">
-                        <i class="material-icons clickable" aria-hidden="true"
-                           @click.stop="showEditServer()" v-cloak>edit</i>
-                    </span>
-                    <span class="server-actions">
-                        <i class="material-icons clickable" aria-hidden="true"
-                            v-cloak>add_box</i>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="container-fluid">
+        <div class="container-fluid dashboard-summary">
             <div class="row">
                 <div class="col-md-12">
                     <div class="container-fluid">

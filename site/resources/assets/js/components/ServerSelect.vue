@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <div class="navbar-nav mr-auto server-select">
         <div v-if="servers.length === 1">
             Server: {{servers[0].name}}
         </div>
         <div v-if="servers.length > 1">
             <md-field>
-                <label for="selected-server">Servers:</label>
+                <label for="selected-server">Server Select:</label>
                 <md-select id="selected-server" name="selected-server"
                            v-model="selectedServerId"
                            @input="updateSelectedServer">
@@ -23,10 +23,6 @@
     import {HTTP} from '../app';
 
     export default {
-        props: [
-            'serversData',
-            'selectedServerData'
-        ],
         data: function() {
             return {
                 selectedServer: {},
@@ -40,6 +36,8 @@
             HTTP.get(serverUrl)
                 .then(response => {
                     this.servers = response.data;
+
+                    console.log('s#$%#$%#$ ', response);
 
                     if (serverId) {
                         this.selectedServer = _.find(this.servers, function(server) {
@@ -79,13 +77,6 @@
             },
         },
         watch: {
-            serversData: function(data) {
-                this.servers = _.clone(data);
-            },
-            selectedServerData: function(data) {
-                this.selectedServer = _.clone(data);
-                this.selectedServerId = this.selectedServer.id;
-            }
         },
         computed: {
         }

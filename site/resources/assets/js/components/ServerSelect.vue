@@ -1,7 +1,7 @@
 <template>
     <div class="navbar-nav mr-auto server-select">
-        <div v-if="servers.length === 1">
-            Server: {{servers[0].name}}
+        <div class="single-server-name" v-if="servers.length === 1" :title="selectedServer.name">
+            Server: {{serverName}}
         </div>
         <div v-if="servers.length > 1">
             <md-field>
@@ -39,27 +39,25 @@
                 .then(response => {
                     this.servers = response.data;
 
-
-                    console.log('GOT SERVERS ', response);
-
                     if (serverId) {
                         this.selectedServer = _.find(this.servers, function(server) {
                             return server.id === serverId;
-                        })
+                        });
                     } else {
                         if(this.servers.length > 0) {
                             this.selectedServer = this.servers[0];
+                        }
+
+                        if(this.servers.length === 1) {
+                            this.serverName = this.selectedServer.name.length > 25 ?
+                                this.selectedServer.name.substr(0, 25) + '...' :
+                                this.selectedServer.name;
                         }
                     }
 
                     this.selectedServerId = this.selectedServer.id;
 
                     sessionStorage.setItem('selected_server_id', this.selectedServerId);
-
-                    //console.log('user/servers data ', response);
-                    //console.log('this.servers ', this.servers);
-                    //console.log('selectedServer: ', this.selectedServer);
-                    console.log('---- trigerring change server', );
 
                     this.$bus.$emit('server-changed', this.selectedServer);
                 })
@@ -78,6 +76,12 @@
                 this.selectedServer = _.find(this.servers, function(server) {
                     return server.id === serverId;
                 });
+
+                this.selectedServerId = this.selectedServer.id;
+
+                console.log('server id set to ', this.selectedServerId);
+
+                sessionStorage.setItem('selected_server_id', this.selectedServerId);
 
                 this.$bus.$emit('server-changed', this.selectedServer);
             },

@@ -95,21 +95,9 @@
             }
         },
         created: function() {
-            let serverId = sessionStorage.getItem('selected_server_id');
-            let url = HTTP.buildUrl('players/' + serverId);
+            this.$bus.$on('server-changed', _.bind(this.getPlayersData, this));
 
-            if (this.currentOnly) {
-                url += '/current';
-            }
-
-            HTTP.get(url)
-                .then(response => {
-                    this.players = response.data.players;
-                    this.syncedPlayers = _.clone(this.players);
-                })
-                .catch(e => {
-                    this.errors.push(e)
-                });
+            this.getPlayersData();
         },
         methods: {
             editPlayer: function(playerData) {
@@ -126,6 +114,29 @@
 
             deletePlayer: function(playerData) {
 
+            },
+
+            onSelectedServerChanged: function(changedServer) {
+
+            },
+
+            getPlayersData: function() {
+                let serverId = sessionStorage.getItem('selected_server_id');
+                let url = HTTP.buildUrl('players/' + serverId);
+                console.log('getPlayersData serverId ', serverId);
+
+                if (this.currentOnly) {
+                    url += '/current';
+                }
+
+                HTTP.get(url)
+                    .then(response => {
+                        this.players = response.data.players;
+                        this.syncedPlayers = _.clone(this.players);
+                    })
+                    .catch(e => {
+                        this.errors.push(e)
+                    });
             }
         },
         watch: {

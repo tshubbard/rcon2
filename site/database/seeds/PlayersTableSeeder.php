@@ -59,7 +59,7 @@ class PlayersTableSeeder extends Seeder
             array(
                 "server_id" => 1,
                 "steam_id" =>"76561197993023958",
-                "short_id" => NULL,
+                "short_id" => "1234567",
                 "username" => "Haelix",
                 "last_steam_sync" => "2018-01-24 22:57:57",
                 "steam_profile" => "http://steamcommunity.com/id/haelix70/",

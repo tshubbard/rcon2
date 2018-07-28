@@ -27,7 +27,7 @@
                 </div>
                 <div class="form-group row active-switch">
                     <label for="disabled" class="col-md-3 col-form-label">Active</label>
-                    <md-switch id="is_active" name="is_active" value="1" class="col-sm-6"
+                    <md-switch id="is_active" name="is_active" class="col-sm-6"
                                v-model="item.is_active"
                                aria-label="Server Active on/off toggle"></md-switch>
                 </div>
@@ -203,6 +203,8 @@
                 this.errors = [];
                 this.item = _.clone(this.serverData);
                 this.addEditLabel = this.item.id ? 'Edit' : 'Add';
+
+                this.item.is_active = !!this.item.is_active;
             },
             onDialogClosed: function() {
                 this.errors = [];

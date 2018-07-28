@@ -62,6 +62,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/api/v1/players/{player}/ban', 'PlayerController@ban');
     Route::delete('/api/v1/players/{player}', 'PlayerController@destroy');
 
+    // PlayerController
+    Route::get('/api/v1/chat/{server}', 'ChatController@index');
+
     // UserController
     Route::get('/u/{userName}', 'UserController@show');
     Route::get('/api/v1/u/{userName}', 'UserController@showJSON');

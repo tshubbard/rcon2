@@ -37,6 +37,7 @@ const AdminIndex = Vue.component('admin-index', require('./components/AdminIndex
 const AdminUsers = Vue.component('admin-users', require('./components/AdminUsers.vue'));
 const ServersList = Vue.component('servers-list', require('./components/ServersList.vue'));
 const PlayersList = Vue.component('players-list', require('./components/PlayersList.vue'));
+const ChatList = Vue.component('chat-list', require('./components/ChatList.vue'));
 const ServerEventsList = Vue.component('server-events-list', require('./components/ServerEventsList.vue'));
 const ServerRecord = Vue.component('server-record', require('./components/ServerRecord.vue'));
 
@@ -61,6 +62,9 @@ var router = new VueRouter({
         }, {
             'path': '/players',
             'component': PlayersList
+        }, {
+            'path': '/chat',
+            'component': ChatList
         }, {
             'path': '/dashboard',
             'component': Dashboard

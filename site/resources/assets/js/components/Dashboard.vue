@@ -211,7 +211,7 @@
                     if (!response.data.current) {
                         this.rustItems = response.data.items;
                         localStorage.setItem('rustItems', JSON.stringify(this.rustItems));
-                        localStorage.setItem('rustItemsHash', response.data.rustItemsTS);
+                        localStorage.setItem('rustItemsTS', response.data.rustItemsTS);
                     }
 
                 })

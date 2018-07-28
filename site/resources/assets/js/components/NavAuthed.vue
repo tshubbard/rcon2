@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
-        <a class="navbar-brand" href="{{ url('/') }}">
-            {{ config('app.name', 'rust-rcon') }}
+        <a class="navbar-brand" href="/">
+            Rust ReCON
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#app-navbar-collapse" aria-controls="navbarSupportedContent"
@@ -46,7 +46,7 @@
                         <li>
                             <router-link class="nav-link dropdown-item"
                                          class-active="active"
-                                         to="/u/{{authUser.slug}}">Profile</router-link>
+                                         :to="'/u/' + authUser.slug">Profile</router-link>
                         </li>
                         <li v-if="authUser.role_id === 4">
                             <router-link class="nav-link dropdown-item"
@@ -61,19 +61,26 @@
                             </a>
 
                             <form id="logout-form" action="logout" method="POST" style="display: none;">
-                                {{ csrf_field() }}
+
                             </form>
                         </li>
                     </ul>
                 </li>
-                @endguest
             </ul>
         </div>
     </nav>
 
 </template>
 <script>
+    import ServerSelect from './ServerSelect';
+
     export default {
+        props: [
+            'authedUserData'
+        ],
+        components: {
+            ServerSelect
+        },
         data: function() {
             return {
                 authUser: {}
@@ -81,8 +88,8 @@
         },
         created: function() {
             console.log('this: ', this);
-            this.authUser = _.clone(JSON.parse(sessionStorage.getItem('me')));
 
+            this.authUser = _.clone(this.authedUserData);
         },
         methods: {
         },

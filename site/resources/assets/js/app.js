@@ -111,6 +111,7 @@ var router = new VueRouter({
 Vue.use(VueRouter);
 
 import NavBar from './components/NavBar';
+Vue.use(NavBar);
 
 var app = new Vue({
     el: '#app',

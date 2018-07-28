@@ -193,7 +193,7 @@
                     this.users = response.data.users;
                 })
                 .catch(e => {
-                    console.error('[API Error] ', url, e);
+                    HTTP.logError(url, e);
 
                     this.errors.push(e)
                 });
@@ -237,7 +237,7 @@
                         this.synceAccountData = _.clone(this.account);
                     })
                     .catch(e => {
-                        console.error('[API Error] ', url, e);
+                        HTTP.logError(url, e);
                         this.errors.push(e);
                     });
             },
@@ -320,7 +320,7 @@
                         }
                     })
                     .catch(e => {
-                        console.error('[API Error] ', url, e);
+                        HTTP.logError(url, e);
                         this.errors.push(e);
                     });
             },

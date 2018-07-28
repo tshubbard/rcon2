@@ -45,7 +45,7 @@
                     this.data = response.data;
                 })
                 .catch(e => {
-                    console.error('[API Error] ', url, e);
+                    HTTP.logError(url, e);
 
                     this.errors.push(e)
                 });

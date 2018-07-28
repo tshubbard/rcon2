@@ -83,7 +83,7 @@
                     this.users = response.data.users;
                 })
                 .catch(e => {
-                    console.error('[API Error] ', url, e);
+                    HTTP.logError(url, e);
                     this.errors.push(e)
                 });
         },
@@ -95,7 +95,7 @@
                         this.users = _.reject(this.users, user);
                     })
                     .catch(e => {
-                        console.error('[API Error] ', url, e);
+                        HTTP.logError(url, e);
                         this.errors.push(e)
                     });
             },
@@ -121,7 +121,7 @@
                         }, this);
                     }, this))
                     .catch(e => {
-                        console.error('[API Error] ', url, e);
+                        HTTP.logError(url, e);
                         this.errors.push(e)
                     });
 

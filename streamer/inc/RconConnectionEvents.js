@@ -146,13 +146,10 @@ class RconConnectionEvents {
 				RconConnectionEvents.bindEvents(server);
 			}, Util.toMSeconds(15));
 		});
-	}
 
-	static unbindEvents(server_id)
-	{
-		_servers[server_id].rcon.removeAllListeners('open');
-		_servers[server_id].rcon.removeAllListeners('message');
-		_servers[server_id].rcon.removeAllListeners('error');
+		_servers[server.id].rcon.on('close', function() {
+			console.log('Connection to Rust server [' + server.id + '] ' + server.host + ':' + server.port + ' closed.');
+		});
 	}
 
 	static cleanupIntervals(server_id)

@@ -205,6 +205,8 @@
                 this.item.is_active = !!this.item.is_active;
 
                 this.addEditLabel = this.item.id ? 'Edit' : 'Add';
+
+                this.item.is_active = !!this.item.is_active;
             },
             onDialogClosed: function() {
                 this.errors = [];

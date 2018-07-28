@@ -22,24 +22,7 @@ class PlayerController extends Controller
      */
     public function index(Server $server)
     {
-        $user = Auth::user();
-        $accounts = $user->accounts;
-        $account_valid = false;
-
-        foreach ($accounts as $row) {
-            if ($row['id'] == $server['account_id']) {
-                $account_valid = true;
-            }
-        }
-
-        if (!$account_valid) {
-            return response()->json([
-                'success' => false,
-                'data' => array(
-                    'errors' => 'Invalid account permissions.',
-                ),
-            ]);
-        }
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
 
         return response()->json([
             'players' => $server->players
@@ -55,26 +38,7 @@ class PlayerController extends Controller
      */
     public function current(Server $server)
     {
-        $user = Auth::user();
-        $accounts = $user->accounts;
-        $account_valid = false;
-
-        foreach ($accounts as $row) {
-            if ($row['id'] == $server['account_id']) {
-                $account_valid = true;
-            }
-        }
-
-        if (!$account_valid) {
-            return response()->json(
-                [
-                    'success' => false,
-                    'data' => array(
-                        'errors' => 'Invalid account permissions.',
-                    ),
-                ]
-            );
-        }
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
 
         $players = DB::table('players_current')
             ->join('players', 'players.steam_id', '=', 'players_current.steam_id')
@@ -97,26 +61,7 @@ class PlayerController extends Controller
     {
         $server = Server::find($player->server_id);
 
-        $user = Auth::user();
-        $accounts = $user->accounts;
-        $account_valid = false;
-
-        foreach ($accounts as $row) {
-            if ($row['id'] == $server['account_id']) {
-                $account_valid = true;
-            }
-        }
-
-        if (!$account_valid) {
-            return response()->json(
-                [
-                    'success' => false,
-                    'data' => array(
-                        'errors' => 'Invalid account permissions.',
-                    ),
-                ]
-            );
-        }
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
 
         $c = curl_init('http://localhost:7869/api/server');
         curl_setopt_array(
@@ -145,26 +90,7 @@ class PlayerController extends Controller
     {
         $server = Server::find($player->server_id);
 
-        $user = Auth::user();
-        $accounts = $user->accounts;
-        $account_valid = false;
-
-        foreach ($accounts as $row) {
-            if ($row['id'] == $server['account_id']) {
-                $account_valid = true;
-            }
-        }
-
-        if (!$account_valid) {
-            return response()->json(
-                [
-                    'success' => false,
-                    'data' => array(
-                        'errors' => 'Invalid account permissions.',
-                    ),
-                ]
-            );
-        }
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
 
         $c = curl_init('http://localhost:7869/api/server');
         curl_setopt_array(
@@ -191,6 +117,10 @@ class PlayerController extends Controller
      */
     public function destroy(Player $player)
     {
+        $server = Server::find($player->server_id);
+
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
+
         $player->delete();
         $player->server()->dissociate();
 

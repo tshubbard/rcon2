@@ -18,6 +18,9 @@ class UserController extends Controller
     public function show($userName)
     {
         $user = User::where('name' , '=', $userName)->first();
+
+        if(!$this->checkAccount($user->account_id)) return $this->checkAccountFail();
+
         $accounts = $user->accounts;
         return view('users.show', compact('user', 'accounts'));
     }
@@ -37,6 +40,9 @@ class UserController extends Controller
             $field = 'slug';
         }
         $user = User::where($field , '=', $userSlug)->first();
+
+        if(!$this->checkAccount($user->account_id)) return $this->checkAccountFail();
+
         // weird way to populate user accounts
         $user->accounts;
 

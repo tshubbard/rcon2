@@ -53,6 +53,8 @@ class AccountController extends Controller
         }
         $account = Account::where($field , '=', $accountSlug)->first();
 
+        if(!$this->checkAccount($account->id)) return $this->checkAccountFail();
+
         // weird way to populate account users
         $account->users;
         foreach($account->users as &$user) {
@@ -127,6 +129,8 @@ class AccountController extends Controller
         // don't update the owner_id if it is sent
         unset($requestInput['owner_id']);
 
+        if(!$this->checkAccount($account->id)) return $this->checkAccountFail();
+
         $account->update($requestInput);
 
         return response()->json([
@@ -158,6 +162,8 @@ class AccountController extends Controller
             ], 405);
         }
 
+        if(!$this->checkAccount($account->id)) return $this->checkAccountFail();
+
         $user->accounts()->detach($account->id);
         return response()->json([
             'success' => true,
@@ -188,7 +194,8 @@ class AccountController extends Controller
             ], 405);
         }
 
-        $server->account()->dissociate();
+        $server->delete();
+
         return response()->json([
             'success' => true,
             'record' => $server
@@ -254,6 +261,8 @@ class AccountController extends Controller
      */
     public function destroy(Account $account)
     {
+        if(!$this->checkAccount($account->id)) return $this->checkAccountFail();
+
         $account->delete();
         $account->users()->detach();
 

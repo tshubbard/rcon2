@@ -30,6 +30,9 @@ class ServerController extends Controller
     {
         // get the server by ID and return it
         $server = Server::find($serverId);
+
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
+
         $resp = [
             'server' => $server,
             'events' => []
@@ -57,6 +60,9 @@ class ServerController extends Controller
             $field = 'slug';
         }
         $server = Server::where($field , '=', $serverSlug)->first();
+
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
+
         // weird way to populate $server users
         $server->users;
         $server->servers;
@@ -107,21 +113,7 @@ class ServerController extends Controller
             ]);
         }
 
-        $user = Auth::user();
-        $accounts = $user->accounts;
-        $account_valid = false;
-
-        foreach($accounts as $row)
-            if($row['id'] == $requestInput['account_id'])
-                $account_valid = true;
-
-        if(!$account_valid)
-            return response()->json([
-                'success' => false,
-                'data' => array(
-                    'errors' => 'Invalid account specified.'
-                )
-            ]);
+        if(!$this->checkAccount($requestInput['account_id'])) return $this->checkAccountFail();
 
         $requestInput['timezone'] = 'America/New_York';
 
@@ -169,6 +161,9 @@ class ServerController extends Controller
             $requestInput['is_active'] = 0;
 
         $newServer = Server::find($id);
+
+        if(!$this->checkAccount($newServer->account_id)) return $this->checkAccountFail();
+
         $newServer->update($requestInput);
 
         $c = curl_init('http://localhost:7869/api/server');
@@ -195,21 +190,7 @@ class ServerController extends Controller
     {
         $server = Server::find($id);
 
-        $user = Auth::user();
-        $accounts = $user->accounts;
-        $account_valid = false;
-
-        foreach($accounts as $row)
-            if($row['id'] == $server['account_id'])
-                $account_valid = true;
-
-        if(!$account_valid)
-            return response()->json([
-                'success' => false,
-                'data' => array(
-                    'errors' => 'Invalid account permissions.'
-                )
-            ]);
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
 
         Server::destroy($id);
 

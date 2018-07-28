@@ -80,6 +80,9 @@ class ServerEventController extends Controller
             ]);
         }
 
+        $server = Server::find($requestInput['server_id']);
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
+
         $requestInput['created_by_user_id'] = Auth::user()->id;
         $newServerEvent = ServerEvent::create($requestInput);
 
@@ -121,6 +124,9 @@ class ServerEventController extends Controller
 
         $current_type = $serverEvent->event_type;
 
+        $server = Server::find($serverEvent->server_id);
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
+
         $serverEvent->update($requestInput);
 
         $c = curl_init('http://localhost:7869/api/server');
@@ -160,6 +166,9 @@ class ServerEventController extends Controller
             ]);
         }
 
+        $server = Server::find($serverEvent->server_id);
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
+
         $serverEvent->update($requestInput);
         $serverEvent->is_active = intval($isActive);
 
@@ -182,6 +191,9 @@ class ServerEventController extends Controller
      */
     public function destroy(ServerEvent $serverEvent)
     {
+        $server = Server::find($serverEvent->server_id);
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
+
         ServerEvent::destroy($serverEvent->id);
 
         $c = curl_init('http://localhost:7869/api/server');

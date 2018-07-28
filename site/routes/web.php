@@ -25,7 +25,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/api/v1/accounts', 'AccountController@store');
     Route::post('/api/v1/accounts/{account}/leave', 'AccountController@leave');
     Route::post('/api/v1/accounts/{account}/removeUser/{user}', 'AccountController@removeUser');
-    Route::post('/api/v1/accounts/{account}/removeServer/{user}', 'AccountController@removeServer');
+    Route::post('/api/v1/accounts/{account}/removeServer/{server}', 'AccountController@removeServer');
     Route::put('/api/v1/accounts/{account}', 'AccountController@update');
     Route::delete('/api/v1/accounts/{account}', 'AccountController@destroy');
 

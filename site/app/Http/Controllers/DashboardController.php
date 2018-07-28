@@ -43,6 +43,9 @@ class DashboardController extends Controller
 
         // get the server by ID and return it
         $server = Server::find($serverId);
+
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
+
         $serverData['selectedServer'] = $server;
 
         $serverData = json_encode($serverData);

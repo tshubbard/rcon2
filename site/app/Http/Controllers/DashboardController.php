@@ -16,16 +16,6 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        //$serverData = $this->_getDefaultViewData();
-
-        //if (count($serverData['servers']) === 1) {
-            // if there's only one server, just go to the server page
-            //return redirect('/dashboard/' . $serverData['servers'][0]['id']);
-        //}
-
-        //$serverData = json_encode($serverData);
-
-        //dd($serverData);
         return view('dashboard.dashboard-layout', compact('serverData'));
     }
 
@@ -73,31 +63,6 @@ class DashboardController extends Controller
 
         return $viewData;
     }
-
-	public function servers()
-	{
-	    // get all the accounts a user is assigned to
-	    $accounts = Auth::user()->accounts;
-
-	    // loop over accounts and get servers for each account
-	    foreach ($accounts as $acct) {
-            $servers = $acct->servers;
-            foreach ($servers as &$server) {
-                $serverData = $server->toArray();
-                // get server events for each server
-                $server['events'] = ServerEvent::where([
-                    ['server_id', '=', $serverData['id']],
-                    ['deleted_at', '=', null]
-                ])->get();
-
-                foreach($server['events'] as &$event) {
-                    $event->tags;
-                }
-            }
-        }
-
-		return $servers;
-	}
 
     /**
      * Show the form for creating a new resource.

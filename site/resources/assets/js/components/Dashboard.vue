@@ -108,7 +108,6 @@
             return {
                 errors: [],
                 rustItems: [],
-                servers: [],
                 selectedServerId: -1,
                 selectedServer: {
                     events: []
@@ -128,54 +127,14 @@
             }
         },
         created: function() {
-            let serverId = +this.$route.params.serverId;
             let itemDate = localStorage.getItem('rustItemsTS');
-            let serverUrl = HTTP.buildUrl('user/servers');
             let itemsUrl = HTTP.buildUrl('items');
 
-            HTTP.get(serverUrl)
-                .then(response => {
-                    this.servers = response.data;
+            this.$bus.$on('server-changed', _.bind(this.onSelectedServerChanged, this));
 
-                    // add any data parsing we need
-                    this.servers.forEach(_.bind(function(server) {
-                        server.events.forEach(_.bind(function(event) {
-                            event.is_active = !!event.is_active;
-                            event.is_indefinite = !!event.is_indefinite;
-                            event.is_public = !!event.is_public;
-                            event.commands = JSON.parse(event.commands);
-                            Utils.updateEventTimer(event);
-                        }, this));
-                    }, this));
-
-                    if (serverId) {
-                        this.selectedServer = _.find(this.servers, function(server) {
-                            return server.id === serverId;
-                        })
-                    } else {
-                        if(this.servers.length > 0) {
-                            this.selectedServer = this.servers[0];
-                        }
-                    }
-
-                    this.selectedServerId = this.selectedServer.id;
-
-                    sessionStorage.setItem('selected_server_id', this.selectedServerId);
-
-                    console.log('user/servers data ', response);
-                    console.log('this.servers ', this.servers);
-                    console.log('selectedServer: ', this.selectedServer);
-                })
-                .catch(e => {
-                    HTTP.logError(serverUrl, e);
-
-                    this.errors.push(e)
-                });
-
-            // todo: set up a latest items ID/hash/timestamp so we dont get this every time
             HTTP.post(itemsUrl, {
-                items_hash: itemDate
-            })
+                    items_hash: itemDate
+                })
                 .then(response => {
                     console.log('ITEMS data: ', response.data);
                     if (!response.data.current) {
@@ -246,10 +205,22 @@
             },
 
             onSelectedServerChanged: function(changedServer) {
-                this.selectedServer = changedServer;
-                this.selectedServerId = this.selectedServer.id;
-                console.log('this.selectedServer ', this.selectedServer);
+                if (!_.isEmpty(changedServer)) {
+                    // add any data parsing we need
+                    changedServer.events.forEach(_.bind(function(event) {
+                        event.is_active = !!event.is_active;
+                        event.is_indefinite = !!event.is_indefinite;
+                        event.is_public = !!event.is_public;
+                        event.commands = JSON.parse(event.commands);
+                        Utils.updateEventTimer(event);
+                    }, this));
 
+                    this.selectedServer = changedServer;
+                    this.selectedServerId = this.selectedServer.id;
+                    sessionStorage.setItem('selected_server_id', this.selectedServerId);
+                }
+
+                console.log('######## this.selectedServer ', this.selectedServer);
             },
 
             /**

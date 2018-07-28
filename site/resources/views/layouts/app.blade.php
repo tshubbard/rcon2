@@ -41,8 +41,7 @@
 
         <div class="footer">
             <div class="container">
-                <span class="float-right"><a href="#">Back to top</a></span>
-                <span>© 2017 Amilix, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></span>
+                <span>© 2018 Archon, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></span>
             </div>
         </div>
     </div>
@@ -52,5 +51,11 @@
     <script src="{{ asset('js/vendor.js') }}"></script>
     <script src="{{ mix('js/app.js') }}"></script>
     @yield('scripts')
+
+    <script src="//widget-cdn.bugplug.omatum.com/bp.js"></script>
+    <script>
+        //Initialize the Widget ---
+        _bugplug.init({"API_KEY":"60e0783589465e359dadc092"});
+    </script>
 </body>
 </html>

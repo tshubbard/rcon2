@@ -144,9 +144,6 @@ var app = new Vue({
                     HTTP.logError(url, e);
                     this.errors.push(e)
                 });
-
-            console.log('this.$bus ', this.$bus);
-
         }
     },
     sockets: {

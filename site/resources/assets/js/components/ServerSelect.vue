@@ -33,11 +33,14 @@
         created: function() {
             let serverId = +this.$route.params.serverId;
             let serverUrl = HTTP.buildUrl('servers');
+            this.$bus.$on('get-selected-server', this.onGetSelectedServer, this);
+
             HTTP.get(serverUrl)
                 .then(response => {
                     this.servers = response.data;
 
-                    console.log('s#$%#$%#$ ', response);
+
+                    console.log('GOT SERVERS ', response);
 
                     if (serverId) {
                         this.selectedServer = _.find(this.servers, function(server) {
@@ -53,9 +56,12 @@
 
                     sessionStorage.setItem('selected_server_id', this.selectedServerId);
 
-                    console.log('user/servers data ', response);
-                    console.log('this.servers ', this.servers);
-                    console.log('selectedServer: ', this.selectedServer);
+                    //console.log('user/servers data ', response);
+                    //console.log('this.servers ', this.servers);
+                    //console.log('selectedServer: ', this.selectedServer);
+                    console.log('---- trigerring change server', );
+
+                    this.$bus.$emit('server-changed', this.selectedServer);
                 })
                 .catch(e => {
                     HTTP.logError(serverUrl, e);
@@ -73,8 +79,11 @@
                     return server.id === serverId;
                 });
 
-                this.$emit('server-changed', this.selectedServer);
+                this.$bus.$emit('server-changed', this.selectedServer);
             },
+            onGetSelectedServer: function() {
+                this.$bus.$emit('server-changed', this.selectedServer);
+            }
         },
         watch: {
         },

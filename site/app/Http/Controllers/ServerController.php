@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Server;
 use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
+use App\Server;
+use App\ServerEvent;
 
 class ServerController extends Controller
 {
@@ -84,9 +85,18 @@ class ServerController extends Controller
 
         // loop over accounts and get servers for each account
         foreach($accounts as $account) {
-            foreach($account->servers as $server) {
-                $server_array = $server->toArray();
-                $servers[] = $server_array;
+            $servers = $account->servers;
+            foreach ($servers as &$server) {
+                $serverData = $server->toArray();
+                // get server events for each server
+                $server['events'] = ServerEvent::where([
+                    ['server_id', '=', $serverData['id']],
+                    ['deleted_at', '=', null]
+                ])->get();
+
+                foreach($server['events'] as &$event) {
+                    $event->tags;
+                }
             }
         }
 

@@ -40,6 +40,7 @@ const PlayersList = Vue.component('players-list', require('./components/PlayersL
 const ChatList = Vue.component('chat-list', require('./components/ChatList.vue'));
 const ServerEventsList = Vue.component('server-events-list', require('./components/ServerEventsList.vue'));
 const ServerRecord = Vue.component('server-record', require('./components/ServerRecord.vue'));
+const EventBus = new Vue();
 
 var router = new VueRouter({
     //mode: 'history',
@@ -113,6 +114,14 @@ Vue.use(VueRouter);
 import NavBar from './components/NavBar';
 Vue.use(NavBar);
 
+Object.defineProperties(Vue.prototype, {
+    $bus: {
+        get: function () {
+            return EventBus
+        }
+    }
+});
+
 var app = new Vue({
     el: '#app',
     router: router,
@@ -135,6 +144,9 @@ var app = new Vue({
                     HTTP.logError(url, e);
                     this.errors.push(e)
                 });
+
+            console.log('this.$bus ', this.$bus);
+
         }
     },
     sockets: {

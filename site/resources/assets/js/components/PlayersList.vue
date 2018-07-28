@@ -35,7 +35,7 @@
                             {{row.username}}
                         </span>
                         <span>
-                            Max Players: {{row.short_id}}
+                            Combat ID: {{row.short_id}} - {{row.steam_id}}
                         </span>
                     </div>
                     <md-button class="md-icon-button"

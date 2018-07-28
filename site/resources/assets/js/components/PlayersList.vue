@@ -4,9 +4,21 @@
             <h3 class="title">
                 Players
             </h3>
+            <div class="container-fluid">
+                <div class="row justify-content-end">
+                    <div class="search-box">
+                        <md-field>
+                            <label>Search Players</label>
+                            <md-input v-model="searchTerm"></md-input>
+                            <md-icon>search</md-icon>
+                            <span class="md-helper-text">Searches Username, combat ID, & steam ID</span>
+                        </md-field>
+                    </div>
+                </div>
+            </div>
 
             <div class="container-fluid">
-                <div class="row record-body">
+                <div class="row">
                     <table class="servers-list-table table table-hover">
                         <thead>
                         <th class="text-center">Steam ID</th>
@@ -75,7 +87,9 @@
         data: function() {
             return {
                 errors: [],
-                players: {},
+                players: [],
+                syncedPlayers: [],
+                searchTerm: '',
                 showPlayerEdit: false,
                 selectedPlayer: {}
             }
@@ -91,6 +105,7 @@
             HTTP.get(url)
                 .then(response => {
                     this.players = response.data.players;
+                    this.syncedPlayers = _.clone(this.players);
                 })
                 .catch(e => {
                     this.errors.push(e)
@@ -111,6 +126,19 @@
 
             deletePlayer: function(playerData) {
 
+            }
+        },
+        watch: {
+            searchTerm: function(term) {
+                if (term.length === 0) {
+                    this.players = _.clone(this.syncedPlayers);
+                } else {
+                    this.players = _.filter(this.players, function(player) {
+                        return (player.short_id && player.short_id.indexOf(term) !== -1) ||
+                            (player.username && player.username.indexOf(term) !== -1) ||
+                            (player.steam_id && player.steam_id.indexOf(term) !== -1);
+                    }, this);
+                }
             }
         }
     }

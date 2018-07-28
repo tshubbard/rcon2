@@ -7,7 +7,7 @@ import 'vue-material/dist/vue-material.min.css';
 import VueSocketio from 'vue-socket.io';
 
 Vue.use(VueMaterial);
-Vue.use(VueSocketio, 'http://socketserver.com:1923');
+Vue.use(VueSocketio, 'http://localhost:6969');
 
 import axios from 'axios';
 
@@ -101,5 +101,12 @@ var app = new Vue({
                     this.errors.push(e)
                 });
         }
-    }
+    },
+    sockets: {
+        connect: function() {
+            console.log('socket connected ', this.$socket);
+            // DEV CODE REMOVE YOU FUCK
+            window.$socket = this.$socket;
+        }
+    },
 });

@@ -213,7 +213,6 @@
                         localStorage.setItem('rustItems', JSON.stringify(this.rustItems));
                         localStorage.setItem('rustItemsTS', response.data.rustItemsTS);
                     }
-
                 })
                 .catch(e => {
                     HTTP.logError(itemsUrl, e);

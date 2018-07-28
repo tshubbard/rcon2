@@ -95,6 +95,7 @@ var app = new Vue({
             HTTP.get(url)
                 .then(response => {
                     sessionStorage.setItem('accounts', JSON.stringify(response.data.accounts));
+                    sessionStorage.setItem('me', JSON.stringify(response.data));
                 })
                 .catch(e => {
                     HTTP.logError(url, e);

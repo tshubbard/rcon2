@@ -38,7 +38,7 @@
         <md-dialog-actions layout="row" layout-align="end">
             <div class="col-md-4 pl-0">
                 <md-button class="md-raised md-accent"
-                           v-if="item.id != null && item.owner_id === $parent.user.id"
+                           v-if="item.id != null && item.id !== userId && accountData.owner_id === userId"
                            v-on:click="removeUser">
                     Remove User
                 </md-button>
@@ -78,16 +78,21 @@
             ErrorsView
         },
         props: [
+            'accountData',
+            'authedUserData',
             'userData',
             'visible'
         ],
         data: function() {
             return {
+                acctData: {},
                 addEditLabel: '',
+                authUser: {},
                 errors: [],
                 isSaving: false,
                 item: {},
                 showConfirmDialog: false,
+                userId: -1
             }
         },
         created: function() {
@@ -96,11 +101,13 @@
         methods: {
             onDialogOpened: function(){
                 this.errors = [];
+                this.acctData = _.clone(this.accountData);
+                this.authUser = _.clone(JSON.parse(sessionStorage.getItem('me')));
                 this.item = _.clone(this.userData);
+
                 this.addEditLabel = this.item.id ? 'Edit' : 'Add';
-
-                console.log('this.item: ', this.item);
-
+                this.userId = this.authUser.id;
+                console.log('this.item: ', this.item, this.userId);
             },
 
             onDialogClosed: function(){

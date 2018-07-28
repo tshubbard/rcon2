@@ -120,6 +120,7 @@
         <account-user-add-edit
                 :visible="showUserAddEdit"
                 :userData="selectedUserForAddEdit"
+                :accountData="account"
                 v-on:account-user-added="onUserAdded"
                 v-on:account-user-deleted="onUserDeleted"
                 v-on:account-user-changed="onUserChanged"
@@ -177,18 +178,19 @@
                 showUserAddEdit: false,
                 showDeleteConfirmDialog: false,
                 showServerAddEdit: false,
-                synceAccountData: {},
+                syncedAccountData: {},
                 users: []
             }
         },
         created: function() {
             let url = HTTP.buildUrl('a/' + this.$route.params.accountName);
+
             HTTP.get(url)
                 .then(response => {
                     console.log('account data: ', response);
 
                     this.account = response.data;
-                    this.synceAccountData = _.clone(this.account);
+                    this.syncedAccountData = _.clone(this.account);
                     this.servers = response.data.servers;
                     this.users = response.data.users;
                 })
@@ -220,7 +222,7 @@
             },
 
             onDescriptionChanged: function() {
-                this.hasDescriptionChanged = this.account.description !== this.synceAccountData.description;
+                this.hasDescriptionChanged = this.account.description !== this.syncedAccountData.description;
             },
 
             saveDescription: function() {
@@ -234,7 +236,7 @@
                     .then(response => {
                         this.showDeleteConfirmDialog = false;
                         this.account = response.data.record;
-                        this.synceAccountData = _.clone(this.account);
+                        this.syncedAccountData = _.clone(this.account);
                     })
                     .catch(e => {
                         HTTP.logError(url, e);

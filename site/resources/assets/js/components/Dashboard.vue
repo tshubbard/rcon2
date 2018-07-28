@@ -159,7 +159,7 @@
         },
         created: function() {
             let serverId = +this.$route.params.serverId;
-            let items = localStorage.getItem('rustItems');
+            let itemDate = localStorage.getItem('rustItemsTS');
             let serverUrl = HTTP.buildUrl('user/servers');
             let itemsUrl = HTTP.buildUrl('items');
 
@@ -203,19 +203,23 @@
                 });
 
             // todo: set up a latest items ID/hash/timestamp so we dont get this every time
-            //if (!items) {
-                HTTP.get(itemsUrl)
-                    .then(response => {
-                        console.log('ITEMS data: ', response.data);
+            HTTP.post(itemsUrl, {
+                items_hash: itemDate
+            })
+                .then(response => {
+                    console.log('ITEMS data: ', response.data);
+                    if (!response.data.current) {
                         this.rustItems = response.data.items;
                         localStorage.setItem('rustItems', JSON.stringify(this.rustItems));
-                    })
-                    .catch(e => {
-                        HTTP.logError(itemsUrl, e);
+                        localStorage.setItem('rustItemsHash', response.data.rustItemsTS);
+                    }
 
-                        this.errors.push(e)
-                    });
-            //}
+                })
+                .catch(e => {
+                    HTTP.logError(itemsUrl, e);
+
+                    this.errors.push(e)
+                });
         },
         methods: {
             /**

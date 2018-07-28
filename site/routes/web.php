@@ -36,7 +36,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/api/v1/user/servers', 'DashboardController@servers');
 
     // ItemController
-    Route::get('/api/v1/items', 'ItemController@index');
+    Route::post('/api/v1/items', 'ItemController@index');
 
     // ServerController
     Route::get('/api/v1/server/{serverId}', 'ServerController@show');

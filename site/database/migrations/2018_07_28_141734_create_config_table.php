@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSessionTable extends Migration
+class CreateConfigTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateSessionTable extends Migration
      */
     public function up()
     {
-        Schema::create('session', function (Blueprint $table) {
-            $table->string('sessionId', 32)->primary();
-            $table->integer('expires', false, true);
-            $table->text('data');
+        Schema::create('config', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->text('value');
         });
     }
 
@@ -27,6 +27,6 @@ class CreateSessionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('session');
+        Schema::dropIfExists('config');
     }
 }

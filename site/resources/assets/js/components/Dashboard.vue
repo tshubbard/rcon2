@@ -4,22 +4,7 @@
 
         <div class="container-fluid">
             <div class="row dashboard-summary">
-                <div class="col-md-5" v-if="servers.length === 1">
-                    Server: {{servers[0].name}}
-                </div>
-                <div class="col-md-5" v-if="servers.length > 1">
-                    <md-field>
-                        <label for="selected-server">Servers:</label>
-                        <md-select id="selected-server" name="selected-server"
-                                   v-model="selectedServerId"
-                                   @input="updateSelectedServer">
-                            <md-option v-for="server in servers"
-                                       :key="server.id"
-                                       :value="server.id">
-                                {{server.name}}
-                            </md-option>
-                        </md-select>
-                    </md-field>
+                <div class="col-md-5">
                 </div>
                 <div class="col-md-2 add-edit-server-buttons">
                     <span class="server-actions" v-if="servers.length">
@@ -113,7 +98,7 @@
         <server-add-edit
                 :visible="showServerAddEdit"
                 :serverData="selectedServerForAddEdit"
-                v-on:server-change="onServerChange"
+                v-on:server-change="onServerChanged"
                 @close="showServerAddEdit = false">
         </server-add-edit>
 
@@ -127,12 +112,13 @@
     import {Utils} from '../utils';
     import ServerEventAddEdit from './ServerEventAddEdit';
     import ServerAddEdit from './ServerAddEdit';
-    import PlayersList from './PlayersList';
+    import ServerSelect from './ServerSelect';
 
     export default {
         components: {
             ServerEventAddEdit,
-            ServerAddEdit
+            ServerAddEdit,
+            ServerSelect
         },
         data: function() {
             return {
@@ -222,15 +208,6 @@
         },
         methods: {
             /**
-             * Updates the selected server when the dropdown is changed
-             */
-            updateSelectedServer: function(serverId) {
-                this.selectedServer = _.find(this.servers, function(server) {
-                    return server.id === serverId;
-                })
-            },
-
-            /**
              * Toggles the Add/Edit Server Event modal
              */
             showAddEditServerEvent: function(event) {
@@ -280,9 +257,15 @@
                 console.log('showAddServer  ', this.showServerAddEdit);
 
             },
-
-            onServerChange: function(changedServer) {
+            onServerChanged: function(changedServer) {
                 debugger;
+            },
+
+            onSelectedServerChanged: function(changedServer) {
+                this.selectedServer = changedServer;
+                this.selectedServerId = this.selectedServer.id;
+                console.log('this.selectedServer ', this.selectedServer);
+
             },
 
             /**

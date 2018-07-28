@@ -22,7 +22,12 @@
     <div id="app" class="site-wrapper" v-cloak>
         <header>
             <div class="container-fluid">
-                @include('partials.nav')
+
+                @guest
+                    @include('partials.nav')
+                @else
+                    <nav-bar></nav-bar>
+                @endguest
             </div>
         </header>
 

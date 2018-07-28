@@ -45,46 +45,72 @@ var router = new VueRouter({
     //mode: 'history',
     routes: [
         {
-            'path': '/',
-            'component': HomeCarousel
+            path: '/',
+            component: HomeCarousel,
+            name: 'Home',
+            meta: { zone: 'home' }
         }, {
-            'path': '/a/:accountName',
-            'component': AccountRecord
+            path: '/a/:accountName',
+            component: AccountRecord,
+            name: 'Account Record',
+            meta: { zone: 'authed' }
         }, {
-            'path': '/admin',
-            'component': AdminIndex
+            path: '/admin',
+            component: AdminIndex,
+            name: 'Admin Dashboard',
+            meta: { zone: 'admin' }
         }, {
-            'path': '/admin/users',
-            'component': AdminUsers
+            path: '/admin/users',
+            component: AdminUsers,
+            name: 'Admin Users',
+            meta: { zone: 'admin' }
         }, {
-            'path': '/servers',
-            'component': ServersList
+            path: '/servers',
+            component: ServersList,
+            name: 'Servers List',
+            meta: { zone: 'authed' }
         }, {
-            'path': '/players',
-            'component': PlayersList
+            path: '/players',
+            component: PlayersList,
+            name: 'Players List',
+            meta: { zone: 'authed' }
         }, {
-            'path': '/chat',
-            'component': ChatList
+            path: '/chat',
+            component: ChatList,
+            name: 'Chat List',
+            meta: { zone: 'authed' }
         }, {
-            'path': '/dashboard',
-            'component': Dashboard
+            path: '/dashboard',
+            component: Dashboard,
+            name: 'Dashboard',
+            meta: { zone: 'authed' }
         }, {
-            'path': '/dashboard/:serverId',
-            'component': Dashboard
+            path: '/dashboard/:serverId',
+            component: Dashboard,
+            name: 'Server Dashboard',
+            meta: { zone: 'authed' }
         }, {
-            'path': '/s/:serverName',
-            'component': ServerRecord
+            path: '/s/:serverName',
+            component: ServerRecord,
+            name: 'Servers Record',
+            meta: { zone: 'authed' }
         }, {
-            'path': '/u/:userName',
-            'component': UserRecord
+            path: '/u/:userName',
+            component: UserRecord,
+            name: 'User Record',
+            meta: { zone: 'authed' }
         }, {
-            'path': '/serverEvents',
-            'component': ServerEventsList
+            path: '/serverEvents',
+            component: ServerEventsList,
+            name: 'Servers Events List',
+            meta: { zone: 'authed' }
         }
     ]
 });
 
 Vue.use(VueRouter);
+
+import NavBar from './components/NavBar';
 
 var app = new Vue({
     el: '#app',
@@ -92,6 +118,9 @@ var app = new Vue({
     data: {
         errors: [],
         server_selected: null
+    },
+    components: {
+        NavBar
     },
     created: function() {
         if (this.$route.path === '/dashboard') {

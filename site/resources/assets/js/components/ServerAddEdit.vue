@@ -154,7 +154,7 @@
                         this.showConfirmDialog = false;
                     })
                     .catch(e => {
-                        console.error('[API Error] ', url, e);
+                        HTTP.logError(url, e);
 
                         this.errors.push(e);
                     });
@@ -202,6 +202,8 @@
             onDialogOpened: function() {
                 this.errors = [];
                 this.item = _.clone(this.serverData);
+                this.item.is_active = !!this.item.is_active;
+
                 this.addEditLabel = this.item.id ? 'Edit' : 'Add';
 
                 this.item.is_active = !!this.item.is_active;

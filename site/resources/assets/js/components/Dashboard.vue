@@ -197,7 +197,7 @@
                     console.log('selectedServer: ', this.selectedServer);
                 })
                 .catch(e => {
-                    console.error('[API Error] ', serverUrl, e);
+                    HTTP.logError(serverUrl, e);
 
                     this.errors.push(e)
                 });
@@ -211,7 +211,7 @@
                         localStorage.setItem('rustItems', JSON.stringify(this.rustItems));
                     })
                     .catch(e => {
-                        console.error('[API Error] ', itemsUrl, e);
+                        HTTP.logError(itemsUrl, e);
 
                         this.errors.push(e)
                     });
@@ -295,7 +295,7 @@
                         console.log('response.data ', response.data);
                     })
                     .catch(e => {
-                        console.error('[API Error] ', url, e);
+                        HTTP.logError(url, e);
 
                         this.errors.push(e)
                     })
@@ -320,7 +320,7 @@
                         });
                     })
                     .catch(e => {
-                        console.error('[API Error] ', url, e);
+                        HTTP.logError(url, e);
 
                         this.errors.push(e)
                     });

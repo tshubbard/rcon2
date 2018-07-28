@@ -38,7 +38,7 @@
         <md-dialog-actions layout="row" layout-align="end">
             <div class="col-md-4 pl-0">
                 <md-button class="md-raised md-accent"
-                           v-if="item.id != null"
+                           v-if="item.id != null && item.owner_id === $parent.user.id"
                            v-on:click="removeUser">
                     Remove User
                 </md-button>
@@ -113,7 +113,6 @@
                 let payload = _.pick(this.item, 'name');
                 let method;
 
-                debugger;
                 if (!this.item.id) {
                     method = 'post';
                     eventName = 'account-user-added';

@@ -25,16 +25,26 @@ class StreamerServer {
 					switch(message.type)
 					{
 						case 'stream.connect':
-							if(this._clients[message.server_id] == null)
-								this._clients[message.server_id] = [];
+							if(typeof(message.server_id) != 'object')
+								message.server_id = [message.server_id];
 
-							this._clients[message.server_id].push({'id': id, 'socket': ws});
+							message.server_id.forEach(function(server_id){
+								if(this._clients[server_id] == null)
+									this._clients[server_id] = [];
+
+								this._clients[server_id].push({'id': id, 'socket': ws});
+							}.bind(this));
 						break;
 						case 'stream.disconnect':
-							let index = this._clients[message.server_id].findIndex(function(item){return (item != null && item.id == id);});
+							if(typeof(message.server_id) != 'object')
+								message.server_id = [message.server_id];
 
-							this._clients[message.server_id][index].socket.close();
-							delete this._clients[message.server_id][index];
+							message.server_id.forEach(function(server_id){
+								let index = this._clients[server_id].findIndex(function(item){return (item != null && item.id == id);});
+
+								this._clients[server_id][index].socket.close();
+								delete this._clients[server_id][index];
+							}.bind(this));
 						break;
 						case 'stream.command':
 							_servers[message.server_id].rcon.command(message.command);
@@ -87,9 +97,6 @@ class StreamerServer {
 							};
 
 							ws.send(JSON.stringify(response));
-						break;
-						case 'event.update':
-							_servers[message.server_id].scheduler.handleEventChange(message.id, message.event_type);
 						break;
 					}
 				}

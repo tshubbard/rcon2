@@ -37,19 +37,26 @@
             console.log('NAVBAR this: ', this);
 
             this.authUser = _.clone(JSON.parse(sessionStorage.getItem('me')));
-
+            //this.appName = 'Rust ReCON';
             console.log('this.authUser: ', this.authUser);
+            console.log('this.appName: ', this.appName);
 
-            if (!this.authUser) {
-                this.$bus.$on('user-authed', this.onUserAuthed, this);
+            if (this.zone === 'home') {
+                if (!this.authUser) {
+                    this.$bus.$on('user-authed', this.onUserAuthed, this);
+                }
                 this.showHome = true;
             } else {
                 this.onUserAuthed();
             }
+
+            console.log(' this.showHome: ',  this.showHome, this.zone);
+
         },
         methods: {
             onUserAuthed: function(userData) {
                 this.authUser = this.authUser || _.clone(userData);
+
                 if (this.zone) {
                     if (this.zone === 'authed') {
                         this.showHome = false;
@@ -59,6 +66,10 @@
                         this.showAdmin = true;
                     }
                 }
+
+
+                console.log('onUserAuthed this.showHome: ',  this.showHome,  this.showAuthed,  this.showAdmin);
+
             }
         },
         computed: {

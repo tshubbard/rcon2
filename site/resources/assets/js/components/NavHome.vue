@@ -33,12 +33,13 @@
 </template>
 <script>
     export default {
-        prop: [
+        props: [
             'appNameData'
         ],
         data: function() {
             return {
-                appName: ''
+                appName: '',
+                errors: []
             }
         },
         created: function() {

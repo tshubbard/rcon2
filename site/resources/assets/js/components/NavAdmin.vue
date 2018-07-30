@@ -98,7 +98,8 @@
         data: function() {
             return {
                 appName: '',
-                authUser: {}
+                authUser: {},
+                errors: []
             }
         },
         created: function() {

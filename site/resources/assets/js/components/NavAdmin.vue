@@ -69,15 +69,14 @@
                                          to="/admin">Admin</router-link>
                         </li>
                         <li>
-                            <a href="/logout" class="nav-link dropdown-item"
-                               onclick="event.preventDefault();
-                                     document.getElementById('logout-form').submit();">
+                            <md-divider></md-divider>
+                        </li>
+                        <li>
+                            <a class="nav-link dropdown-item" class-active="active"
+                               href="javascript:void(0)"
+                               @click="this.onLogoutClicked">
                                 Logout
                             </a>
-
-                            <form id="logout-form" action="logout" method="POST" style="display: none;">
-
-                            </form>
                         </li>
                     </ul>
                 </li>
@@ -101,11 +100,24 @@
             }
         },
         created: function() {
-            console.log('this: ', this);
+            console.log('[NavAdmin] this: ', this);
 
             this.authUser = _.clone(this.authedUserData);
         },
         methods: {
+            onLogoutClicked: function() {
+                sessionStorage.clear();
+                HTTP.get('/logout')
+                    .then(response => {
+                        console.log('logout data: ', response);
+                        window.location.replace('/');
+                    })
+                    .catch(e => {
+                        HTTP.logError('/logout', e);
+
+                        this.errors.push(e)
+                    });
+            }
         },
         computed: {
         }

@@ -22,7 +22,6 @@
     <div id="app" class="site-wrapper" v-cloak>
         <header>
             <div class="container-fluid">
-
                 @guest
                     @include('partials.nav')
                 @else
@@ -41,7 +40,7 @@
 
         <div class="footer">
             <div class="container">
-                <span>© 2018 Archon, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></span>
+                <span>© 2018 Archonoclast, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></span>
             </div>
         </div>
     </div>
@@ -55,7 +54,23 @@
     <script src="//widget-cdn.bugplug.omatum.com/bp.js"></script>
     <script>
         //Initialize the Widget ---
-        _bugplug.init({"API_KEY":"60e0783589465e359dadc092"});
+        var _bpopts ={
+            "API_KEY" : "60e0783589465e359dadc092",
+            "screen_anchor" : "left"
+        };
+        var user = JSON.parse(sessionStorage.getItem('me'));
+        _bugplug.init(_bpopts);
+        if (user && user.id) {
+            _bugplug.addVar({"logged_in": true});
+            _bugplug.addVar({"user_name": user.name});
+            _bugplug.addVar({"user_id": user.id});
+            _bugplug.addVar({"user_email": user.email});
+        } else {
+            _bugplug.addVar({"logged_in": false});
+
+        }
+        _bugplug.addVar({"browser": navigator.userAgent});
+
     </script>
 </body>
 </html>

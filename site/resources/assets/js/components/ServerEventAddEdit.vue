@@ -500,7 +500,7 @@
         },
         created: function() {
             let i;
-            console.log('this: ', this);
+            console.log('ServerEventAddEdit this: ', this);
 
             this.eventTypes.forEach(_.bind(function(evt) {
                 this.eventTypeObj[evt.id] = evt;

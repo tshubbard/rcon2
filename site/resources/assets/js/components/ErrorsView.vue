@@ -17,7 +17,7 @@
             return {}
         },
         created: function() {
-            console.log('this: ', this);
+            console.log('[ErrorsView] this: ', this);
         },
         methods: {
         },

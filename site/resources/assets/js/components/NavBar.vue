@@ -1,8 +1,8 @@
 <template>
     <div>
-        <nav-admin v-if="zone === 'admin'" :authedUserData="authUser"></nav-admin>
-        <nav-authed v-if="zone === 'authed'" :authedUserData="authUser"></nav-authed>
-        <nav-home v-if="zone === 'home'"></nav-home>
+        <nav-admin v-if="showAdmin" :authedUserData="authUser"></nav-admin>
+        <nav-authed v-if="showAuthed" :authedUserData="authUser"></nav-authed>
+        <nav-home v-if="showHome"></nav-home>
     </div>
 </template>
 <script>
@@ -18,15 +18,39 @@
         },
         data: function() {
             return {
-                authUser: {}
+                authUser: {},
+                showAdmin: false,
+                showAuthed: false,
+                showHome: false,
             }
         },
         created: function() {
             console.log('NAVBAR this: ', this);
 
             this.authUser = _.clone(JSON.parse(sessionStorage.getItem('me')));
+
+            console.log('this.authUser: ', this.authUser);
+
+            if (!this.authUser) {
+                this.$bus.$on('user-authed', this.onUserAuthed, this);
+                this.showHome = true;
+            } else {
+                this.onUserAuthed();
+            }
         },
         methods: {
+            onUserAuthed: function(userData) {
+                this.authUser = this.authUser || _.clone(userData);
+                if (this.zone) {
+                    if (this.zone === 'authed') {
+                        this.showHome = false;
+                        this.showAuthed = true;
+                    } else if (this.zone === 'admin') {
+                        this.showHome = false;
+                        this.showAdmin = true;
+                    }
+                }
+            }
         },
         computed: {
             zone() {

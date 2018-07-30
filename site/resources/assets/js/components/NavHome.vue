@@ -37,7 +37,7 @@
             return {}
         },
         created: function() {
-            console.log('this: ', this);
+            console.log('[NavHome] this: HOME ', this);
         },
         methods: {
         },

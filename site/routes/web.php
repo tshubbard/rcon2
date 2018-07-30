@@ -16,6 +16,7 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('email-verification/error', 'Auth\RegisterController@getVerificationError')->name('email-verification.error');
 Route::get('email-verification/check/{token}', 'Auth\RegisterController@getVerification')->name('email-verification.check');
+Route::get('logout', 'AuthController@logout');
 
 // Requires User Authentication
 Route::group(['middleware' => ['auth']], function () {

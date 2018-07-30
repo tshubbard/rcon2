@@ -127,20 +127,22 @@
             getPlayersData: function() {
                 let serverId = sessionStorage.getItem('selected_server_id');
                 let url = HTTP.buildUrl('players/' + serverId);
-                console.log('getPlayersData serverId ', serverId);
 
-                if (this.currentOnly) {
-                    url += '/current';
+                if (serverId) {
+                    console.log('getPlayersData serverId ', serverId);
+                    if (this.currentOnly) {
+                        url += '/current';
+                    }
+
+                    HTTP.get(url)
+                        .then(response => {
+                            this.players = response.data.players;
+                            this.syncedPlayers = _.clone(this.players);
+                        })
+                        .catch(e => {
+                            this.errors.push(e)
+                        });
                 }
-
-                HTTP.get(url)
-                    .then(response => {
-                        this.players = response.data.players;
-                        this.syncedPlayers = _.clone(this.players);
-                    })
-                    .catch(e => {
-                        this.errors.push(e)
-                    });
             }
         },
         watch: {

@@ -134,16 +134,23 @@ var app = new Vue({
     },
     created: function() {
         if (this.$route.path === '/dashboard') {
-            let url = HTTP.buildUrl('user/me');
-            HTTP.get(url)
-                .then(response => {
-                    sessionStorage.setItem('accounts', JSON.stringify(response.data.accounts));
-                    sessionStorage.setItem('me', JSON.stringify(response.data));
-                })
-                .catch(e => {
-                    HTTP.logError(url, e);
-                    this.errors.push(e)
-                });
+            let userData = sessionStorage.getItem('me');
+            console.log('userData ', JSON.parse(userData));
+
+            if (!userData) {
+                let url = HTTP.buildUrl('user/me');
+                HTTP.get(url)
+                    .then(response => {
+                        sessionStorage.setItem('accounts', JSON.stringify(response.data.accounts));
+                        sessionStorage.setItem('me', JSON.stringify(response.data));
+
+                        this.$bus.$emit('user-authed', response.data);
+                    })
+                    .catch(e => {
+                        HTTP.logError(url, e);
+                        window.location.replace('/');
+                    });
+            }
         }
     },
     sockets: {

@@ -206,8 +206,6 @@
             },
 
             onSelectedServerChanged: function(changedServer) {
-                console.log('changedServer ', changedServer);
-
                 if (!_.isEmpty(changedServer)) {
                     // add any data parsing we need
                     changedServer.events.forEach(_.bind(function(event) {
@@ -222,8 +220,6 @@
                     this.selectedServerId = this.selectedServer.id;
                     sessionStorage.setItem('selected_server_id', this.selectedServerId);
                 }
-
-                console.log('######## this.selectedServer ', this.selectedServer);
             },
 
             /**

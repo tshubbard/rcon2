@@ -41,13 +41,13 @@
             }
         },
         created: function() {
-            console.log('this: ', this);
+            console.log('[ServerEventsList] this: ', this);
             let url = HTTP.buildUrl('serverEvents');
             HTTP.get(url)
                 .then(response => {
                     this.serverEvents = response.data;
 
-                    console.log('this.serverEvents: ', this.serverEvents);
+                    console.log('[ServerEventsList] this.serverEvents: ', this.serverEvents);
 
                 })
                 .catch(e => {

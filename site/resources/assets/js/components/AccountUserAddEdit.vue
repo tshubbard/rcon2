@@ -107,7 +107,7 @@
 
                 this.addEditLabel = this.item.id ? 'Edit' : 'Add';
                 this.userId = this.authUser.id;
-                console.log('this.item: ', this.item, this.userId);
+                console.log('[AccountUserAddEdit] this.item: ', this.item, this.userId);
             },
 
             onDialogClosed: function(){

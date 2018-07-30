@@ -79,7 +79,7 @@
                 this.errors = [];
                 this.item = _.clone(this.accountData);
                 this.addEditLabel = this.item.id ? 'Edit' : 'Add';
-                console.log('this.item: ', this.item);
+                console.log('[AccountAddEdit] this.item: ', this.item);
 
             },
             onDialogClosed: function(){

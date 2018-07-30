@@ -46,7 +46,7 @@
 <script>
     export default {
         created: function() {
-            console.log('this: ', this);
+            console.log('[HomeCarousel] this: ', this);
         },
         methods: {
         },

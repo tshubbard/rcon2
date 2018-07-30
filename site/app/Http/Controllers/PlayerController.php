@@ -24,9 +24,21 @@ class PlayerController extends Controller
     {
         if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
 
+        $players = $server->players->toArray();
+
+        usort($players,array($this, 'cmpUsernames'));
+
         return response()->json([
-            'players' => $server->players
+            'players' => $players
         ]);
+    }
+
+    public function cmpUsernames($a, $b)
+    {
+        if ($a['username'] == $b['username']) {
+            return 0;
+        }
+        return ($a['username'] < $b['username']) ? -1 : 1;
     }
 
     /**

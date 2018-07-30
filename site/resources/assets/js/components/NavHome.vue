@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
         <a class="navbar-brand" href="/">
-            Rust ReCON
+            {{appName}}
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#app-navbar-collapse" aria-controls="navbarSupportedContent"
@@ -33,10 +33,16 @@
 </template>
 <script>
     export default {
+        prop: [
+            'appNameData'
+        ],
         data: function() {
-            return {}
+            return {
+                appName: ''
+            }
         },
         created: function() {
+            this.appName = _.clone(this.appNameData);
             console.log('[NavHome] this: HOME ', this);
         },
         methods: {

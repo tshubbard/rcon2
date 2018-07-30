@@ -1,8 +1,16 @@
 <template>
     <div>
-        <nav-admin v-if="showAdmin" :authedUserData="authUser"></nav-admin>
-        <nav-authed v-if="showAuthed" :authedUserData="authUser"></nav-authed>
-        <nav-home v-if="showHome"></nav-home>
+        <nav-admin v-if="showAdmin"
+                   :authedUserData="authUser"
+                   :appNameData="appName">
+        </nav-admin>
+        <nav-authed v-if="showAuthed"
+                    :authedUserData="authUser"
+                    :appNameData="appName">
+        </nav-authed>
+        <nav-home v-if="showHome"
+                  :appNameData="appName">
+        </nav-home>
     </div>
 </template>
 <script>
@@ -18,6 +26,7 @@
         },
         data: function() {
             return {
+                appName: 'Rust ReCON',
                 authUser: {},
                 showAdmin: false,
                 showAuthed: false,

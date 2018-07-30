@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
         <a class="navbar-brand" href="/">
-            Rust ReCON
+            {{appName}}
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#app-navbar-collapse" aria-controls="navbarSupportedContent"
@@ -89,13 +89,15 @@
     import ServerSelect from './ServerSelect';
     export default {
         props: [
-            'authedUserData'
+            'authedUserData',
+            'appNameData'
         ],
         components: {
             ServerSelect
         },
         data: function() {
             return {
+                appName: '',
                 authUser: {}
             }
         },
@@ -103,6 +105,7 @@
             console.log('[NavAdmin] this: ', this);
 
             this.authUser = _.clone(this.authedUserData);
+            this.appName = _.clone(this.appNameData);
         },
         methods: {
             onLogoutClicked: function() {

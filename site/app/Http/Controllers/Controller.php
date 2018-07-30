@@ -12,14 +12,17 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function checkAccount($account_id)
+    public function checkAccount($account_ids)
     {
+        if(!is_array($account_ids))
+            $account_ids = array($account_ids);
+
         $user = Auth::user();
         $accounts = $user->accounts;
         $account_valid = false;
 
         foreach($accounts as $row)
-            if($row['id'] == $account_id)
+            if(in_array($row['id'], $account_ids))
                 return true;
 
         return false;

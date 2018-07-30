@@ -42,11 +42,12 @@ class UserController extends Controller
         $user = User::where($field , '=', $userSlug)->first();
 
         $accounts = $user->accounts;
-        foreach($accounts as $acct) {
-            if(!$this->checkAccount($acct->id)) {
-                return $this->checkAccountFail();
-            }
-        }
+        $account_ids = array();
+
+        foreach($accounts as $acct)
+            $account_ids[] = $acct->id;
+
+        if(!$this->checkAccount($account_ids)) return $this->checkAccountFail();
 
         return response()->json($user);
     }

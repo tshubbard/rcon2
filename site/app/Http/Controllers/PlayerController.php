@@ -43,6 +43,8 @@ class PlayerController extends Controller
         $players = DB::table('players_current')
             ->join('players', 'players.steam_id', '=', 'players_current.steam_id')
             ->select('players.*')
+            ->where('players_current.server_id', '=', $server->id)
+            ->orderBy('players.username')
             ->get();
 
         return response()->json([

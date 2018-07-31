@@ -37,21 +37,20 @@
             console.log('NAVBAR this: ', this);
 
             this.authUser = _.clone(JSON.parse(sessionStorage.getItem('me')));
-            //this.appName = 'Rust ReCON';
             console.log('this.authUser: ', this.authUser);
             console.log('this.appName: ', this.appName);
 
-            if (this.zone === 'home') {
-                if (!this.authUser) {
-                    this.$bus.$on('user-authed', this.onUserAuthed, this);
+            if (!this.authUser) {
+                if (this.zone === 'home') {
+                    this.showHome = true;
                 }
-                this.showHome = true;
+                this.$bus.$on('user-authed', this.onUserAuthed, this);
             } else {
                 this.onUserAuthed();
+
             }
 
             console.log(' this.showHome: ',  this.showHome, this.zone);
-
         },
         methods: {
             onUserAuthed: function(userData) {

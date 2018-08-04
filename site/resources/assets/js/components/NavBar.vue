@@ -63,6 +63,12 @@
                     } else if (this.zone === 'admin') {
                         this.showHome = false;
                         this.showAdmin = true;
+                    } else if (this.zone === 'home') {
+                        if (this.authUser && this.authUser.id) {
+                            this.showAuthed = true;
+                        } else {
+                            this.showHome = true;
+                        }
                     }
                 }
 

@@ -207,12 +207,19 @@
                     <div class="form-group col-md-5">
                         <label>Command</label>
                         <md-field>
-                            <md-textarea ref="command" v-model="selectedServerEvent.command"></md-textarea>
+                            <md-textarea ref="command" v-model="selectedServerEventCommand"></md-textarea>
                         </md-field>
-                        <div class="text-right">
+                        <div class="command-validation" v-show="selectedServerEventCommand.length">
+                            <h6>Command Validation</h6>
+                        </div>
+                        <div class="text-right" v-show="selectedServerEventCommand.length">
+                            <md-button class="md-raised md-dense" v-show="selectedServerEvent.isEdit"
+                                       @click.stop="cancelEditEvent()">
+                                <span>Cancel Edit</span>
+                            </md-button>
                             <md-button class="md-raised md-dense md-primary"
                                        @click.stop="addEventToCommandStack()"
-                                       :disabled="selectedServerEvent.command.length < 5">
+                                       :disabled="!validCommand">
                                 <span v-show="selectedServerEvent.isEdit">Update Command</span>
                                 <span v-show="!selectedServerEvent.isEdit">Add To Command Stack</span>
                             </md-button>
@@ -479,6 +486,7 @@
                     isEdit: false,
                     key: undefined
                 },
+                selectedServerEventCommand: '',
                 serverCommandTemplates: [{
                     name: 'say',
                     icon: 'chat'
@@ -495,7 +503,55 @@
                     name: 'custom',
                     icon: 'brush'
                 }],
-                serverCommandTargetList: []
+                serverCommandTargetList: [],
+                validCommand: false,
+                validationRules: {
+                    giveall: {
+                        rules: [{
+                            commandIndex: 0,
+                            type: '=',
+                            value: 'giveall'
+                        }, {
+                            commandIndex: 1,
+                            type: 'validItem'
+                        }, {
+                            commandIndex: 2,
+                            type: 'numeric',
+                            value: 'gt:0'
+                        }]
+                    },
+                    giveto: {
+                        rules: [{
+                            commandIndex: 0,
+                            type: '=',
+                            value: 'giveto'
+                        }, {
+                            commandIndex: 1,
+                            type: '=OR',
+                            value: [
+                                '${user.username}',
+                                '${user.steam_id}'
+                            ],
+                        }, {
+                            commandIndex: 2,
+                            type: 'validItem'
+                        }, {
+                            commandIndex: 3,
+                            type: 'numeric',
+                            value: 'gt:0'
+                        }]
+                    },
+                    say: {
+                        rules: [{
+                            commandIndex: 0,
+                            type: '=',
+                            value: 'say'
+                        }, {
+                            type: 'length',
+                            value: 'gt:4',
+                        }]
+                    }
+                }
             }
         },
         created: function() {
@@ -536,6 +592,7 @@
              */
             onDialogClosed: function() {
                 this.selectedEventType = {};
+                this.selectedServerEventCommand = '';
                 this.selectedServerEvent = {
                     command: '',
                     isEdit: false,
@@ -637,12 +694,22 @@
                 console.log('saveAddEditServerEventDialog eventData ', this.eventData);
             },
 
+            cancelEditEvent: function() {
+                this.selectedServerEventCommand = '';
+                this.selectedServerEvent = {
+                    command: '',
+                    isEdit: false,
+                    key: undefined
+                };
+            },
+
             /**
              * Handles when user clicks to edit a specific server event
              */
             onEditServerEvent: function(serverEvent) {
                 console.log('onEditServerEvent: ', serverEvent);
                 this.selectedServerEvent = serverEvent;
+                this.selectedServerEventCommand = this.selectedServerEvent.command;
                 this.selectedServerEvent.isEdit = true;
                 this.$refs.command.$el.focus();
             },
@@ -672,6 +739,7 @@
                     this.eventData.commands.push(this.selectedServerEvent);
                 }
 
+                this.selectedServerEventCommand = '';
                 this.selectedServerEvent = {
                     command: '',
                     isEdit: false,
@@ -689,17 +757,24 @@
             onAddKeyToCommand: function(type) {
                 // custom event types dont add "custom" to the beginning
                 var cmd = type === 'custom' ? '' : type;
+                var key = this.selectedServerEventCommand.split(' ')[0];
 
-                if (this.selectedServerEvent.key && this.selectedServerEvent.key !== 'custom' &&
-                    (this.selectedServerEvent.command.indexOf(this.selectedServerEvent.key) !== -1)) {
+                if (_.isUndefined(this.selectedServerEvent.key)) {
+                    if (['say', 'giveto', 'giveall', 'kick'].indexOf(key) !== -1) {
+                        cmd = this.selectedServerEventCommand.replace(key, cmd);
+                    } else {
+                        cmd = cmd + ' ' + this.selectedServerEventCommand;
+                    }
+                } else if (this.selectedServerEvent.key && this.selectedServerEvent.key !== 'custom' &&
+                    (this.selectedServerEventCommand.indexOf(this.selectedServerEvent.key) !== -1)) {
                     // if there's already a selected event key, replace it in the string with the new key
-                    cmd = this.selectedServerEvent.command.replace(this.selectedServerEvent.key, cmd);
+                    cmd = this.selectedServerEventCommand.replace(this.selectedServerEvent.key, cmd);
                 } else {
                     // otherwise prepend the new command type to the command string
-                    cmd = cmd + ' ' + this.selectedServerEvent.command;
+                    cmd = cmd + ' ' + this.selectedServerEventCommand;
                 }
 
-                this.selectedServerEvent.command = cmd;
+                this.selectedServerEventCommand = cmd;
                 this.selectedServerEvent.key = type;
             },
 
@@ -709,12 +784,18 @@
              * @param {string} targetId The target id for a command
              */
             onAddTargetToCommand: function(targetId) {
-                this.selectedServerEvent.command += ' ${' + targetId + '}';
+                this.selectedServerEventCommand += ' ${' + targetId + '}';
+
+                console.log('onAddTargetToCommand: ', this.selectedServerEventCommand);
+
             },
 
             onAddItemToCommand: function(itemObj) {
                 console.log('onAddItemToCommand: ', itemObj);
-                this.selectedServerEvent.command += ' ' + itemObj.console_id;
+                this.selectedServerEventCommand += ' ' + itemObj.console_id;
+
+                console.log('onAddTargetToCommand: ', this.selectedServerEventCommand);
+
             },
 
             onChangeEventIndefinite: function(eventData) {
@@ -806,6 +887,142 @@
 
             sortByOrder: function(items) {
                 return _.sortBy(items, 'order');
+            },
+
+            validateCommand: function(cmd) {
+                let args = cmd.split(' ');
+                let key = args[0];
+                let validation = this.validationRules[key];
+                let rule;
+                let validCommand = true;
+                let equality;
+                let testArg;
+
+                // get rid of empty spaces
+                args = _.reject(args, function(arg) {
+                    return _.isEmpty(arg);
+                });
+
+                if (validation && args && args.length > 1) {
+                    // there are validation rules, and there are at least 2 args
+                    for(let i = 0; i < validation.rules.length; i++) {
+                        rule = validation.rules[i];
+
+                        if (_.isNumber(rule.commandIndex)) {
+                            // if this rule has a command number, get the testArg
+                            testArg = args[rule.commandIndex];
+
+                            if (_.isEmpty(testArg)) {
+                                // if this element doesnt exist, the rule is not valid
+                                validCommand = false;
+                                break;
+                            }
+                        }
+
+                        if (rule.type === '=') {
+                            if (testArg !== rule.value) {
+                                validCommand = false;
+                                break;
+                            }
+                        } else if (rule.type === '=OR') {
+                            if (rule.value.indexOf(args[rule.commandIndex]) === -1) {
+                                validCommand = false;
+                                break;
+                            }
+                        } else if (rule.type === 'length') {
+                            equality = rule.value.split(':');
+                            if (equality[0] === 'gt') {
+                                // if the rule is for greater than, check for less than or equal to
+                                if (cmd.length <= +equality[1]) {
+                                    validCommand = false;
+                                    break;
+                                }
+                            } else if (equality[0] === 'gte') {
+                                // if the rule is for greater than or equal to, check for less than
+                                if (cmd.length < +equality[1]) {
+                                    validCommand = false;
+                                    break;
+                                }
+                            } else if (equality[0] === 'lt') {
+                                // if the rule is for less than, check for greater than or equal to
+                                if (cmd.length >= +equality[1]) {
+                                    validCommand = false;
+                                    break;
+                                }
+                            } else if (equality[0] === 'lte') {
+                                // if the rule is for less than or equal to, check for greater than
+                                if (cmd.length > +equality[1]) {
+                                    validCommand = false;
+                                    break;
+                                }
+                            }
+                        } else if (rule.type === 'validItem') {
+                            let tmpKeys = _.keys(this.items);
+                            let tmpItem;
+                            let index;
+                            let itemCategory;
+                            // assume not found
+                            validCommand = false;
+
+                            for (let i = 0; i < tmpKeys.length; i++) {
+                                index = tmpKeys[i];
+                                itemCategory = this.items[index];
+                                tmpItem = _.find(itemCategory.items, function(item) {
+                                    return item.console_id === testArg;
+                                }, this);
+
+                                if (tmpItem) {
+                                    validCommand = true;
+                                    break;
+                                }
+                            }
+                        } else if (rule.type === 'numeric') {
+                            equality = rule.value.split(':');
+                            testArg = +testArg;
+
+                            if (!_.isFinite(testArg)) {
+                                // testArg must be a number
+                                validCommand = false;
+                                break;
+                            }
+
+                            if (equality[0] === 'gt') {
+                                // if the rule is for greater than, check for less than or equal to
+                                if (testArg <= +equality[1]) {
+                                    validCommand = false;
+                                    break;
+                                }
+                            } else if (equality[0] === 'gte') {
+                                // if the rule is for greater than or equal to, check for less than
+                                if (testArg < +equality[1]) {
+                                    validCommand = false;
+                                    break;
+                                }
+                            } else if (equality[0] === 'lt') {
+                                // if the rule is for less than, check for greater than or equal to
+                                if (testArg >= +equality[1]) {
+                                    validCommand = false;
+                                    break;
+                                }
+                            } else if (equality[0] === 'lte') {
+                                // if the rule is for less than or equal to, check for greater than
+                                if (testArg > +equality[1]) {
+                                    validCommand = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    validCommand = false;
+                }
+
+
+                this.validCommand = validCommand;
+                console.log('validateCommand: IS VALID ', this.validCommand);
+
+                //console.log('validateCommand ', args);
+
             }
         },
         watch: {
@@ -838,6 +1055,10 @@
                 this.eventData.command_interval_minutes = value;
                 this.updateIntervalText();
             },
+            selectedServerEventCommand: function(value) {
+                console.log('selectedServerEventCommand: ', value);
+                this.validateCommand(value);
+            }
         },
         computed: {
             eventDataCommands: {

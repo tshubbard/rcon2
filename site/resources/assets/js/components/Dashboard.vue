@@ -142,7 +142,13 @@
                         this.rustItems = response.data.items;
                         localStorage.setItem('rustItems', JSON.stringify(this.rustItems));
                         localStorage.setItem('rustItemsTS', response.data.rustItemsTS);
+
+                    } else {
+                        this.rustItems = JSON.parse(localStorage.getItem('rustItems'));
                     }
+
+                    console.log('rustItems: ', this.rustItems);
+
                 })
                 .catch(e => {
                     HTTP.logError(itemsUrl, e);

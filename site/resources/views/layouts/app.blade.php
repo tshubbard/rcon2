@@ -58,19 +58,20 @@
             "API_KEY" : "60e0783589465e359dadc092",
             "screen_anchor" : "left"
         };
-        var user = JSON.parse(sessionStorage.getItem('me'));
-        _bugplug.init(_bpopts);
-        if (user && user.id) {
-            _bugplug.addVar({"logged_in": true});
-            _bugplug.addVar({"user_name": user.name});
-            _bugplug.addVar({"user_id": user.id});
-            _bugplug.addVar({"user_email": user.email});
-        } else {
-            _bugplug.addVar({"logged_in": false});
+        if (_bugplug) {
+            var user = JSON.parse(sessionStorage.getItem('me'));
+            _bugplug.init(_bpopts);
+            if (user && user.id) {
+                _bugplug.addVar({"logged_in": true});
+                _bugplug.addVar({"user_name": user.name});
+                _bugplug.addVar({"user_id": user.id});
+                _bugplug.addVar({"user_email": user.email});
+            } else {
+                _bugplug.addVar({"logged_in": false});
 
+            }
+            _bugplug.addVar({"browser": navigator.userAgent});
         }
-        _bugplug.addVar({"browser": navigator.userAgent});
-
     </script>
 </body>
 </html>

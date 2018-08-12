@@ -211,6 +211,56 @@
                         </md-field>
                         <div class="command-validation" v-show="selectedServerEventCommand.length">
                             <h6>Command Validation</h6>
+                            <table class="table table-responsive validation-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%" v-if="validTable.showCol1">
+                                            {{validTable.headerCol1}}
+                                        </th>
+                                        <th style="width: 25%" v-if="validTable.showCol2">
+                                            {{validTable.headerCol2}}
+                                        </th>
+                                        <th style="width: 25%" v-if="validTable.showCol3">
+                                            {{validTable.headerCol3}}
+                                        </th>
+                                        <th style="width: 25%" v-if="validTable.showCol4">
+                                            {{validTable.headerCol4}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td v-if="validTable.showCol1"
+                                            v-bind:class="{'text-center table-success': validTable.validCol1, 'table-danger': !validTable.validCol1}">
+                                            <span v-if="validTable.validCol1">
+                                                <md-icon>done</md-icon>
+                                            </span>
+                                            <span v-if="!validTable.validCol1">{{validTable.helpTextCol1}}</span>
+                                        </td>
+                                        <td v-if="validTable.showCol2"
+                                            v-bind:class="{'text-center table-success': validTable.validCol2, 'table-danger': !validTable.validCol2}">
+                                            <span v-if="validTable.validCol2">
+                                                <md-icon>done</md-icon>
+                                            </span>
+                                            <span v-if="!validTable.validCol2">{{validTable.helpTextCol2}}</span>
+                                        </td>
+                                        <td v-if="validTable.showCol3"
+                                            v-bind:class="{'text-center table-success': validTable.validCol3, 'table-danger': !validTable.validCol3}">
+                                            <span v-if="validTable.validCol3">
+                                                <md-icon>done</md-icon>
+                                            </span>
+                                            <span v-if="!validTable.validCol3">{{validTable.helpTextCol3}}</span>
+                                        </td>
+                                        <td v-if="validTable.showCol4"
+                                            v-bind:class="{'text-center table-success': validTable.validCol4, 'table-danger': !validTable.validCol4}">
+                                            <span v-if="validTable.validCol4">
+                                                <md-icon>done</md-icon>
+                                            </span>
+                                            <span v-if="!validTable.validCol4">{{validTable.helpTextCol4}}</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="text-right" v-show="selectedServerEventCommand.length">
                             <md-button class="md-raised md-dense" v-show="selectedServerEvent.isEdit"
@@ -253,6 +303,7 @@
                                     </md-list>
                                 </md-list-item>
                             </md-tab>
+
                         </md-tabs>
                     </div>
                     <div class="form-group col-md-4" v-show="serverCommandTargetList.length === 0">
@@ -364,15 +415,7 @@
                     id: 'player.chat',
                     name: 'Chat-Triggered',
                     help: 'Chat-typed messages: !kits, !rules, etc',
-                    targets: [{
-                        id: 'user.username',
-                        name: 'UserName',
-                        help: 'The name of the user sending the message'
-                    }, {
-                        id: 'user.steam_id',
-                        name: 'Steam ID',
-                        help: 'The Steam ID of the user sending the message'
-                    }]
+                    targets: []
                 }, {
                     id: 'player.spawned',
                     name: 'Player Spawned',
@@ -427,14 +470,6 @@
                         id: 'user.host',
                         name: 'Host',
                         help: 'The Host info of the user who connected'
-                    }, {
-                        id: 'user.username',
-                        name: 'UserName',
-                        help: 'The name of the user who connected'
-                    }, {
-                        id: 'user.steam_id',
-                        name: 'Steam ID',
-                        help: 'The Steam ID of the user who connected'
                     }]
                 }, {
                     id: 'player.disconnected',
@@ -444,14 +479,6 @@
                         id: 'user.host',
                         name: 'Host',
                         help: 'The Host info of the user who disconnected'
-                    }, {
-                        id: 'user.username',
-                        name: 'UserName',
-                        help: 'The name of the user who disconnected'
-                    }, {
-                        id: 'user.steam_id',
-                        name: 'Steam ID',
-                        help: 'The Steam ID of the user who disconnected'
                     }]
                 }, {
                     id: 'cargo_plane',
@@ -507,24 +534,53 @@
                 validCommand: false,
                 validationRules: {
                     giveall: {
+                        vTable: {
+                            headerCol1: 'Command',
+                            headerCol2: 'Item',
+                            headerCol3: 'Quantity',
+                            headerCol4: '',
+                            showCol1: true,
+                            showCol2: true,
+                            showCol3: true,
+                            helpTextCol2: 'Must be a valid Rust item shortname',
+                            helpTextCol3: 'Must be a numeric quantity greater than 0',
+                        },
                         rules: [{
                             commandIndex: 0,
                             type: '=',
-                            value: 'giveall'
+                            value: 'giveall',
+                            errCol: 1
                         }, {
                             commandIndex: 1,
-                            type: 'validItem'
+                            type: 'validItem',
+                            errCol: 2
                         }, {
                             commandIndex: 2,
                             type: 'numeric',
-                            value: 'gt:0'
-                        }]
+                            value: 'gt:0',
+                            errCol: 3
+                        }],
+                        targets: []
                     },
                     giveto: {
+                        vTable: {
+                            headerCol1: 'Command',
+                            headerCol2: 'Target',
+                            headerCol3: 'Item',
+                            headerCol4: 'Quantity',
+                            showCol1: true,
+                            showCol2: true,
+                            showCol3: true,
+                            showCol4: true,
+                            helpTextCol2: 'Must have valid target: "${user.username}" or "${user.steam_id}"',
+                            helpTextCol3: 'Must be a valid Rust item shortname',
+                            helpTextCol4: 'Must be a numeric quantity greater than 0',
+                        },
                         rules: [{
                             commandIndex: 0,
                             type: '=',
-                            value: 'giveto'
+                            value: 'giveto',
+                            errCol: 1
                         }, {
                             commandIndex: 1,
                             type: '=OR',
@@ -532,25 +588,105 @@
                                 '${user.username}',
                                 '${user.steam_id}'
                             ],
+                            errCol: 2
                         }, {
                             commandIndex: 2,
-                            type: 'validItem'
+                            type: 'validItem',
+                            errCol: 3
                         }, {
                             commandIndex: 3,
                             type: 'numeric',
-                            value: 'gt:0'
+                            value: 'gt:0',
+                            errCol: 4
+                        }],
+                        targets: [{
+                            id: 'user.username',
+                            name: 'UserName',
+                            help: 'The name of the user who connected'
+                        }, {
+                            id: 'user.steam_id',
+                            name: 'Steam ID',
+                            help: 'The Steam ID of the user who connected'
                         }]
                     },
-                    say: {
+                    kick: {
+                        vTable: {
+                            headerCol1: 'Command',
+                            headerCol2: 'Target',
+                            headerCol3: '',
+                            headerCol4: '',
+                            showCol1: true,
+                            showCol2: true,
+                            showCol3: false,
+                            showCol4: false,
+                            helpTextCol2: 'Must have valid target: "${user.username}" or "${user.steam_id}"',
+                        },
                         rules: [{
                             commandIndex: 0,
                             type: '=',
-                            value: 'say'
+                            value: 'kick',
+                            errCol: 1
+                        }, {
+                            commandIndex: 1,
+                            type: '=OR',
+                            value: [
+                                '${user.username}',
+                                '${user.steam_id}'
+                            ],
+                            errCol: 2
+                        }],
+                        targets: [{
+                            id: 'user.username',
+                            name: 'UserName',
+                            help: 'The name of the user who connected'
+                        }, {
+                            id: 'user.steam_id',
+                            name: 'Steam ID',
+                            help: 'The Steam ID of the user who connected'
+                        }]
+                    },
+                    say: {
+                        vTable: {
+                            headerCol1: 'Command',
+                            headerCol2: 'Text',
+                            headerCol3: '',
+                            headerCol4: '',
+                            showCol1: true,
+                            showCol2: true,
+                            showCol3: false,
+                            showCol4: false,
+                            helpTextCol2: 'Must be longer than 4 characters',
+                        },
+                        rules: [{
+                            commandIndex: 0,
+                            type: '=',
+                            value: 'say',
+                            errCol: 1
                         }, {
                             type: 'length',
                             value: 'gt:4',
-                        }]
+                            errCol: 2
+                        }],
+                        targets: []
                     }
+                },
+                validTable: {
+                    headerCol1: 'Command',
+                    headerCol2: 'Text',
+                    headerCol3: 'Target',
+                    headerCol4: 'Quantity',
+                    showCol1: true,
+                    showCol2: true,
+                    showCol3: true,
+                    showCol4: true,
+                    validCol1: true,
+                    validCol2: true,
+                    validCol3: true,
+                    validCol4: true,
+                    helpTextCol1: '',
+                    helpTextCol2: '',
+                    helpTextCol3: '',
+                    helpTextCol4: '',
                 }
             }
         },
@@ -889,6 +1025,27 @@
                 return _.sortBy(items, 'order');
             },
 
+            resetValidationTable: function() {
+                this.validTable = {
+                    headerCol1: _.isUndefined(this.validTable.headerCol1) ? 'Command' : this.validTable.headerCol1,
+                    headerCol2: _.isUndefined(this.validTable.headerCol2) ? 'Text' : this.validTable.headerCol2,
+                    headerCol3: _.isUndefined(this.validTable.headerCol3) ? 'Target' : this.validTable.headerCol3,
+                    headerCol4: _.isUndefined(this.validTable.headerCol4) ? 'Quantity' : this.validTable.headerCol4,
+                    showCol1: _.isUndefined(this.validTable.showCol1) ? true : this.validTable.showCol1,
+                    showCol2: _.isUndefined(this.validTable.showCol2) ? true : this.validTable.showCol2,
+                    showCol3: _.isUndefined(this.validTable.showCol3) ? true : this.validTable.showCol3,
+                    showCol4: _.isUndefined(this.validTable.showCol4) ? true : this.validTable.showCol4,
+                    validCol1: this.validTable.validCol1,
+                    validCol2: this.validTable.validCol2,
+                    validCol3: this.validTable.validCol3,
+                    validCol4: this.validTable.validCol4,
+                    helpTextCol1: '',
+                    helpTextCol2: '',
+                    helpTextCol3: '',
+                    helpTextCol4: '',
+                }
+            },
+
             validateCommand: function(cmd) {
                 let args = cmd.split(' ');
                 let key = args[0];
@@ -897,13 +1054,37 @@
                 let validCommand = true;
                 let equality;
                 let testArg;
+                let vTable;
+                let eventType;
 
+                this.resetValidationTable();
                 // get rid of empty spaces
                 args = _.reject(args, function(arg) {
                     return _.isEmpty(arg);
                 });
 
-                if (validation && args && args.length > 1) {
+                if (validation && args && args.length > 0) {
+                    if (this.eventData && this.eventData.event_type) {
+                        eventType = _.find(this.eventTypes, _.bind(function(evt) {
+                            return evt.id === this.eventData.event_type;
+                        }, this));
+
+                        this.serverCommandTargetList = _.uniq(eventType.targets.concat(validation.targets));
+                    } else {
+                        this.serverCommandTargetList = validation.targets;
+                    }
+
+
+                    vTable = validation.vTable;
+                    this.validTable.headerCol1 = vTable.headerCol1;
+                    this.validTable.headerCol2 = vTable.headerCol2;
+                    this.validTable.headerCol3 = vTable.headerCol3;
+                    this.validTable.headerCol4 = vTable.headerCol4;
+                    this.validTable.showCol1 = vTable.showCol1;
+                    this.validTable.showCol2 = vTable.showCol2;
+                    this.validTable.showCol3 = vTable.showCol3;
+                    this.validTable.showCol4 = vTable.showCol4;
+
                     // there are validation rules, and there are at least 2 args
                     for(let i = 0; i < validation.rules.length; i++) {
                         rule = validation.rules[i];
@@ -915,19 +1096,26 @@
                             if (_.isEmpty(testArg)) {
                                 // if this element doesnt exist, the rule is not valid
                                 validCommand = false;
-                                break;
                             }
                         }
 
                         if (rule.type === '=') {
                             if (testArg !== rule.value) {
                                 validCommand = false;
-                                break;
+                                if (_.isNumber(rule.commandIndex) && rule.commandIndex === 0) {
+                                    this.validTable['validCol' + rule.errCol] = false;
+                                    this.validTable['helpTextCol' + rule.errCol] = 'Must begin with valid command';
+                                }
+                            } else {
+                                this.validTable['validCol' + rule.errCol] = true;
                             }
                         } else if (rule.type === '=OR') {
                             if (rule.value.indexOf(args[rule.commandIndex]) === -1) {
                                 validCommand = false;
-                                break;
+                                this.validTable['validCol' + rule.errCol] = false;
+                                this.validTable['helpTextCol' + rule.errCol] = vTable['helpTextCol' + rule.errCol];
+                            } else {
+                                this.validTable['validCol' + rule.errCol] = true;
                             }
                         } else if (rule.type === 'length') {
                             equality = rule.value.split(':');
@@ -935,27 +1123,30 @@
                                 // if the rule is for greater than, check for less than or equal to
                                 if (cmd.length <= +equality[1]) {
                                     validCommand = false;
-                                    break;
                                 }
                             } else if (equality[0] === 'gte') {
                                 // if the rule is for greater than or equal to, check for less than
                                 if (cmd.length < +equality[1]) {
                                     validCommand = false;
-                                    break;
                                 }
                             } else if (equality[0] === 'lt') {
                                 // if the rule is for less than, check for greater than or equal to
                                 if (cmd.length >= +equality[1]) {
                                     validCommand = false;
-                                    break;
                                 }
                             } else if (equality[0] === 'lte') {
                                 // if the rule is for less than or equal to, check for greater than
                                 if (cmd.length > +equality[1]) {
                                     validCommand = false;
-                                    break;
                                 }
                             }
+                            if (!validCommand) {
+                                this.validTable['validCol' + rule.errCol] = false;
+                                this.validTable['helpTextCol' + rule.errCol] = vTable['helpTextCol' + rule.errCol];
+                            } else {
+                                this.validTable['validCol' + rule.errCol] = true;
+                            }
+
                         } else if (rule.type === 'validItem') {
                             let tmpKeys = _.keys(this.items);
                             let tmpItem;
@@ -973,8 +1164,14 @@
 
                                 if (tmpItem) {
                                     validCommand = true;
-                                    break;
                                 }
+                            }
+
+                            if (validCommand) {
+                                this.validTable['validCol' + rule.errCol] = true;
+                            } else {
+                                this.validTable['validCol' + rule.errCol] = false;
+                                this.validTable['helpTextCol' + rule.errCol] = vTable['helpTextCol' + rule.errCol];
                             }
                         } else if (rule.type === 'numeric') {
                             equality = rule.value.split(':');
@@ -983,43 +1180,59 @@
                             if (!_.isFinite(testArg)) {
                                 // testArg must be a number
                                 validCommand = false;
-                                break;
+                                this.validTable['validCol' + rule.errCol] = false;
+                                this.validTable['helpTextCol' + rule.errCol] = 'Item ' + rule.errCol + ' must be a number';
                             }
 
                             if (equality[0] === 'gt') {
                                 // if the rule is for greater than, check for less than or equal to
                                 if (testArg <= +equality[1]) {
                                     validCommand = false;
-                                    break;
+                                    this.validTable['helpTextCol' + rule.errCol] = 'Item ' + rule.errCol + ' must be greater than ' + equality[1];
                                 }
                             } else if (equality[0] === 'gte') {
                                 // if the rule is for greater than or equal to, check for less than
                                 if (testArg < +equality[1]) {
                                     validCommand = false;
-                                    break;
+                                    this.validTable['helpTextCol' + rule.errCol] = 'Item ' + rule.errCol + ' must be greater than or equal to ' + equality[1];
                                 }
                             } else if (equality[0] === 'lt') {
                                 // if the rule is for less than, check for greater than or equal to
                                 if (testArg >= +equality[1]) {
                                     validCommand = false;
-                                    break;
+                                    this.validTable['helpTextCol' + rule.errCol] = 'Item ' + rule.errCol + ' must be less than ' + equality[1];
                                 }
                             } else if (equality[0] === 'lte') {
                                 // if the rule is for less than or equal to, check for greater than
                                 if (testArg > +equality[1]) {
                                     validCommand = false;
-                                    break;
+                                    this.validTable['helpTextCol' + rule.errCol] = 'Item ' + rule.errCol + ' must be less than or equal to ' + equality[1];
                                 }
+                            }
+
+                            if (!validCommand) {
+                                this.validTable['validCol' + rule.errCol] = false;
+                            } else {
+                                this.validTable['validCol' + rule.errCol] = true;
                             }
                         }
                     }
                 } else {
+
+                    this.validTable.showCol1 = true;
+                    this.validTable.showCol2 = false;
+                    this.validTable.showCol3 = false;
+                    this.validTable.showCol4 = false;
+
+                    this.validTable.validCol1 = false;
+
+                    this.validTable.helpTextCol1 = 'Must begin with valid command';
                     validCommand = false;
                 }
 
 
                 this.validCommand = validCommand;
-                console.log('validateCommand: IS VALID ', this.validCommand);
+                //console.log('validateCommand: IS VALID ', this.validCommand);
 
                 //console.log('validateCommand ', args);
 
@@ -1031,13 +1244,13 @@
 
                 if (eventType && evt) {
                     this.selectedEventTypeText = evt.help;
-                    this.serverCommandTargetList = this.eventTypeObj[eventType].targets;
+                    //this.serverCommandTargetList = this.eventTypeObj[eventType].targets;
                 }
-                console.log('selectedEventType watcher ', this.serverCommandTargetList);
+                console.log('selectedEventType watcher ', eventType, this.eventTypeObj, this.serverCommandTargetList);
 
             },
             eventData: function(event) {
-                console.log('eventData watcher ', arguments);
+                //console.log('eventData watcher ', arguments);
                 this.hasEventsInStack = !!event.commands.length;
                 this.commandIntervalDays = event.command_interval_days;
                 this.commandIntervalHours = event.command_interval_hours;
@@ -1056,7 +1269,6 @@
                 this.updateIntervalText();
             },
             selectedServerEventCommand: function(value) {
-                console.log('selectedServerEventCommand: ', value);
                 this.validateCommand(value);
             }
         },

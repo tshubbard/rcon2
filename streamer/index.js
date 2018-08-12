@@ -100,7 +100,7 @@ db.on('error', function(error){
 
 db.connect(function(error) {
 	if (error) {
-		console.log(err.stack);
+		console.log(error.stack);
 		process.exit();
 	}
 	else

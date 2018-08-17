@@ -526,9 +526,6 @@
                 }, {
                     name: 'kick',
                     icon: 'exposure_neg_1'
-                }, {
-                    name: 'custom',
-                    icon: 'brush'
                 }],
                 serverCommandTargetList: [],
                 validCommand: false,
@@ -867,6 +864,9 @@
 
             addEventToCommandStack: function() {
                 console.log('addEventToCommandStack  ', this.selectedServerEvent);
+                let cmd = this.selectedServerEventCommand.split(' ');
+                this.selectedServerEvent.key = cmd[0];
+                this.selectedServerEvent.command = this.selectedServerEventCommand;
 
                 if (this.selectedServerEvent.order) {
                     this.eventData.commands[this.selectedServerEvent.order - 1] = this.selectedServerEvent;
@@ -895,6 +895,7 @@
                 var cmd = type === 'custom' ? '' : type;
                 var key = this.selectedServerEventCommand.split(' ')[0];
 
+                debugger;
                 if (_.isUndefined(this.selectedServerEvent.key)) {
                     if (['say', 'giveto', 'giveall', 'kick'].indexOf(key) !== -1) {
                         cmd = this.selectedServerEventCommand.replace(key, cmd);

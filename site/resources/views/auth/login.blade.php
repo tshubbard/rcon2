@@ -15,7 +15,7 @@
                             <md-input type="email" name="email" value="{{ old('email') }}" required></md-input>
                         </md-field>
                         @if ($errors->has('email'))
-                            <span class="help-block">
+                            <span class="help-block text-danger">
                                 <strong>{{ $errors->first('email') }}</strong>
                             </span>
                         @endif
@@ -28,7 +28,7 @@
                             <md-input type="password" name="password" value="{{ old('password') }}" required></md-input>
                         </md-field>
                         @if ($errors->has('password'))
-                            <span class="help-block">
+                            <span class="help-block text-danger">
                                 <strong>{{ $errors->first('password') }}</strong>
                             </span>
                         @endif

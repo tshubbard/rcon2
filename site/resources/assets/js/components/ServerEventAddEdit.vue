@@ -895,7 +895,6 @@
                 var cmd = type === 'custom' ? '' : type;
                 var key = this.selectedServerEventCommand.split(' ')[0];
 
-                debugger;
                 if (_.isUndefined(this.selectedServerEvent.key)) {
                     if (['say', 'giveto', 'giveall', 'kick'].indexOf(key) !== -1) {
                         cmd = this.selectedServerEventCommand.replace(key, cmd);

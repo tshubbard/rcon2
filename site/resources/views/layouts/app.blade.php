@@ -21,7 +21,7 @@
 <body>
     <div id="app" class="site-wrapper" v-cloak>
         <header>
-            <div class="container-fluid">
+            <div class="container-fluid bg-dark">
                 @guest
                     @include('partials.nav')
                 @else

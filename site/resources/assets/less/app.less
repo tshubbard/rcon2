@@ -47,14 +47,25 @@ h6 {
 header {
     background-color: @color-bg-dark;
 }
+.bg-dark {
+    background-color: @color-rust-dark !important;
+}
 nav {
     font-size: 1rem;
 
     &.navbar {
         padding: 0.5rem 0;
     }
-    &.dark-bg {
-        background-color: @color-rust-dark;
+    .navbar-brand {
+        color: @color-white !important;
+        .brand-text {
+            top: 2px;
+            position: relative;
+
+            .red-text {
+                color: #B25440;
+            }
+        }
     }
     .breadcrumb {
         margin-bottom: 0;
@@ -123,7 +134,7 @@ nav {
         }
         .carousel-item {
             height: 24rem;
-            background-color: @color-rust-dark;
+            background-color: #383838;
             text-align: center;
 
             & > img {

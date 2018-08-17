@@ -8,7 +8,7 @@
             </ol>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="images/rust-rcon2.jpg"
+                    <img src="images/RustReconLogo1.png"
                          alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h3>Real-Time Server Logs</h3>
@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="images/rust-rcon2.jpg"
+                    <img src="images/RustReconLogo1.png"
                          alt="Second slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h3>Administrate YOUR Server</h3>
@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="images/rust-rcon2.jpg"
+                    <img src="images/RustReconLogo1.png"
                          alt="Third slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h3>Custom Events</h3>

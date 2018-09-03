@@ -25,8 +25,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/api/v1/a/{account}', 'AccountController@showJSON');
     Route::post('/api/v1/accounts', 'AccountController@store');
     Route::post('/api/v1/accounts/{account}/leave', 'AccountController@leave');
-    Route::post('/api/v1/accounts/{account}/removeUser/{user}', 'AccountController@removeUser');
-    Route::post('/api/v1/accounts/{account}/removeServer/{server}', 'AccountController@removeServer');
+    Route::post('/api/v1/accounts/{account}/user/{userEmail}/check', 'AccountController@checkUser');
+    Route::post('/api/v1/accounts/{account}/user/{user}', 'AccountController@addUser');
+    Route::put('/api/v1/accounts/{account}/user/{user}', 'AccountController@updateUser');
+    Route::delete('/api/v1/accounts/{account}/user/{user}', 'AccountController@removeUser');
+    Route::delete('/api/v1/accounts/{account}/server/{server}', 'AccountController@removeServer');
     Route::put('/api/v1/accounts/{account}', 'AccountController@update');
     Route::delete('/api/v1/accounts/{account}', 'AccountController@destroy');
 

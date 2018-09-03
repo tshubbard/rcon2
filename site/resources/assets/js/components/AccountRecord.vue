@@ -121,6 +121,7 @@
                 :visible="showUserAddEdit"
                 :userData="selectedUserForAddEdit"
                 :accountData="account"
+                :usersData="users"
                 v-on:account-user-added="onUserAdded"
                 v-on:account-user-deleted="onUserDeleted"
                 v-on:account-user-changed="onUserChanged"
@@ -247,7 +248,7 @@
             deleteServer: function(server) {
                 let name = server.name;
                 this.showDeleteConfirmDialog = true;
-                this.dialogAction = 'removeServer';
+                this.dialogAction = 'server';
                 this.dialogTitle = 'Delete Server: ' + name;
                 this.dialogContent = 'Are you sure you wish to delete ' + name + '?';
                 this.dialogConfirmText = 'Delete Server';
@@ -282,23 +283,32 @@
             removeUser: function(user) {
                 let name = user.name;
                 this.showDeleteConfirmDialog = true;
-                this.dialogAction = 'removeUser';
+                this.dialogAction = 'user';
                 this.dialogTitle = 'Remove User: ' + name;
                 this.dialogContent = 'Are you sure you wish to remove ' + name + ' from this Account?';
                 this.dialogConfirmText = 'Remove User';
                 this.item = user;
             },
 
-            onUserAdded: function(data) {
-                console.log('onUserAdded ', data);
+            onUserAdded: function(userData) {
+                console.log('onUserAdded ', userData);
+                this.users.push(userData);
             },
 
-            onUserDeleted: function(data) {
-                console.log('onUserDeleted ', data);
+            onUserDeleted: function(userData) {
+                console.log('onUserDeleted ', userData);
+                this.users = _.reject(this.users, function(user) {
+                    return user.id === userData.id;
+                }, this);
             },
 
-            onUserChanged: function(data) {
-                console.log('onUserChanged ', data);
+            onUserChanged: function(userData) {
+                console.log('onUserChanged ', userData);
+                _.each(this.users, function(user) {
+                    if (user.id === userData.id) {
+                        user = userData;
+                    }
+                }, this);
             },
 
             onConfirmDialogCancel: function() {
@@ -308,14 +318,14 @@
             onConfirmDialogConfirm: function() {
                 let url = HTTP.buildUrl('accounts/' + this.account.id + '/' + this.dialogAction + '/' + this.item.id);
 
-                HTTP.post(url)
+                HTTP.delete(url)
                     .then(response => {
                         this.showDeleteConfirmDialog = false;
-                        if (this.dialogAction === 'removeUser') {
+                        if (this.dialogAction === 'user') {
                             this.users = _.reject(this.users, function(user) {
                                 return user.id === response.data.record.id;
                             }, this);
-                        } else if (this.dialogAction === 'removeServer') {
+                        } else if (this.dialogAction === 'server') {
                             this.servers = _.reject(this.servers, function(server) {
                                 return server.id === response.data.record.id;
                             }, this);

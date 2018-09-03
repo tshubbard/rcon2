@@ -139,6 +139,67 @@ class AccountController extends Controller
         ]);
     }
 
+    public function updateUser(Request $request, Account $account, User $user) {
+        if(!$this->checkAccount($account->id)) return $this->checkAccountFail();
+
+        $success = false;
+        $msg = 'Not an active endpoint yet!';
+
+        // todo: update any user stuff on the account that we need to do
+
+        return response()->json([
+            'success' => $success,
+            'record' => $user,
+            'message' => $msg
+        ]);
+    }
+
+    public function checkUser(Request $request, Account $account, $userEmail) {
+        if(!$this->checkAccount($account->id)) return $this->checkAccountFail();
+
+        $user = User::where('email', '=', $userEmail)->first();
+
+        $success = true;
+        $msg = '';
+        $accts = $user->accounts;
+        foreach($accts as $acct) {
+            if ($acct['id'] === $account->id) {
+                $success = false;
+                $msg = 'User already exists on Account';
+            }
+        }
+
+        return response()->json([
+            'success' => $success,
+            'record' => $user,
+            'message' => $msg
+        ]);
+    }
+
+    public function addUser(Request $request, Account $account, User $user) {
+        if(!$this->checkAccount($account->id)) return $this->checkAccountFail();
+
+        $addAcct = true;
+        $success = false;
+        $msg = '';
+        $accts = $user->accounts;
+        foreach($accts as $acct) {
+            if ($acct['id'] === $account->id) {
+                $addAcct = false;
+                $msg = 'User already exists on Account';
+            }
+        }
+        if ($addAcct) {
+            $user->accounts()->attach($account->id);
+            $success = true;
+        }
+        return response()->json([
+            'success' => $success,
+            'record' => $user,
+            'message' => $msg
+        ]);
+    }
+
     public function removeUser(Request $request, Account $account, User $user) {
         $thisUser = Auth::user();
 

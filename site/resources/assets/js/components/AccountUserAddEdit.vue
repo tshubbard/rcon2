@@ -22,8 +22,14 @@
             <form name="addEditAccountUserForm">
                 <errors-view :errors="errors"></errors-view>
 
-                <div class="form-group row">
-                    <label for="user_name" class="col-md-3 col-form-label" v-if="!item.id">Email</label>
+                <div class="form-group row" v-if="!item.id">
+                    <label for="user_name" class="col-md-3 col-form-label">Email</label>
+                    <input id="user_name" type="email" class="col-sm-6 form-control"
+                           @keyup.enter="enterClicked"
+                           @keydown.enter="enterClicked"
+                           name="user_name" v-model="item.email" required>
+                </div>
+                <div class="form-group row" v-if="item.id">
                     <label for="user_name" class="col-md-3 col-form-label" v-if="item.id">User Name</label>
                     <input id="user_name" type="text" class="col-sm-6 form-control"
                            @keyup.enter="enterClicked"
@@ -50,8 +56,13 @@
                     Cancel
                 </md-button>
                 <md-button
+                        @click.stop="verifyUser"
+                        class="md-raised md-primary" v-if="!isVerified">
+                    Check User
+                </md-button>
+                <md-button
                         @click.stop="checkForm"
-                        class="md-raised md-primary">
+                        class="md-raised md-primary" v-if="isVerified">
                     Save
                 </md-button>
             </div>
@@ -81,6 +92,7 @@
             'accountData',
             'authedUserData',
             'userData',
+            'usersData',
             'visible'
         ],
         data: function() {
@@ -90,9 +102,11 @@
                 authUser: {},
                 errors: [],
                 isSaving: false,
+                isVerified: false,
                 item: {},
                 showConfirmDialog: false,
-                userId: -1
+                userId: -1,
+                verifiedUser: {},
             }
         },
         created: function() {
@@ -107,6 +121,9 @@
 
                 this.addEditLabel = this.item.id ? 'Edit' : 'Add';
                 this.userId = this.authUser.id;
+                if (this.item.id) {
+                    this.isVerified = true;
+                }
                 console.log('[AccountUserAddEdit] this.item: ', this.item, this.userId);
             },
 
@@ -115,28 +132,32 @@
             },
 
             saveAddEditAccountDialog: function() {
-                let url = HTTP.buildUrl('accounts');
+                let url = HTTP.buildUrl('accounts/' + this.accountData.id + '/user/');
                 let eventName;
-                let payload = _.pick(this.item, 'name');
+                let payload = _.clone(this.item);
                 let method;
 
+                if (this.isSaving) {
+                    return;
+                }
+                this.isSaving = true;
                 if (!this.item.id) {
                     method = 'post';
                     eventName = 'account-user-added';
-                    payload.owner_id = this.$parent.user.id;
+                    url += this.verifiedUser.id;
                 } else if (this.item.delete) {
                     method = 'delete';
-                    url += '/' + this.item.id;
+                    url += this.item.id;
                     eventName = 'account-user-deleted';
                 } else {
                     method = 'put';
-                    url += '/' + this.item.id;
+                    url += this.item.id;
                     eventName = 'account-user-changed';
                 }
 
                 HTTP[method](url, payload)
                     .then(response => {
-                        this.$emit(eventName, _.clone(response.data));
+                        this.$emit(eventName, _.clone(response.data.record));
                         this.isSaving = false;
                         this.showDialog = false;
                     })
@@ -169,26 +190,83 @@
                 this.checkForm(evt);
             },
 
+            verifyUser: function() {
+                let regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                let url;
+                let userAlreadyExists = false;
+                let item;
+
+                if (this.isVerifying) {
+                    return;
+                }
+
+                this.errors = [];
+                if (regEx.test(this.item.email)) {
+                    item = this.item;
+                    _.each(this.usersData, function(user) {
+                        if (user.email === item.email) {
+                            userAlreadyExists = true;
+                        }
+                    }, this);
+
+                    if (!userAlreadyExists) {
+                        url = HTTP.buildUrl('accounts/' + this.accountData.id + '/user/' + this.item.email + '/check');
+
+                        this.isVerifying = true;
+
+                        HTTP.post(url)
+                            .then(response => {
+
+                                this.isVerifying = false;
+                                if (response.data.success && !_.isNull(response.data.record)) {
+                                    this.isVerified = true;
+                                    this.verifiedUser = response.data.record;
+                                    this.saveAddEditAccountDialog();
+                                } else if (!response.data.success && response.data.message) {
+                                    this.errors.push(response.data.message)
+                                } else {
+                                    this.errors.push('Not a valid User');
+                                }
+                            })
+                            .catch(e => {
+                                console.error('[API Error] ', url, e);
+                                this.isSaving = false;
+
+                                this.errors.push(e)
+                            });
+                    } else {
+                        this.errors.push('User already exists on account!');
+                    }
+                } else {
+                    this.errors.push('Not a valid Email Address');
+                }
+            },
+
             checkForm: function(evt) {
                 if (evt) {
                     evt.preventDefault();
                     evt.stopImmediatePropagation();
                 }
 
-                if (!this.isSaving) {
-                    this.isSaving = true;
-                } else {
+                if (this.isSaving) {
                     return;
                 }
 
                 this.errors = [];
 
-                if(!this.item.name) {
+                if(this.isVerified && !this.item.name) {
                     this.errors.push('Name is required');
+                }
+                if(!this.isVerified && !this.item.email) {
+                    this.errors.push('Email is required');
                 }
 
                 if(!this.errors.length) {
-                    this.saveAddEditAccountDialog();
+                    if (this.isVerified) {
+                        this.saveAddEditAccountDialog();
+                    } else {
+                        this.verifyUser();
+                    }
                 }
             },
         },

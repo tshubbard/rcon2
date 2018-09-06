@@ -947,7 +947,6 @@
 
                 this.errors = [];
 
-                debugger;
                 if(!this.eventData.name) {
                     this.errors.push('Name is required');
                 }

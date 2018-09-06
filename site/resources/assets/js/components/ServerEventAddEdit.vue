@@ -805,7 +805,7 @@
 
                 HTTP[method](url, payload)
                     .then(response => {
-                        let eventData = _.clone(response.data.data);
+                        let eventData = _.clone(response.data.data || response.data);
 
                         eventData.is_active = !!eventData.is_active;
                         eventData.is_indefinite = !!eventData.is_indefinite;
@@ -947,6 +947,7 @@
 
                 this.errors = [];
 
+                debugger;
                 if(!this.eventData.name) {
                     this.errors.push('Name is required');
                 }

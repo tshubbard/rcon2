@@ -176,8 +176,9 @@
                         command_timer: undefined,
                         event_type: 'timer',
                         commands: [],
-                        is_public: 0,
-                        is_active: 0,
+                        is_public: false,
+                        is_active: false,
+                        is_indefinite: true,
                         votes: 0
                     };
                 }

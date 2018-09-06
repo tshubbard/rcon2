@@ -753,21 +753,21 @@
                 }
 
                 if (payload.is_public === 'on' || payload.is_public === 'off') {
-                    payload.is_public = payload.is_public === 'on' ? 1 : 0;
+                    payload.is_public = payload.is_public === 'on' ? true : false;
                 }
                 if (payload.is_active === 'on' || payload.is_active === 'off') {
-                    payload.is_active = payload.is_active === 'on' ? 1 : 0;
+                    payload.is_active = payload.is_active === 'on' ? true : false;
                 }
 
                 if (!payload.is_active) {
-                    payload.is_active = 0;
+                    payload.is_active = false;
                 }
 
                 if (payload.is_indefinite) {
                     payload.start_date = null;
                     payload.end_date = null;
                 } else {
-                    payload.is_indefinite = 0;
+                    payload.is_indefinite = false;
                     if (payload.start_date) {
                         tmpDate = new Date(payload.start_date);
                         tmpMonth = tmpDate.getMonth();
@@ -805,7 +805,7 @@
 
                 HTTP[method](url, payload)
                     .then(response => {
-                        let eventData = _.clone(response.data);
+                        let eventData = _.clone(response.data.data);
 
                         eventData.is_active = !!eventData.is_active;
                         eventData.is_indefinite = !!eventData.is_indefinite;

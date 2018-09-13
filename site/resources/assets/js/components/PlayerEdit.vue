@@ -201,8 +201,12 @@
 
             onDialogOpened: function() {
                 let tmp = _.clone(this.playerData);
-                let steamUrl = tmp.steam_profile.split('/');
-                tmp.steamName = steamUrl[steamUrl.length - 1] || steamUrl[steamUrl.length - 2];
+
+                if(tmp.steam_profile !== null) {
+                    let steamUrl = tmp.steam_profile.split('/');
+                    tmp.steamName = steamUrl[steamUrl.length - 1] || steamUrl[steamUrl.length - 2];
+                }
+
                 tmp.last_login = format(tmp.last_login, 'MM-DD-YYYY');
 
                 this.item = tmp;

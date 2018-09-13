@@ -23,7 +23,7 @@ class ChatController extends Controller
     {
         if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
 
-        $chat = Chat::where('server_id', '=', $server->id)->get();
+        $chat = Chat::where('server_id', '=', $server->id)->orderBy('id', 'desc')->limit(100)->get();
 
         return response()->json([
             'messages' => $chat

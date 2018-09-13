@@ -87,7 +87,7 @@ class Scheduler extends EventEmitter {
 						setTimeout(function(){
 							this.triggers['player.chat'][row.id] = {
 								'command': row.commands,
-								'trigger': row.commands_trigger
+								'trigger': row.command_trigger
 							};
 						}.bind(this), delay);
 
@@ -182,8 +182,8 @@ class Scheduler extends EventEmitter {
 			case 'player.chat':
 				Object.keys(this.triggers['player.chat']).forEach(function(key){
 					if(event.message == this.triggers['player.chat'][key].trigger)
-						this.triggers['player.chat'][key].command.forEach(function(command){
-							_servers[this.server_id].rcon.command(this.handleVariableSubstitution(event, command));
+						this.triggers['player.chat'][key].command.forEach(function(item){
+							_servers[this.server_id].rcon.command(this.handleVariableSubstitution(event, item.command));
 						}.bind(this));
 				}.bind(this));
 			break;
@@ -196,8 +196,8 @@ class Scheduler extends EventEmitter {
 			case('xmasrefill'):
 			case('ch47scientists.entity'):
 				Object.keys(this.triggers[event.type]).forEach(function(key){
-					this.triggers[event.type][key].command.forEach(function(command){
-						_servers[this.server_id].rcon.command(this.handleVariableSubstitution(event, command));
+					this.triggers[event.type][key].command.forEach(function(item){
+						_servers[this.server_id].rcon.command(this.handleVariableSubstitution(event, item.command));
 					}.bind(this));
 				}.bind(this));
 			break;

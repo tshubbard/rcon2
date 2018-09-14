@@ -139,7 +139,6 @@ class RconConnectionEvents {
 
 			_servers[server.id].rcon.disconnect();
 			RconConnectionEvents.cleanupIntervals(server.id);
-			RconConnectionEvents.unbindEvents(server.id);
 
 			setTimeout(function(){
 				_servers[server.id].rcon.connect();

@@ -7,7 +7,7 @@ import 'vue-material/dist/vue-material.min.css';
 import VueSocketio from 'vue-socket.io';
 
 Vue.use(VueMaterial);
-Vue.use(VueSocketio, 'http://localhost:6969');
+//Vue.use(VueSocketio, 'http://localhost:6969');
 
 import axios from 'axios';
 

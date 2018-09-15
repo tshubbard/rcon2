@@ -130,6 +130,8 @@ class ServerController extends Controller
         if(empty($requestInput['is_active']))
             $requestInput['is_active'] = 0;
 
+        $requestInput['slug'] = sha1($requestInput['name'] . $requestInput['account_id'] . microtime());
+
         $newServer = Server::create($requestInput);
 
         $c = curl_init('http://localhost:7869/api/server');
@@ -214,7 +216,7 @@ class ServerController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => array('id' => $id, 'deleted' => true)
+            'data' => array('id' => (int) $id, 'deleted' => true)
         ]);
     }
 

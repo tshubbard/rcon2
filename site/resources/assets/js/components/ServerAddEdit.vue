@@ -65,8 +65,8 @@
 
         <md-dialog-actions layout="row" layout-align="end">
             <div class="col-md-4 pl-0">
-                <md-button class="md-raised md-accent" v-if="item.id != null" v-on:click="deleteServer">Delete This
-                    Server
+                <md-button class="md-raised md-accent" v-if="item.id != null" v-on:click="deleteServer">
+                    Delete This Server
                 </md-button>
             </div>
             <div class="col-md-8 text-right">
@@ -152,6 +152,7 @@
                         this.$emit(eventName, _.clone(response.data));
                         this.isSaving = false;
                         this.showConfirmDialog = false;
+                        this.showDialog = false;
                     })
                     .catch(e => {
                         HTTP.logError(url, e);
@@ -174,7 +175,8 @@
             },
 
             checkForm: function(evt) {
-                evt.preventDefault();
+                if(evt != null)
+                    evt.preventDefault();
 
                 this.errors = [];
 

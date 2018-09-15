@@ -31,7 +31,9 @@
         <server-add-edit
                 :visible="showServerAddEdit"
                 :serverData="selectedServer"
-                v-on:server-change="onServerChange"
+                v-on:server-added="onServerAdd"
+                v-on:server-changed="onServerChange"
+                v-on:server-deleted="onServerDelete"
                 @close="showServerAddEdit = false">
 
         </server-add-edit>
@@ -76,16 +78,26 @@
                 this.selectedServer = serverData;
                 this.showServerAddEdit = true;
             },
+            onServerAdd: function(newServer) {
+                this.servers.push(newServer.data);
+            },
             onServerChange: function(changedServer) {
-                if(changedServer.deleted != null && changedServer.deleted)
-                {
-                    if(this.servers[changedServer.id] != null)
-                        delete this.servers[changedServer.id];
-                }
-                else if(this.servers[changedServer.id] != null)
-                    this.servers[changedServer.id] = Object.assign(this.servers[changedServer.id], changedServer);
-                else
-                    this.servers[changedServer.id] = changedServer;
+                if(changedServer.success == null || !changedServer.success)
+                    return false;
+
+                _.each(this.servers, function(server) {
+                    if (server.id === changedServer.data.id) {
+                        Object.assign(server, changedServer.data);
+                    }
+                }, this);
+            },
+            onServerDelete: function(deletedServer) {
+                if(deletedServer.success == null || !deletedServer.success)
+                    return false;
+
+                this.servers = _.reject(this.servers, function(server) {
+                    return server.id === deletedServer.data.id;
+                });
             }
         },
         computed: {

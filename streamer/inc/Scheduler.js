@@ -37,7 +37,7 @@ class Scheduler extends EventEmitter {
 		}
 
 		db.query(sql, parameters, function(error, results, fields){
-			if(error) console.log('Error retrieving server event list.');
+			if(error) Util.log('Error retrieving server event list.');
 
 			let now = DateTime.fromObject({'zone': _servers[this.server_id].timezone});
 
@@ -161,7 +161,7 @@ class Scheduler extends EventEmitter {
 	updateLastRun(id)
 	{
 		db.query('UPDATE server_events SET lastrun_date = NOW() WHERE id = ? AND server_id = ?', [id, this.server_id], function(error, results, fields){
-			if(error) console.log('Error updating event last run date.');
+			if(error) Util.log('Error updating event last run date.');
 		});
 	}
 

@@ -2,7 +2,7 @@ class RconConnectionEvents {
 	static bindEvents(server)
 	{
 		_servers[server.id].rcon.on('open', function() {
-			console.log('Connection to Rust server [' + server.id + '] ' + server.host + ':' + server.port + ' established.');
+			Util.log('Connection to Rust server [' + server.id + '] ' + server.host + ':' + server.port + ' established.');
 
 			_servers[server.id].intervals.push(setInterval(function(){
 				_servers[server.id].player.load();
@@ -67,9 +67,9 @@ class RconConnectionEvents {
 			db.query('INSERT INTO stream (server_id, payload, event) VALUES (?, ?, ?)', [server.id, utf8.encode(msg_raw), ((event.type == null) ? null : JSON.stringify(event))], function (error, results, fields){
 				if(error)
 				{
-					console.log('Error inserting into stream table.' + "\n");
-					console.log([server.id, msg_raw, ((event.type == null) ? null : JSON.stringify(event))]);
-					console.log("\n\n");
+					Util.log('Error inserting into stream table.' + "\n");
+					Util.log([server.id, msg_raw, ((event.type == null) ? null : JSON.stringify(event))]);
+					Util.log("\n\n");
 				}
 			});
 
@@ -78,7 +78,7 @@ class RconConnectionEvents {
 				switch(event.type){
 					case 'player.chat':
 						db.query('INSERT INTO chat (server_id, steam_id, username, message) VALUES (?, ?, ?, ?)', [server.id, event.user.steam_id, utf8.encode(event.user.username), event.message], function (error, results, fields){
-							if (error) console.log('Error inserting record into chat table.');
+							if (error) Util.log('Error inserting record into chat table.');
 						});
 					break;
 					case 'player.connected':
@@ -95,7 +95,7 @@ class RconConnectionEvents {
 					case 'player.killed':
 						_servers[server.id].player.getLastDeath(event.victim.steam_id, function(record){
 							db.query('INSERT INTO kills (server_id, victim_steam_id, victim_username, killer_steam_id, killer_username) VALUES (?, ?, ?, ?, ?)', [server.id, event.victim.steam_id, utf8.encode(event.victim.username), event.killer.steam_id, utf8.encode(event.killer.username)], function (error, results, fields){
-								if (error) console.log('Error inserting record into kills table.');
+								if (error) Util.log('Error inserting record into kills table.');
 							});
 
 							let message = event.victim.username + ' was killed by ' + event.killer.username;
@@ -135,7 +135,7 @@ class RconConnectionEvents {
 		});
 
 		_servers[server.id].rcon.on('error', function(msg) {
-			console.log('Connection to Rust server [' + server.id + '] ' + server.host + ':' + server.port + ' FAILED. Trying again in 15 seconds.');
+			Util.log('Connection to Rust server [' + server.id + '] ' + server.host + ':' + server.port + ' FAILED. Trying again in 15 seconds.');
 
 			_servers[server.id].rcon.disconnect();
 			RconConnectionEvents.cleanupIntervals(server.id);
@@ -147,7 +147,7 @@ class RconConnectionEvents {
 		});
 
 		_servers[server.id].rcon.on('close', function() {
-			console.log('Connection to Rust server [' + server.id + '] ' + server.host + ':' + server.port + ' closed.');
+			Util.log('Connection to Rust server [' + server.id + '] ' + server.host + ':' + server.port + ' closed.');
 		});
 	}
 

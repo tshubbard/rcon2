@@ -95,24 +95,24 @@ const mysql = require('mysql');
 db = mysql.createConnection(_config.db);
 
 db.on('error', function(error){
-	console.log(error);
+	Util.log(error);
 });
 
 db.connect(function(error) {
 	if (error) {
-		console.log(error.stack);
+		Util.log(error.stack);
 		process.exit();
 	}
 	else
 	{
 		db.query('SET time_zone = \'UTC\'', [], function(error, results, fields){
-			if(error) console.log('Error setting time zone to UTC.');
+			if(error) Util.log('Error setting time zone to UTC.');
 
 			db.query('SET NAMES \'utf8mb4\' COLLATE \'utf8mb4_unicode_ci\';', [], function(error, results, fields){
-				if(error) console.log('Error setting time zone to UTC.');
+				if(error) Util.log('Error setting time zone to UTC.');
 
 				db.query('TRUNCATE TABLE players_current', [], function (error, results, fields){
-					if(error) console.log('Error truncating players_current table.');
+					if(error) Util.log('Error truncating players_current table.');
 
 					StreamerEvents.emit('dbready');
 				});

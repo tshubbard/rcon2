@@ -19,8 +19,13 @@ class Util {
 		return (hours * 3600);
 	}
 
+	static log(message)
+	{
+		console.log(DateTime.local().toString() + ' - ' + message);
+	}
+
 	static gracefulShutdown(){
-		console.log("\n" + 'Graceful shutdown initiated.');
+		Util.log("\n" + 'Graceful shutdown initiated.');
 
 		let shutdown_counter = 0;
 		let shutdown_attempts = 0;
@@ -28,7 +33,7 @@ class Util {
 		shutdown_counter++;
 
 		db.end(function(){
-			console.log('Database connection closed.');
+			Util.log('Database connection closed.');
 
 			shutdown_counter--;
 		});
@@ -40,7 +45,7 @@ class Util {
 			RconConnectionEvents.cleanupIntervals(server);
 
 			_servers[server].rcon.on('close', function(){
-				console.log('Rust server [' + server + '] connection closed.');
+				Util.log('Rust server [' + server + '] connection closed.');
 				shutdown_counter--;
 			});
 
@@ -51,9 +56,9 @@ class Util {
 			if(shutdown_counter == 0 || shutdown_attempts == 4)
 			{
 				if(shutdown_counter == 0)
-					console.log('Graceful shutdown complete.');
+					Util.log('Graceful shutdown complete.');
 				else
-					console.log('Graceful shutdown timer exceeded, program exiting.');
+					Util.log('Graceful shutdown timer exceeded, program exiting.');
 
 				process.exit();
 			}

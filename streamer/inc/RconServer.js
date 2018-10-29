@@ -10,7 +10,7 @@ class RconServer {
 		db.query(sql, function(error, results, fields){
 			if(error)
 			{
-				console.log('Error retrieving list of servers.');
+				Util.log('Error retrieving list of servers.');
 				process.exit();
 			}
 

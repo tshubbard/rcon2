@@ -16,7 +16,8 @@ class Scheduler extends EventEmitter {
 			'cargo_plane': {},
 			'patrolhelicopter': {},
 			'xmasrefill': {},
-			'ch47scientists.entity': {}
+			'ch47scientists.entity': {},
+			'cargoshiptest': {}
 		};
 	}
 
@@ -106,6 +107,7 @@ class Scheduler extends EventEmitter {
 					case('patrolhelicopter'):
 					case('xmasrefill'):
 					case('ch47scientists.entity'):
+					case('cargoshiptest'):
 						if(start_date !== null && now < start_date)
 							delay = start_date.diff(now).toObject().milliseconds;
 						else
@@ -195,6 +197,7 @@ class Scheduler extends EventEmitter {
 			case('patrolhelicopter'):
 			case('xmasrefill'):
 			case('ch47scientists.entity'):
+			case('cargoshiptest'):
 				Object.keys(this.triggers[event.type]).forEach(function(key){
 					this.triggers[event.type][key].command.forEach(function(item){
 						_servers[this.server_id].rcon.command(this.handleVariableSubstitution(event, item.command));

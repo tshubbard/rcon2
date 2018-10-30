@@ -486,6 +486,11 @@
                     help: 'When the Cargo Plane spawns',
                     targets: []
                 }, {
+                    id: 'cargoshiptest',
+                    name: 'Cargo Ship',
+                    help: 'When the Cargo Ship spawns',
+                    targets: []
+                }, {
                     id: 'patrolhelicopter',
                     name: 'Patrol Helicopter',
                     help: 'When the Patrol Helicopter spawns',

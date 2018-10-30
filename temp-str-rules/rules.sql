@@ -14,6 +14,8 @@ INSERT INTO server_events (name, server_id, created_by_user_id, event_type, comm
 
 INSERT INTO server_events (name, server_id, created_by_user_id, event_type, commands, is_indefinite, is_public, is_active) VALUES ('Chinook Message', 1, 0, 'ch47scientists.entity', '[{"key": "say", "order": 1, "command": "say Chinook incoming."}]', 1, 0, 1);
 
+INSERT INTO server_events (name, server_id, created_by_user_id, event_type, commands, is_indefinite, is_public, is_active) VALUES ('Cargo Ship Message', 1, 0, 'cargoshiptest', '[{"key": "say", "order": 1, "command": "say Cargo Ship incoming."}]', 1, 0, 1);
+
 INSERT INTO server_events (name, server_id, created_by_user_id, event_type, commands, command_timer, is_indefinite, is_public, is_active) VALUES ('PURGE - General Server Broadcast', 1, 0, 'timer', '[{"key": "say", "order": 1, "command": "say PURGE is live!"}]', 15, 1, 0, 0);
 
 INSERT INTO server_events (name, server_id, created_by_user_id, event_type, commands, command_timer, is_indefinite, is_public, is_active) VALUES ('PURGE - Weapon Timed Give', 1, 0, 'timer', '[{"key": "giveall", "order": 1, "command": "giveall rifle.bolt"},{"key": "giveall", "order": 2, "command": "giveall weapon.mod.small.scope"},{"key": "giveall", "order": 3, "command": "giveall ammo.rifle.hv 200"}]', 20, 1, 0, 0);

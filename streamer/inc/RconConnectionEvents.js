@@ -146,8 +146,8 @@ class RconConnectionEvents {
 			}, Util.toMSeconds(15));
 		});
 
-		_servers[server.id].rcon.on('close', function() {
-			Util.log('Connection to Rust server [' + server.id + '] ' + server.host + ':' + server.port + ' closed.');
+		_servers[server.id].rcon.on('close', function(code, reason) {
+			Util.log('Connection to Rust server [' + server.id + '] ' + server.host + ':' + server.port + ' closed. CODE: ' + code + ', REASON: ' + reason);
 		});
 	}
 

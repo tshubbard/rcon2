@@ -25,7 +25,7 @@ class Util {
 	}
 
 	static gracefulShutdown(){
-		Util.log("\n" + 'Graceful shutdown initiated.');
+		Util.log('Graceful shutdown initiated.');
 
 		let shutdown_counter = 0;
 		let shutdown_attempts = 0;

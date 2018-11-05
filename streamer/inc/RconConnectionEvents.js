@@ -136,18 +136,11 @@ class RconConnectionEvents {
 
 		_servers[server.id].rcon.on('error', function(msg) {
 			Util.log('Connection to Rust server [' + server.id + '] ' + server.host + ':' + server.port + ' FAILED. Trying again in 15 seconds.');
-
-			_servers[server.id].rcon.disconnect();
-			RconConnectionEvents.cleanupIntervals(server.id);
-
-			setTimeout(function(){
-				_servers[server.id].rcon.connect();
-				RconConnectionEvents.bindEvents(server);
-			}, Util.toMSeconds(15));
 		});
 
 		_servers[server.id].rcon.on('close', function(code, reason) {
-			Util.log('Connection to Rust server [' + server.id + '] ' + server.host + ':' + server.port + ' closed. CODE: ' + code + ', REASON: ' + reason);
+			if(code != 1000)
+				RconConnectionEvents.retryConnection(server);
 		});
 	}
 
@@ -160,6 +153,17 @@ class RconConnectionEvents {
 		_servers[server_id].intervals = [];
 
 		_servers[server_id].scheduler.unload();
+	}
+
+	static retryConnection(server)
+	{
+		_servers[server.id].rcon.disconnect();
+		RconConnectionEvents.cleanupIntervals(server.id);
+
+		setTimeout(function(){
+			_servers[server.id].rcon.connect();
+			RconConnectionEvents.bindEvents(server);
+		}, Util.toMSeconds(15));
 	}
 }
 

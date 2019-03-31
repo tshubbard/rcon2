@@ -16,6 +16,7 @@ class Scheduler extends EventEmitter {
 			'cargo_plane': {},
 			'patrolhelicopter': {},
 			'xmasrefill': {},
+			'santasleigh': {},
 			'ch47scientists.entity': {},
 			'cargoshiptest': {}
 		};
@@ -106,6 +107,7 @@ class Scheduler extends EventEmitter {
 					case('cargo_plane'):
 					case('patrolhelicopter'):
 					case('xmasrefill'):
+					case('santasleigh'):
 					case('ch47scientists.entity'):
 					case('cargoshiptest'):
 						if(start_date !== null && now < start_date)
@@ -196,6 +198,7 @@ class Scheduler extends EventEmitter {
 			case('cargo_plane'):
 			case('patrolhelicopter'):
 			case('xmasrefill'):
+			case('santasleigh'):
 			case('ch47scientists.entity'):
 			case('cargoshiptest'):
 				Object.keys(this.triggers[event.type]).forEach(function(key){

@@ -505,6 +505,11 @@
                     name: 'Christmas Gift Drop',
                     help: 'When the Christmas gifts are dropped by Santa',
                     targets: []
+                }, {
+                    id: 'santasleigh',
+                    name: 'Santa Arrival',
+                    help: 'When Santa and his sleigh appear',
+                    targets: []
                 }],
                 eventTypeObj: {},
                 hasEventsInStack: false,

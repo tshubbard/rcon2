@@ -25,7 +25,8 @@ class Server extends Model
         'port',
         'password',
         'is_active',
-        'timezone'
+        'timezone',
+        'slug'
     ];
 
     /**
@@ -61,5 +62,10 @@ class Server extends Model
     public function playerscurrent()
     {
         return $this->hasMany(PlayerCurrent::class);
+    }
+
+    public function ipbans()
+    {
+        return $this->hasMany(IPBan::class);
     }
 }

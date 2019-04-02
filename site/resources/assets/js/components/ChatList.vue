@@ -6,19 +6,17 @@
 
         <div class="container-fluid">
             <div class="row record-body">
-                <md-table md-card class="servers-list-table table table-hover">
-                    <thead>
+                <md-table class="servers-list-table table table-hover">
+                    <md-table-row>
                         <md-table-head class="text-center">Time</md-table-head>
                         <md-table-head class="text-center">Username</md-table-head>
                         <md-table-head class="text-center">Message</md-table-head>
-                    </thead>
-                    <tbody>
-                        <md-table-row v-for="row in chat" :key="row.id">
-                            <md-table-cell class="text-center" md-label="Time" nowrap>{{row.added_on}}</md-table-cell>
-                            <md-table-cell md-label="Username">{{row.username}}</md-table-cell>
-                            <md-table-cell md-label="Message">{{row.message}}</md-table-cell>
-                        </md-table-row>
-                    </tbody>
+                    </md-table-row>
+                    <md-table-row v-for="row in chat" :key="row.id">
+                        <md-table-cell class="text-center" md-label="Time" nowrap>{{row.added_on}}</md-table-cell>
+                        <md-table-cell md-label="Username">{{row.username}}</md-table-cell>
+                        <md-table-cell md-label="Message">{{row.message}}</md-table-cell>
+                    </md-table-row>
                 </md-table>
             </div>
         </div>

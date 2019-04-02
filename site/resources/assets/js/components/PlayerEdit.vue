@@ -86,13 +86,9 @@
         <div class="container-fluid mb-2">
             <div class="row">
                 <div class="col">
-                    <div class="pl-0" v-if="!currentOnly">
-                        <md-button class="md-raised md-accent" v-if="item.id != null" @click.stop="deletePlayer">Delete This
-                            Player
-                        </md-button>
-                    </div>
-                    <div class="pl-0" v-if="currentOnly">
-                        <md-button class="md-raised md-accent" @click.stop="kickPlayer">Kick Player</md-button>
+                    <div class="pl-0">
+                        <md-button class="md-raised md-accent" v-if="!currentOnly && item.id != null" @click.stop="deletePlayer">Delete This Player</md-button>
+                        <md-button class="md-raised md-accent" v-if="currentOnly" @click.stop="kickPlayer">Kick Player</md-button>
                         <md-button class="md-raised md-accent" @click.stop="banPlayer">Ban Player</md-button>
                     </div>
                 </div>

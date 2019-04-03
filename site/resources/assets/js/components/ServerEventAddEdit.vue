@@ -409,7 +409,7 @@
                 eventTypes: [{
                     id: 'timer',
                     name: 'Scheduled/Timed',
-                    help: 'Post server message every 15 minutes',
+                    help: 'Post server message every X number of minutes',
                     targets: []
                 }, {
                     id: 'player.chat',

@@ -19,11 +19,11 @@ class ChatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Server $server)
+    public function index(Server $server, $page = 1)
     {
         if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
 
-        $chat = Chat::where('server_id', '=', $server->id)->orderBy('id', 'desc')->limit(100)->get();
+        $chat = Chat::where('server_id', '=', $server->id)->orderBy('id', 'desc')->offset(100 * ($page-1))->limit(100)->get();
 
         return response()->json([
             'messages' => $chat

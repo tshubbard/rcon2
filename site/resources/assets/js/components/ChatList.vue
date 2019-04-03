@@ -19,6 +19,13 @@
                     </md-table-row>
                 </md-table>
             </div>
+            <div class="row">
+                <div class="md-layout md-gutter md-alignment-top-center" style="width: 100%">
+                    <div class="md-layout-item md-size-15"><a v-on:click="changePage('down')"><md-icon class="md-size-3x">navigate_before</md-icon></a></div>
+                    <div class="md-layout-item md-size-60">&nbsp;</div>
+                    <div class="md-layout-item md-size-15"><a v-on:click="changePage('up')"><md-icon class="md-size-3x">navigate_next</md-icon></a></div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -28,24 +35,40 @@
     export default {
         data: function() {
             return {
-                chat: []
+                chat: [],
+                page: 1
             }
         },
         created: function() {
-            let serverId = sessionStorage.getItem('selected_server_id');
-            let url = HTTP.buildUrl('chat/' + serverId);
-
-            HTTP.get(url)
-                .then(response => {
-                    this.chat = response.data.messages;
-                })
-                .catch(e => {
-                    HTTP.logError(url, e);
-
-                    this.errors.push(e)
-                });
+            this.loadMessages();
         },
         methods: {
+            loadMessages() {
+                let serverId = sessionStorage.getItem('selected_server_id');
+                let url = HTTP.buildUrl('chat/' + serverId + '/' + this.page);
+
+                HTTP.get(url)
+                    .then(response => {
+                        this.chat = response.data.messages;
+                    })
+                    .catch(e => {
+                        HTTP.logError(url, e);
+
+                        this.errors.push(e)
+                    });
+            },
+            changePage(direction)
+            {
+                let curpage = this.page;
+
+                if(direction == 'up' && this.chat.length >= 100)
+                    this.page++;
+                else if(direction == 'down' && this.page != 1)
+                    this.page--;
+
+                if(curpage != this.page)
+                    this.loadMessages();
+            }
         },
         computed: {
         }

@@ -50,19 +50,25 @@
             }
         },
         created: function() {
-            let url = HTTP.buildUrl('ipbans');
+            this.$bus.$on('server-changed', _.bind(this.getIPBanData, this));
 
-            HTTP.get(url)
-                .then(response => {
-                    this.ipbans = response.data;
-                })
-                .catch(e => {
-                    HTTP.logError(url, e);
-
-                    this.errors.push(e)
-                });
+            this.getIPBanData();
         },
         methods: {
+            getIPBanData: function(){
+                let serverId = sessionStorage.getItem('selected_server_id');
+                let url = HTTP.buildUrl('ipbans/' + serverId);
+
+                HTTP.get(url)
+                    .then(response => {
+                        this.ipbans = response.data;
+                    })
+                    .catch(e => {
+                        HTTP.logError(url, e);
+
+                        this.errors.push(e)
+                    });
+            },
             editIPBan: function(ipbanData){
                 this.selectedIPBan = ipbanData;
                 this.showIPBanAddEdit = true;

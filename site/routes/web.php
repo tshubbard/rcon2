@@ -73,7 +73,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/api/v1/user/me', 'UserController@showMeJSON');
 
     // IPBanController
-    Route::get('/api/v1/ipbans', 'IPBanController@ipbansIndexJSON');
+    Route::get('/api/v1/ipbans/{server}', 'IPBanController@ipbansIndexJSON');
 
     Route::post('/api/v1/ipban', 'IPBanController@store');
     Route::put('/api/v1/ipban/{ipbanId}', 'IPBanController@update');

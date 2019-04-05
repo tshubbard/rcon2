@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Auth;
 use App\Server;
@@ -16,9 +17,13 @@ class IPBanController extends Controller
         'ipaddress' => 'required'
     );
 
-    public function serversIndexJSON(Request $request)
+    public function ipbansIndexJSON(Server $server)
     {
-        $ipbans = [];
+        $ipbans = DB::table('server_ipbans')
+            ->select('*')
+            ->where('server_id', '=', $server->id)
+            ->orderBy('id')
+            ->get();
 
         return response()->json($ipbans);
     }

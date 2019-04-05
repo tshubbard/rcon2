@@ -38,6 +38,7 @@ const AdminUsers = Vue.component('admin-users', require('./components/AdminUsers
 const ServersList = Vue.component('servers-list', require('./components/ServersList.vue'));
 const PlayersList = Vue.component('players-list', require('./components/PlayersList.vue'));
 const ChatList = Vue.component('chat-list', require('./components/ChatList.vue'));
+const IPBanList = Vue.component('ipban-list', require('./components/IPBanList.vue'));
 const ServerEventsList = Vue.component('server-events-list', require('./components/ServerEventsList.vue'));
 const ServerRecord = Vue.component('server-record', require('./components/ServerRecord.vue'));
 const EventBus = new Vue();
@@ -79,6 +80,11 @@ var router = new VueRouter({
             path: '/chat',
             component: ChatList,
             name: 'Chat List',
+            meta: { zone: 'authed' }
+        }, {
+            path: '/ipbans',
+            component: IPBanList,
+            name: 'IPBan List',
             meta: { zone: 'authed' }
         }, {
             path: '/dashboard',

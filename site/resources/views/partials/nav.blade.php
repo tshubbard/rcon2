@@ -47,6 +47,11 @@
                 <li class="nav-item">
                     <router-link class="nav-link"
                                  class-active="active"
+                                 to="/ipbans">IP Bans</router-link>
+                </li>
+                <li class="nav-item" style="display: none">
+                    <router-link class="nav-link"
+                                 class-active="active"
                                  to="/serverEvents">Events List</router-link>
                 </li>
             @endauth

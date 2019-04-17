@@ -4,7 +4,7 @@
             aria-label="Add/Edit IP Ban Dialog"
             @md-opened="onDialogOpened"
             @md-closed="onDialogClosed"
-            class="col-8">
+            class="add-edit-ipban col-8">
 
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -92,6 +92,7 @@
             saveAddEditIPBanDialog: function() {
                 let url = HTTP.buildUrl('ipban');
                 let payload = _.pick(this.item, 'name', 'ipaddress');
+                payload['server_id'] = sessionStorage.getItem('selected_server_id');
                 let method;
                 let eventName;
 

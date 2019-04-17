@@ -14,6 +14,8 @@ class IPBan extends Model
      * @var array
      */
     protected $fillable = [
+        'server_id',
+        'created_by_user_id',
         'name',
         'ipaddress'
     ];

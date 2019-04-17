@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Auth;
 use App\Server;
-use App\ServerEvent;
+use App\IPBan;
 
 class IPBanController extends Controller
 {
@@ -34,6 +34,8 @@ class IPBanController extends Controller
 
         $requestInput = $request->all();
         $validator = Validator::make($requestInput, $this->validationRules);
+
+        $requestInput['created_by_user_id'] = Auth::user()->id;
 
         if ($validator->fails()) {
             return response()->json([

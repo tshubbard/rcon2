@@ -18,7 +18,8 @@ class Scheduler extends EventEmitter {
 			'xmasrefill': {},
 			'santasleigh': {},
 			'ch47scientists.entity': {},
-			'cargoshiptest': {}
+			'cargoshiptest': {},
+			'egghunt': {}
 		};
 	}
 
@@ -110,6 +111,7 @@ class Scheduler extends EventEmitter {
 					case('santasleigh'):
 					case('ch47scientists.entity'):
 					case('cargoshiptest'):
+					case('egghunt'):
 						if(start_date !== null && now < start_date)
 							delay = start_date.diff(now).toObject().milliseconds;
 						else
@@ -184,8 +186,11 @@ class Scheduler extends EventEmitter {
 		switch(event.type)
 		{
 			case 'player.chat':
+				event.message_firstword = event.message.split(' ')[0];
+				event.message_remainingwords = event.message.split(' ').slice(1).join(' ');
+
 				Object.keys(this.triggers['player.chat']).forEach(function(key){
-					if(event.message == this.triggers['player.chat'][key].trigger)
+					if(event.message == this.triggers['player.chat'][key].trigger || event.message_firstword == this.triggers['player.chat'][key].trigger)
 						this.triggers['player.chat'][key].command.forEach(function(item){
 							_servers[this.server_id].rcon.command(this.handleVariableSubstitution(event, item.command));
 						}.bind(this));
@@ -201,6 +206,7 @@ class Scheduler extends EventEmitter {
 			case('santasleigh'):
 			case('ch47scientists.entity'):
 			case('cargoshiptest'):
+			case('egghunt'):
 				Object.keys(this.triggers[event.type]).forEach(function(key){
 					this.triggers[event.type][key].command.forEach(function(item){
 						_servers[this.server_id].rcon.command(this.handleVariableSubstitution(event, item.command));
@@ -213,7 +219,7 @@ class Scheduler extends EventEmitter {
 	handleVariableSubstitution(event, command)
 	{
 		let subs = {
-			'player.chat': ['user.username', 'user.steam_id'],
+			'player.chat': ['user.username', 'user.steam_id', 'message_remainingwords'],
 			'player.killed': ['victim.username', 'victim.short_id', 'victim.steam_id', 'killer.username', 'killer.short_id', 'killer.steam_id'],
 			'player.spawned': ['user.username', 'user.short_id', 'user.steam_id'],
 			'player.connected': ['host', 'user.username', 'user.steam_id'],

@@ -510,6 +510,11 @@
                     name: 'Santa Arrival',
                     help: 'When Santa and his sleigh appear',
                     targets: []
+                }, {
+                    id: 'egghunt',
+                    name: 'Easter Egg Hunt',
+                    help: 'When the Easter Egg hunt starts',
+                    targets: []
                 }],
                 eventTypeObj: {},
                 hasEventsInStack: false,

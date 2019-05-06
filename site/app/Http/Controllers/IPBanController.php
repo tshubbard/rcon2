@@ -19,6 +19,10 @@ class IPBanController extends Controller
 
     public function ipbansIndexJSON(Server $server)
     {
+        // **** Permissions Check ****
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
+        // ***************************
+
         $ipbans = DB::table('server_ipbans')
             ->select('*')
             ->where('server_id', '=', $server->id)
@@ -30,9 +34,13 @@ class IPBanController extends Controller
 
     public function store(Request $request)
     {
-	    //if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
-
         $requestInput = $request->all();
+
+        // **** Permissions Check ****
+        $server = Server::find($requestInput['server_id']);
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
+        // ***************************
+
         $validator = Validator::make($requestInput, $this->validationRules);
 
         $requestInput['created_by_user_id'] = Auth::user()->id;
@@ -48,11 +56,11 @@ class IPBanController extends Controller
 
         $newIPBan = IPBan::create($requestInput);
 /*
-        $c = curl_init('http://localhost:7869/api/ipban');
+        $c = curl_init('http://localhost:7869/api/server');
         curl_setopt_array($c, array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => ('server_id=' . $newServer->id . '&operation=server.update')
+            CURLOPT_POSTFIELDS => ('server_id=' . $newServer->id . '&operation=ipban.update')
         ));
         curl_exec($c);
 */
@@ -64,9 +72,14 @@ class IPBanController extends Controller
 
     public function update(Request $request, $id)
     {
-	    //if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
+        // **** Permissions Check ****
+        $ipban = IPBan::find($id);
+        $server = Server::find($ipban->server_id);
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
+        // ***************************
 
         $requestInput = $request->all();
+
         $validator = Validator::make($requestInput, $this->validationRules);
 
         if ($validator->fails()) {
@@ -78,34 +91,39 @@ class IPBanController extends Controller
             ]);
         }
 
-        $newIPBan->update($requestInput);
+        $ipban->update($requestInput);
 /*
-        $c = curl_init('http://localhost:7869/api/ipban');
+        $c = curl_init('http://localhost:7869/api/server');
         curl_setopt_array($c, array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => ('server_id=' . $id . '&operation=server.update')
+            CURLOPT_POSTFIELDS => ('server_id=' . $id . '&operation=ipban.update')
         ));
         curl_exec($c);
 */
         return response()->json([
             'success' => true,
-            'data' => $newServer
+            'data' => $ipban
         ]);
     }
 
     public function destroy($id)
     {
-        //if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
+        $ipban = IPBan::find($id);
+
+        // **** Permissions Check ****
+        $server = Server::find($ipban->server_id);
+        if(!$this->checkAccount($server->account_id)) return $this->checkAccountFail();
+        // ***************************
 
         IPBan::destroy($id);
 
 /*
-        $c = curl_init('http://localhost:7869/api/ipban');
+        $c = curl_init('http://localhost:7869/api/server');
         curl_setopt_array($c, array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => ('server_id=' . $id . '&operation=server.update')
+            CURLOPT_POSTFIELDS => ('server_id=' . $id . '&operation=ipban.update')
         ));
         curl_exec($c);
 */

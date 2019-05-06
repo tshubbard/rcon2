@@ -92,13 +92,13 @@
             saveAddEditIPBanDialog: function() {
                 let url = HTTP.buildUrl('ipban');
                 let payload = _.pick(this.item, 'name', 'ipaddress');
-                payload['server_id'] = sessionStorage.getItem('selected_server_id');
                 let method;
                 let eventName;
 
                 if (this.item.id == null) {
                     method = 'post';
                     eventName = 'ipban-added';
+                    payload['server_id'] = sessionStorage.getItem('selected_server_id');
                 } else if (this.item.delete) {
                     method = 'delete';
                     url += '/' + this.item.id;
